@@ -1,0 +1,229 @@
+:root {
+  --color-white: #f7f2ed;
+  --color-black: #241F1F;
+  --color-grey: #3d3d3d;
+  --color-grey-description: #6e6e6e;
+  --color-red: #C83F37;
+  --color-red-hover: #a42019;
+  --color-cream: #FBE5CF;
+  --color-beige: #F6E8DA;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--color-white);
+  color: var(--color-black);
+}
+
+header, footer {
+  text-align: center;
+  padding: 1rem;
+  background: var(--color-black);
+  color: var(--color-white);
+}
+
+.hero {
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-red);
+  color: var(--color-white);
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+  background-color: var(--color-red-hover);
+  transform: scale(1.05);
+}
+
+.info {
+  padding: 2rem;
+  text-align: center;
+}
+
+.menu {
+  padding: 3rem 1.5rem;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.menu-nav {
+  z-index: 10;
+  background: var(--color-black);
+  color: var(--color-white);
+  padding: 1rem 1rem;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  
+}
+
+.menu-nav ul {
+  display: flex; /* 👈 Esto es lo que hace que los <li> se alineen en fila horizontal */
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-nav ul li {
+  flex-shrink: 0; /* 👈 evita que se encojan si hay overflow */
+}
+
+.menu-nav ul li a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: var(--color-white);
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s, color 0.3s;
+}
+
+.menu-nav ul li a:hover {
+  background: var(--color-white);
+  color: var(--color-black);
+}
+
+.menu-nav ul li a.active,
+.menu-nav ul li a:focus {
+    background: var(--color-red);
+    color: var(--color-white);
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--color-black);
+  color: var(--color-white);
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid var(--color-cream);
+}
+
+.category-section {
+    scroll-margin-top: 180px;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+}
+
+.category-section h3 {
+    font-size: 1.6rem;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.category-section.active-section {
+  border-left: 4px solid var(--color-red);
+  background-color: var(--color-cream);
+  transition: background-color 0.3s ease, border-left 0.3s ease;
+  padding-left: 1rem;
+}
+
+
+.category-description {
+  font-style: italic;
+  color: var(--color-grey);
+  margin-bottom: 1rem;
+}
+
+.menu-item {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-cream);
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.single-price {
+  font-weight: bold;
+  color: var(--color-black);
+}
+
+.multi-price {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-grey);
+}
+
+.multi-price li {
+  margin: 0;
+}
+
+.item-description {
+  margin: 0.3rem 0 0 0;
+  font-size: 0.9rem;
+  color: var(--color-grey-description);
+}
+
+.nav {
+  background-color: var(--color-beige);
+  padding: 1rem;
+  text-align: center;
+}
+
+.nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--color-grey);
+  font-weight: bold;
+}
+
+.nav a:hover {
+  color: var(--color-red);
+}
+
+.nav a.active {
+  color: var(--color-red-hover);
+  border-bottom: 2px solid var(--color-red-hover);
+}
+
+.back-to-home {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-red); 
+  color: var(--color-white);
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-to-home:hover {
+  background-color: var(--color-red-hover); 
+  transform: scale(1.05);
+}

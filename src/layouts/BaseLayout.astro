@@ -1,0 +1,31 @@
+---
+import Nav from "../components/Nav.astro";
+const { title } = Astro.props;
+import "../style/global.css";
+---
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content="Descubre nuestro pollo asado y los mejores camperos de Málaga en Asador Kome Kome, ubicado en Torremolinos." />
+    <link rel="stylesheet" href="/style/global.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Asador Kome Kome</h1>
+      <Nav />
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+        <a href="/" class="btn back-to-home">Inicio</a>
+        <p>&copy; {new Date().getFullYear()} Asador Kome Kome</p>
+    </footer>
+  </body>
+</html>

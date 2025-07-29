@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import menu from '../data/menu.json';
+
+const categoryNames = Object.keys(menu);
+---
+
+<BaseLayout title="Carta - Asador Kome Kome">
+    <header class="sticky-header">
+        <h2>Nuestra Carta</h2>
+        <nav class="menu-nav">
+            <ul>
+                {categoryNames.map((cat) => (
+                    <li><a href={`#${cat}`} class="menu-nav">{cat}</a></li>
+                ))}
+            </ul>
+        </nav>
+    </header>
+  <section class="menu">
+    {Object.entries(menu).map(([categoryName, categoryData]) => (
+      <section id={categoryName} class="category-section">
+        <h3>{categoryName}</h3>
+      
+        {categoryData.description && <p class="category-description">{categoryData.description}</p>}
+        <ul>
+          {categoryData.items.map(item => (
+            <li class="menu-item">
+              <div class="item-header">
+                <strong>{item.name}</strong>
+                {typeof item.price === "object" ? (
+                  <ul class="multi-price">
+                    {Object.entries(item.price).map(([portion, price]) => (
+                      <li><span>{portion}:</span> {price}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span class="single-price">{item.price}</span>
+                )}
+              </div>
+              {item.description && <p class="item-description">{item.description}</p>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </section>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const links = document.querySelectorAll('.menu-nav a');
+    const sections = [...document.querySelectorAll('.category-section')];
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+            const id = entry.target.id;
+            const link = document.querySelector(`.menu-nav a[href="#${id}"]`);
+
+            if (entry.isIntersecting) {
+                // Limpiar clases activas de los links
+                document.querySelectorAll('.menu-nav a').forEach(link => link.classList.remove('active'));
+                // Activar link correspondiente
+                if (link) link.classList.add('active');
+
+                // 🔥 Añadir clase a la sección visible
+                entry.target.classList.add('active-section');
+            } else {
+                // 🔥 Quitar clase si sale del viewport
+                entry.target.classList.remove('active-section');
+            }
+            });
+        },
+        {
+            rootMargin: '-50% 0px -50% 0px',
+            threshold: 0.1
+        }
+        );
+
+
+    sections.forEach(section => observer.observe(section));
+  });
+</script>
+
+
+
+</BaseLayout>

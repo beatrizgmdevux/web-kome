@@ -1,0 +1,25 @@
+---
+const links = [
+  { href: "/", label: "Inicio" },
+  { href: "/carta", label: "Carta" },
+  { href: "/contacto", label: "Contacto" },
+  { href: "/ubicacion", label: "Ubicación" },
+];
+---
+
+<nav class="nav">
+  <ul>
+    {links.map(link => (
+      <li><a href={link.href} class="nav-link">{link.label}</a></li>
+    ))}
+  </ul>
+</nav>
+
+<script type="module" is:inline>
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.nav-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath) {
+      link.classList.add('active');
+    }
+  });
+</script>
