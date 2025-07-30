@@ -41,7 +41,7 @@ Está desarrollada en **Astro**, con HTML, CSS y algo de JavaScript para lograr 
 
 ---
 
-## 👩‍💻 Autora
+## 👩🏻‍💻 Autora
 
 Desarrollado por **Beatriz García Muñoz**  
 🔗 [Kome-Kome](https://github.com/beatrizgmdevux/web-kome.git)
