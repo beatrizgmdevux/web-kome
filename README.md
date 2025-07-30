@@ -1,7 +1,7 @@
 # 🍗 Asador Kome Kome 🍔
 
 ¡Bienvenidos al proyecto web del **Asador Kome Kome**! 🔥  
-Una parrilla tradicional con un toque moderno, que ahora también tiene su carta digital. Este proyecto ha sido realizado para un **cliente real** con necesidades específicas y mucho sabor. 😋
+Una asador de pollos de toda la vida con un toque moderno, que quiere su carta digital y presencia en internet. Este proyecto ha sido realizado para un **cliente real** con necesidades específicas y mucho sabor. 😋
 
 ---
 
