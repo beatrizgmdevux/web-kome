@@ -7,11 +7,10 @@ const categoryNames = Object.keys(menu);
 
 <BaseLayout title="Carta - Asador Kome Kome">
     <header class="sticky-header">
-        <h2>Nuestra Carta</h2>
         <nav class="menu-nav">
-            <ul>
+            <ul class="menu-links">
                 {categoryNames.map((cat) => (
-                    <li><a href={`#${cat}`} class="menu-nav">{cat}</a></li>
+                    <li><a href={`#${cat}`}>{cat}</a></li>
                 ))}
             </ul>
         </nav>
@@ -20,7 +19,6 @@ const categoryNames = Object.keys(menu);
     {Object.entries(menu).map(([categoryName, categoryData]) => (
       <section id={categoryName} class="category-section">
         <h3>{categoryName}</h3>
-      
         {categoryData.description && <p class="category-description">{categoryData.description}</p>}
         <ul>
           {categoryData.items.map(item => (
@@ -61,10 +59,10 @@ const categoryNames = Object.keys(menu);
                 // Activar link correspondiente
                 if (link) link.classList.add('active');
 
-                // 🔥 Añadir clase a la sección visible
+                // Añadir clase a la sección visible
                 entry.target.classList.add('active-section');
             } else {
-                // 🔥 Quitar clase si sale del viewport
+                // Quitar clase si sale del viewport
                 entry.target.classList.remove('active-section');
             }
             });
