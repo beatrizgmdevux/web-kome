@@ -1,48 +1,60 @@
-# Astro Starter Kit: Basics
+# 🍗 Asador Kome Kome 🍔
 
-```sh
-npm create astro@latest -- --template basics
-```
+¡Bienvenidos al proyecto web del **Asador Kome Kome**! 🔥  
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+Una asador de pollos de toda la vida con un toque moderno y mucho que ofrecer, que quiere su carta digital y su hueco en el mundo de internet. Este proyecto ha sido realizado para un **cliente real** con necesidades específicas y mucho sabor. 😋
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+---
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+## 📋 Descripción del Proyecto
 
-## 🚀 Project Structure
+La web tiene como objetivo principal mostrar de forma clara y accesible:
 
-Inside of your Astro project, you'll see the following folders and files:
+- 📝 La **carta digital** del asador, organizada por secciones.
+- 📱 Una experiencia **responsive** adaptada a móviles y tablets.
+- 🍔 Un **menú hamburguesa interactivo** para facilitar la navegación.
+- 📍 Información útil para el cliente como ubicación y contacto.
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+Está desarrollada en **Astro**, con HTML, CSS y algo de JavaScript para lograr una navegación suave y actual.
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+---
 
-## 🧞 Commands
+## 🛠️ Tecnologías utilizadas
 
-All commands are run from the root of the project, from a terminal:
+- ⚡️ [Astro](https://astro.build/) — Framework ligero para generar sitios rápidos.
+- 🎨 HTML + CSS (estilos propios en `global.css`)
+- 🌐 JavaScript — Para la navegación y el menú interactivo.
+- 📁 JSON — Para estructurar el contenido de la carta.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+---
 
-## 👀 Want to learn more?
+## 🧪 Estado del Proyecto
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+⚙️ Proyecto en proceso
+🚀 Preparándolo para despliegue  
+📱 Totalmente responsive
+
+---
+
+## 📸 Captura de Pantalla
+
+*Próximamente una imagen del diseño final aquí...*
+
+---
+
+## 👩🏻‍💻 Autora
+
+Desarrollado por **Beatriz García Muñoz**  
+🔗 [Kome-Kome](https://github.com/beatrizgmdevux/web-kome.git)
+
+---
+
+## 📄 Licencia
+
+Este proyecto es de uso exclusivo para el cliente **Asador Kome Kome**.  
+**No está permitido su uso, distribución ni modificación sin autorización previa.**  
+Todos los derechos reservados © Beatriz García Muñoz.
+
+---
+
+¡Gracias por visitar!  👋🏼
