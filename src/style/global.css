@@ -152,15 +152,21 @@ header, footer {
 }
 
 .menu-item {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
+  margin: 1rem;
+  padding: 1rem;
   border-bottom: 1px solid var(--color-cream);
 }
 
 .item-header {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-bottom: 0.2rem;
+}
+
+.item-header strong {
+  font-weight: 600;
+  flex: 1;
 }
 
 .single-price {
@@ -171,17 +177,29 @@ header, footer {
 .multi-price {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0.3rem 0;
   font-size: 0.9rem;
   color: var(--color-grey);
 }
 
 .multi-price li {
-  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.1rem 0;
+}
+
+.portion {
+  font-weight: 500;
+}
+
+.price {
+  font-weight: bold;
+  white-space: nowrap;
 }
 
 .item-description {
-  margin: 0.3rem 0 0 0;
+  margin: 0.3rem;
   font-size: 0.9rem;
   color: var(--color-grey-description);
 }
@@ -210,6 +228,7 @@ header, footer {
     cursor: pointer;
 }
 
+/* Menú hamburguesa para pantallas móvil o tablet*/
 .hamburger {
     display: none;
     position: relative;

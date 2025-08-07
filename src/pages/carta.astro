@@ -28,9 +28,13 @@ const categoryNames = Object.keys(menu);
                 {typeof item.price === "object" ? (
                   <ul class="multi-price">
                     {Object.entries(item.price).map(([portion, price]) => (
-                      <li><span>{portion}:</span> {price}</li>
+                      <li>
+                        <span class="portion">{portion}</span>
+                        <span class="price">{price}</span>
+                      </li>
                     ))}
                   </ul>
+
                 ) : (
                   <span class="single-price">{item.price}</span>
                 )}
