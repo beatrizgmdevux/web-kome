@@ -7,6 +7,7 @@
   --color-red-hover: #a42019;
   --color-cream: #FBE5CF;
   --color-beige: #F6E8DA;
+  --color-grey-shadow: #241f1f0d;
 }
 
 html {
@@ -333,6 +334,48 @@ header, footer {
     background-color: var(--color-red-hover); 
     transform: scale(1.05);
 }
+
+/* Estilos reseñas */
+.reviews {
+  background-color: var(--color-beige);
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.reviews h2 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: var(--color-black);
+}
+
+.review-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.review {
+  background-color: var(--color-white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px var(--color-grey-shadow);
+  text-align: left;
+}
+
+.review-text {
+  font-style: italic;
+  color: var(--color-grey-description);
+  margin-bottom: 1rem;
+}
+
+.review-author {
+  font-weight: bold;
+  color: var(--color-black);
+  text-align: right;
+}
+
 
 /* PANTALLAS RESPONSIVE */
 /* Responsive: para móviles pequeños */
