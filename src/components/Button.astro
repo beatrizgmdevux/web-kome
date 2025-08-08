@@ -1,9 +1,9 @@
 ---
 const {
-  variant = "primary", // primary, secondary, tertiary
-  href,                // si se pasa href -> <a>, si no -> <button>
-  type = "button",     // para formularios: button, submit, reset
-  children
+  variant = "primary", // Existen las variantes: primary, secondary y tertiary
+  href,                // Si se pasa href -> <a>; si no -> <button>
+  type = "button",     // Para formularios: button, submit, reset
+  children             // Children será el "nombre" del botón. Por ejemplo: Aceptar, Ver carta, etc.
 } = Astro.props;
 ---
 
@@ -14,16 +14,6 @@ const {
 )}
 
 <style>
-  :root {
-    --color-primary: #C83F37;
-    --color-primary-hover: #a42019;
-    --color-secondary: #d62828;
-    --color-secondary-bg: transparent;
-    --color-secondary-hover-bg: #efa7a4;
-    --color-text-light: #f7f2ed;
-    --color-text-dark: #241F1F;
-  }
-
   .btn {
     display: inline-block;
     margin-top: 1rem;
@@ -34,43 +24,52 @@ const {
   }
 
   .btn:hover {
-    transform: scale(1.05);
+    transform: scale(1.03);
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 5px var(--color-grey-shadow);
+    opacity: 0.8;
+
   }
 
   /* Botón primario */
   .btn.primary {
-    background-color: var(--color-primary);
-    color: var(--color-text-light);
-    border: 2px solid var(--color-primary);
+    background-color: var(--color-red);
+    color: var(--color-white);
+    border: 2px solid var(--color-red-hover);
     border: none;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
   }
   .btn.primary:hover {
-    background-color: var(--color-primary-hover);
+    background-color: var(--color-red-hover);
+    color: var(--color-white);
   }
-
-
 
   /* Botón secundario */
   .btn.secondary {
-    background-color: var(--color-secondary-bg);
-    border: 2px solid var(--color-secondary);
-    color: var(--color-secondary);
+    background-color: var(--color-white);
+    border: 2px solid var(--color-grey);
+    color: var(--color-black);
   }
   .btn.secondary:hover {
-    background-color: var(--color-secondary-hover-bg);
-    color: var(--color-text-dark);
+    background-color: var(--color-white);
+    border: 2px solid var(--color-black);
+    color: var(--color-black);
   }
 
   /* Botón terciario */
   .btn.tertiary {
     background: none;
-    color: var(--color-text-dark);
+    color: var(--color-black);
     font-size: 0.9rem;
     border: none;
     padding: 0.5rem 0.75rem;
   }
   .btn.tertiary:hover {
     text-decoration: underline;
-    color: var(--color-primary-hover);
+    font-weight: 500;
+    color: var(--color-red-hover);
   }
 </style>

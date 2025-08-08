@@ -56,7 +56,7 @@
     },
 
     "🥖 Entrepanes": {
-        "description": "Bocatas 🥖, rollos 🌯 y hamburguesas 🍔. Ingredientes extra: 1,20€",
+        "description": "Bocatas 🥖, rollos 🌯 y hamburguesas 🍔.",
         "items": [
             { "name": "🥖 Serranito", "price": "6,50€", "description": "Filetes de cerdo o pollo, jamón serrano, pimiento frito y mayonesa" },
             { "name": "🥖 Montadito", "price": "6,50€", "description": "Filetes de cerdo o pollo, lechuga, tomate, cebolla y mayonesa" },
@@ -67,14 +67,14 @@
             { "name": "🍔🆕 Burger Como Una ... Cabra", "price": "8,50€", "description": "Pan brioche, salsa de bacon casera, ternera nacional, cebolla caramelizada, mermelada de bacon y queso de cabra"},
             { "name": "🍔🆕 Burger Capricho Trufado ", "price": "8,50€", "description": "Ternera nacional, mayo trufada, queso ahumado, crujiente de patata y huevo frito"},
             { "name": "🍔 Cresta de cerdo", "price": "7,00€", "description": "Cresta de cerdo, lechuga, tomate, cebolla y queso"},
-            { "name": "🌯 Shawarma", "price": "6,50€", "description": "Rollo de carne kebab, lechuga, tomate, cebolla y salsa de yogur casera"},
+            { "name": "🌯 Shawarma", "price": "7,50€", "description": "Rollo de carne kebab, lechuga, tomate, cebolla y salsa de yogur casera"},
             { "name": "🌯 Mexicano", "price": "7,20€", "description": "Pollo asado, cebolla, pimiento rojo, pimiento verde y salsa mexicana"},
             { "name": "🌯 Pollo", "price": "6,70€", "description": "Pollo asado, lechuga, tomate, cebolla y mayonesa"}
         ]
     },
 
     "🍔 Nuestros camperos": {
-        "description": "Ingredientes extra: 1,20€",
+        "description": "Prueba el mejor campero malagueño 😉.",
         "items": [
             { "name": "🆕 Como Una ... Cabra", "price": "7,70€", "description": "Salsa bacon casera, pollo asado, cebolla caramelizada, mermelada de bacon y queso de cabra" },
             { "name": "Mixto", "price": "5,00€", "description": "Jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
