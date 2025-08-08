@@ -1,6 +1,7 @@
 ---
 import Nav from "../components/Nav.astro";
-const { title } = Astro.props;
+import Reviews from "../components/Reviews.astro";
+const { title, description } = Astro.props;
 import "../style/global.css";
 ---
 
@@ -9,11 +10,24 @@ import "../style/global.css";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>{title}</title>
-    <meta name="description" content="Descubre nuestro pollo asado y los mejores camperos de Málaga en Asador Kome Kome, ubicado en Torremolinos." />
-    <link rel="stylesheet" href="/style/global.css" />
+    <meta name="description" content={description} />
+
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
+    <!-- Open Graph (para redes sociales) -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://asadorkomekome.netlify.app/pollo.jpg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://asadorkomekome.netlify.app/" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://asadorkomekome.netlify.app/pollo.jpg" />
   </head>
   <body>
     <header>
@@ -22,6 +36,7 @@ import "../style/global.css";
 
     <main>
       <slot />
+      <Reviews />
     </main>
 
     <footer>
