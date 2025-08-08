@@ -1,21 +1,23 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Reviews from '../components/Reviews.astro';
 ---
 
 <BaseLayout title="Inicio - Asador Kome Kome" description="Descubre nuestro pollo asado y los mejores camperos de Málaga en Asador Kome Kome, ubicado en Torremolinos.">
   <section class="hero">
     <h2>¡Bienvenidos al Kome Kome!</h2>
-	<img src="/pollo.jpg" alt="Pollo asado en el asador" class="hero-img"/>
-    
+    <img src="/pollo.jpg" alt="Pollo asado en el asador" class="hero-img"/>
     <p>Descubre.</p>
-    <a href="/carta" class="btn">Ver nuestra carta</a>
+    <Button href="/carta" children="Ver nuestra carta"></Button>
   </section>
 
   <section class="info">
     <h3>¿Dónde estamos?</h3>
     <p>📍 Avenida del Carmelo, 21 - Torremolinos (Junto al Parque de la Batería)</p>
-    <p>👋🏼 Síguenos en <a href="https://www.instagram.com/komekomehamb/?hl=es" target="_blank">Instagram</a></p>
+    <p>👋🏼 Síguenos en <Button variant="tertiary" children="Instagram" href="https://www.instagram.com/komekomehamb/?hl=es" target="_blank" ></Button></p>
   </section>
-
+  
+  <Reviews />
 
 </BaseLayout>

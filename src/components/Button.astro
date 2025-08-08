@@ -1,0 +1,76 @@
+---
+const {
+  variant = "primary", // primary, secondary, tertiary
+  href,                // si se pasa href -> <a>, si no -> <button>
+  type = "button",     // para formularios: button, submit, reset
+  children
+} = Astro.props;
+---
+
+{href ? (
+  <a href={href} class={`btn ${variant}`}>{children}</a>
+) : (
+  <button type={type} class={`btn ${variant}`}>{children}</button>
+)}
+
+<style>
+  :root {
+    --color-primary: #C83F37;
+    --color-primary-hover: #a42019;
+    --color-secondary: #d62828;
+    --color-secondary-bg: transparent;
+    --color-secondary-hover-bg: #efa7a4;
+    --color-text-light: #f7f2ed;
+    --color-text-dark: #241F1F;
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .btn:hover {
+    transform: scale(1.05);
+  }
+
+  /* Botón primario */
+  .btn.primary {
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    border: 2px solid var(--color-primary);
+    border: none;
+  }
+  .btn.primary:hover {
+    background-color: var(--color-primary-hover);
+  }
+
+
+
+  /* Botón secundario */
+  .btn.secondary {
+    background-color: var(--color-secondary-bg);
+    border: 2px solid var(--color-secondary);
+    color: var(--color-secondary);
+  }
+  .btn.secondary:hover {
+    background-color: var(--color-secondary-hover-bg);
+    color: var(--color-text-dark);
+  }
+
+  /* Botón terciario */
+  .btn.tertiary {
+    background: none;
+    color: var(--color-text-dark);
+    font-size: 0.9rem;
+    border: none;
+    padding: 0.5rem 0.75rem;
+  }
+  .btn.tertiary:hover {
+    text-decoration: underline;
+    color: var(--color-primary-hover);
+  }
+</style>
