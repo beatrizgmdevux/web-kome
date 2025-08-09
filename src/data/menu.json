@@ -92,6 +92,60 @@
             { "name": "Italiano", "price": "6,50€", "description": "Ternera boloñesa, huevo y queso" }
             
         ]
+    },
+
+      "🥤 Bebidas": {
+        "description": "",
+        "items": [
+            { "name": "Coca-Cola", 
+              "price": {
+                "Lata (33cl.)": "1,30€",
+                "Botella (2L)": "2,50€"
+              },
+             "description": "Coca-Cola, Coca-Cola Zero, Coca-Cola Zero Zero" },
+
+            { "name": "Fanta", 
+              "price": {
+                "Lata (33cl.)": "1,30€",
+                "Botella (2L)": "2,50€"
+              },
+             "description": "Fanta naranja, Fanta limón" },
+
+            { "name": "Nestea", 
+                "price": "1,60€",
+                "description": "Nestea limón, Nestea maracuyá" },
+
+            { "name": "Aquarius", 
+              "price":"1,60€",
+             "description": "Aquarius limón, Aquarius naranja" },
+            
+            { "name": "Cerveza", 
+              "price": {
+                "Lata (33cl.)": "1,40€",
+                "Tercio": "2,00€",
+                "Botella (1L)": "2,50€"
+              },
+             "description": "" },
+
+            { "name": "Agua", 
+              "price": {
+                "Pequeña (500ml.)": "1,20€",
+                "Grande (1,5L)": "2,00€"
+              },
+             "description": "" },
+
+            { "name": "Tinto de Verano", 
+              "price":"1,50€",
+             "description": "" },
+
+            { "name": "Zumos", 
+              "price":"1,50€",
+             "description": "Melocotón, Piña" },
+            
+            { "name": "Monster", 
+              "price":"2,00€",
+             "description": "" }
+        ]
     }
   
 }
