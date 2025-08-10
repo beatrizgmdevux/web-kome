@@ -3,9 +3,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import menu from '../data/menu.json';
 
 const categoryNames = Object.keys(menu);
+
+const pageTitle = "Carta - Asador Kome Kome";
+const pageDescription = "El pollo asado es nuestra especialidad. Pídelo para llevar o domicilio y que no falte en tu mesa.";
+
 ---
 
-<BaseLayout title="Carta - Asador Kome Kome" description="El pollo asado es nuestra especialidad. Pídelo para llevar y que no falte en tu mesa.">
+<BaseLayout title={pageTitle} description={pageDescription}>
     <header class="sticky-header">
         <nav class="menu-nav">
             <ul class="menu-links">

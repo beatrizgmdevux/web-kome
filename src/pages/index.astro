@@ -2,9 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import Reviews from '../components/Reviews.astro';
+
+const pageTitle = "Inicio - Asador Kome Kome";
+const pageDescription = "Descubre nuestro pollo asado y los mejores camperos de Málaga en Asador Kome Kome, ubicado en Torremolinos.";
 ---
 
-<BaseLayout title="Inicio - Asador Kome Kome" description="Descubre nuestro pollo asado y los mejores camperos de Málaga en Asador Kome Kome, ubicado en Torremolinos.">
+<BaseLayout title={pageTitle} description={pageDescription}>
   <section class="hero">
     <h2>¡Bienvenidos al Kome Kome!</h2>
     <img src="/pollo.jpg" alt="Pollo asado en el asador" class="hero-img"/>
@@ -15,9 +18,9 @@ import Reviews from '../components/Reviews.astro';
   <section class="info">
     <h3>¿Dónde estamos?</h3>
     <p>📍 Avenida del Carmelo, 21 - Torremolinos (Junto al Parque de la Batería)</p>
-        <p>¿Quieres pedir o consultarnos algo?</p>
+    <p>¿Quieres pedir o consultarnos algo?</p>
     <p>Llámanos directamente al  
-      <Button href="tel:+34952376259" variant="secondary" children="952 376 259"></Button>
+      <Button href="tel:+34952376259" variant="tertiary" children="952 376 259"></Button>
     </p>
     <p>👋🏼 Síguenos en <Button variant="tertiary" children="Instagram" href="https://www.instagram.com/komekomehamb/?hl=es" target="_blank" ></Button></p>
   </section>
