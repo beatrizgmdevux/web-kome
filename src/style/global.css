@@ -3,11 +3,17 @@
   --color-black: #241F1F;
   --color-grey: #3d3d3d;
   --color-grey-description: #6e6e6e;
-  --color-red: #C83F37;
+  --color-red: #df5048;
   --color-red-hover: #a42019;
   --color-cream: #FBE5CF;
   --color-beige: #F6E8DA;
   --color-grey-shadow: #241f1f0d;
+}
+
+html, body {
+  overflow-x: hidden;
+  height: 100%;
+  margin: 0;
 }
 
 html {
@@ -19,6 +25,9 @@ body {
   font-family: system-ui, sans-serif;
   background: var(--color-white);
   color: var(--color-black);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 header, footer {
@@ -28,6 +37,11 @@ header, footer {
   color: var(--color-white);
 }
 
+main {
+  flex: 1,
+}
+
+/* *INICIO */
 .hero {
   text-align: center;
   padding: 2rem;
@@ -38,20 +52,79 @@ header, footer {
     margin-bottom: 1.5rem;
 }
 
-.hero-img {
-  width: 90%;
-  max-width: 700px;
-  height: auto;
-  margin: 0 auto;
-  display: block;
-  border-radius: 10px;
+/* Contenedor de las cards con info: horario, teléfono y ubicación*/
+.info {
+  display: flex;
+  gap: 1rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-.info {
-  padding: 2rem;
+/* estilo cards */
+.card-container{
+  background-color: var(--color-white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px var(--color-grey-shadow);
+  max-width: 250px;
+  margin: 1rem auto;
   text-align: center;
 }
 
+
+/* Estilos reseñas */
+.reviews {
+  background-color: var(--color-beige);
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.reviews h2 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: var(--color-black);
+}
+
+.review-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.review {
+  background-color: var(--color-white);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px var(--color-grey-shadow);
+  text-align: left;
+}
+
+.review-text {
+  font-style: italic;
+  color: var(--color-grey-description);
+  margin-bottom: 1rem;
+}
+
+.review-author {
+  font-weight: bold;
+  color: var(--color-black);
+  text-align: right;
+}
+
+/* Animación de flotación */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Navegación del menú principal */
 .menu {
   padding: 3rem 1.5rem;
   max-width: 850px;
@@ -70,7 +143,7 @@ header, footer {
 }
 
 .menu-nav ul {
-  display: flex; /* 👈 Esto es lo que hace que los <li> se alineen en fila horizontal */
+  display: flex; 
   gap: 1rem;
   list-style: none;
   padding: 0;
@@ -78,7 +151,7 @@ header, footer {
 }
 
 .menu-nav ul li {
-  flex-shrink: 0; /* 👈 evita que se encojan si hay overflow */
+  flex-shrink: 0;
 }
 
 .menu-nav ul li a {
@@ -98,28 +171,28 @@ header, footer {
 
 .menu-nav ul li a.active,
 .menu-nav ul li a:focus {
-    background: var(--color-red);
-    color: var(--color-white);
+  background: var(--color-red);
+  color: var(--color-white);
 }
 
 .sticky-header {
-    position: sticky;
-    top: 0;
-    background: var(--color-black);
-    color: var(--color-beige);
-    border-bottom: 1px solid var(--color-grey);
+  position: sticky;
+  top: 0;
+  background: var(--color-black);
+  color: var(--color-beige);
+  border-bottom: 1px solid var(--color-grey);
 }
 
 .category-section {
-    scroll-margin-top: 160px;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
+  scroll-margin-top: 160px;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
 }
 
 .category-section h3 {
-    font-size: 1.2rem;
-    margin-top: 2rem;
-    margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .category-section.active-section {
@@ -157,11 +230,13 @@ header, footer {
   flex: 1;
 }
 
+/* precio simple de la carta */
 .single-price {
   font-weight: bold;
   color: var(--color-black);
 }
 
+/* precio múltiple de la carta */
 .multi-price {
   list-style: none;
   padding: 0;
@@ -194,17 +269,16 @@ header, footer {
 
 /* Navegación principal de la web: Inicio, Carta, Contacto, Ubicación*/
 .nav {
-    background-color: var(--color-beige);
-    padding: 1rem;
-    text-align: center;
-    border-radius: 16px;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-items: center;
-    align-content: center;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  border-end-end-radius: 20px;
 }
 
 .nav-container {
@@ -212,7 +286,7 @@ header, footer {
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    background-color: var(--color-beige);
+    
     margin: 0 auto;
     gap: 2rem;
 }
@@ -229,7 +303,7 @@ header, footer {
 
 .nav-links a {
     text-decoration: none;
-    color: var(--color-black);
+    color: var(--color-beige);
     font-size: 20px;
     font-weight: bold;
     transition: color 0.3s;
@@ -240,8 +314,8 @@ header, footer {
 }
 
 .nav-links a.active {
-    color: var(--color-red-hover);
-    border-bottom: 2px solid var(--color-red-hover);
+    color: var(--color-red);
+    border-bottom: 2px solid var(--color-red);
 }
 
 /* Estilos logo Nav*/
@@ -306,6 +380,7 @@ header, footer {
     transform: rotate(-45deg) translateY(-10px);
 }
 
+/* Iconos Material Symbols Design */
 .material-symbols-outlined {
   font-size: 32px;
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -313,47 +388,66 @@ header, footer {
   cursor: pointer;
 }
 
-/* Estilos reseñas */
-.reviews {
-  background-color: var(--color-beige);
-  padding: 3rem 1.5rem;
-  text-align: center;
-}
-
-.reviews h2 {
-  font-size: 1.8rem;
-  margin-bottom: 2rem;
-  color: var(--color-black);
-}
-
-.review-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-  max-width: 900px;
+/* *CONTACTO Y UBICACIÓN*/
+.contact-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+  flex-wrap: wrap;
+  max-width: 1000px;
   margin: 0 auto;
+  padding: 2rem;
 }
 
-.review {
-  background-color: var(--color-white);
-  padding: 1.5rem;
+.contact-text {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-image {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  justify-content: center;
+}
+
+.img-pollo {
+  width: 100%;
+  max-width: 400px;
+  height: 300px;
+  object-fit: cover;
   border-radius: 12px;
-  box-shadow: 0 4px 6px var(--color-grey-shadow);
-  text-align: left;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-.review-text {
-  font-style: italic;
-  color: var(--color-grey-description);
-  margin-bottom: 1rem;
+.location-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+.map-container {
+  margin-top: 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.review-author {
-  font-weight: bold;
-  color: var(--color-black);
-  text-align: right;
+iframe {
+  display: block;
 }
 
+
+/* Estilos logo Instagram del footer*/
+#logo-insta {
+  width: 32px;
+  height: 32px;
+}
 
 /* PANTALLAS RESPONSIVE */
 /* Responsive: para móviles pequeños */
@@ -409,4 +503,5 @@ header, footer {
     .nav-links.open {
         display: flex;
     }
+
 }

@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import Reviews from '../components/Reviews.astro';
+import Card from "../components/Card.astro";
 
 const pageTitle = "Inicio - Asador Kome Kome";
 const pageDescription = "Descubre nuestro pollo asado y los mejores camperos de Málaga en Asador Kome Kome, ubicado en Torremolinos.";
@@ -9,22 +10,90 @@ const pageDescription = "Descubre nuestro pollo asado y los mejores camperos de 
 
 <BaseLayout title={pageTitle} description={pageDescription}>
   <section class="hero">
-    <h2>¡Bienvenidos al Kome Kome!</h2>
-    <img src="/pollo.jpg" alt="Pollo asado en el asador" class="hero-img"/>
-    <p>Descubre.</p>
+    <h2>¡Bienvenid@s al Kome Kome!</h2>
+    <h4>Pollos asados 🍗, camperos 🥪 y hamburguesas 🍔 en Torremolinos</h4>
+
+    <p>
+      En Asador Kome Kome llevamos el sabor callejero al siguiente nivel.
+    </p>
+    <p>Disfruta de hamburguesas jugosas, camperos malagueños y nuestros famosos pollos hechos con ingredientes frescos y pan artesanal.</p>
+    <!-- NO IMPLEMENTADO
+    <div class="carrousel-platos">
+      <strong>Vuestros favoritos</strong>
+      <div class="track">
+        <div class="slide">🍟 Patatas Kome Kome</div>
+        <div class="slide">⁠🔥 Campero Malaka</div>
+        <div class="slide">🐐 Burger Como Una ... Cabra </div>
+        <div class="slide">🔥🍗 Pollos asados</div>
+      </div>
+    </div>
+     -->
     <Button href="/carta" variant="primary" children="Ver nuestra carta"></Button>
   </section>
 
   <section class="info">
-    <h3>¿Dónde estamos?</h3>
-    <p>📍 Avenida del Carmelo, 21 - Torremolinos (Junto al Parque de la Batería)</p>
-    <p>¿Quieres pedir o consultarnos algo?</p>
-    <p>Llámanos directamente al  
-      <Button href="tel:+34952376259" variant="tertiary" children="952 376 259"></Button>
-    </p>
-    <p>👋🏼 Síguenos en <Button variant="tertiary" children="Instagram" href="https://www.instagram.com/komekomehamb/?hl=es" target="_blank" ></Button></p>
+    <div class="card-container">
+      <span class="material-symbols-outlined">
+        schedule
+      </span>
+      <h3>Horario</h3>
+      <h4>Abiertos de Miércoles a Domingo</h4>
+      <p>12:00 a 16:00</p>
+      <p>20:00 a 23:00</p>
+    </div>
+
+    <div class="card-container">
+      <span class="material-symbols-outlined">
+        phone_in_talk
+      </span>
+      <h3>Teléfono</h3>
+      <p>¿Quieres pedir ya?</p>
+      <Button variant="secondary" children="Llámanos" href="tel:+34952376259"></Button>
+    </div>
+
+    <div class="card-container">
+      <span class="material-symbols-outlined">
+        location_on
+      </span>
+      <h3>Ubicación</h3>
+      <p>Avenida del Carmelo, 21</p>
+      <Button variant="secondary" children="¿Dónde estamos?" href="/ubicacion"></Button>
+    </div>
+
   </section>
   
   <Reviews />
+  <!-- NO IMPLEMENTADO
+   * Script del carrusel 
+  <script is:inline>
+    document.addEventListener("DOMContentLoaded", () => {
+      const slides = document.querySelectorAll(".slide");
+      let currentIndex = 0;
 
+      - Inicializa la primera diapositiva como visible
+      slides.forEach((slide, index) => {
+        slide.style.opacity = index === 0 ? 1 : 0; // Solo la primera diapositiva es visible
+      });
+
+      function showNextSlide() {
+        slides[currentIndex].style.opacity = 0; // Oculta la diapositiva actual
+        currentIndex = (currentIndex + 1) % slides.length; // Avanza al siguiente índice
+        slides[currentIndex].style.opacity = 1; // Muestra la siguiente diapositiva
+      }
+
+      - Cambia de diapositiva cada 4 segundos
+      setInterval(showNextSlide, 4000);
+
+      - Pausa si pasa el ratón encima
+      slides.forEach(slide => {
+        slide.addEventListener("mouseenter", () => {
+          clearInterval(interval); // Detiene el cambio de diapositivas
+        });
+        slide.addEventListener("mouseleave", () => {
+          interval = setInterval(showNextSlide, 4000); // Reinicia el cambio de diapositivas
+        });
+      });
+    });
+  </script>
+   -->
 </BaseLayout>

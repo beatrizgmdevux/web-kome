@@ -1,6 +1,6 @@
 ---
 import Nav from "../components/Nav.astro";
-import Button from "../components/Button.astro";
+import Footer from "../components/Footer.astro";
 const { title, description } = Astro.props;
 import "../style/global.css";
 ---
@@ -14,6 +14,7 @@ import "../style/global.css";
     <title>{title}</title>
     <meta name="description" content={description} />
 
+    <!-- Material Symbols Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
     <!-- Open Graph (para redes sociales) -->
@@ -38,10 +39,6 @@ import "../style/global.css";
       <slot />
     </main>
 
-    <footer>
-      <Button href="/" variant="secondary" children="Inicio"></Button>
-      
-      <p>&copy; {new Date().getFullYear()} Asador Kome Kome</p>
-    </footer>
+    <Footer />
   </body>
 </html>

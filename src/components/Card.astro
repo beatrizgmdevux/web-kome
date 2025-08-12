@@ -1,0 +1,25 @@
+---
+const {childrenH4, childrenP, className = "", textButton, childrenHref, imgSrc, imgAlt} = Astro.props;
+
+import Button from "./Button.astro";
+---
+
+<section class={`card ${className}`}>
+    <img src={imgSrc} alt={imgAlt} class="cards-logo">
+    <h4>{childrenH4}</h4>
+    <p>{childrenP}</p>
+    <Button variant="secondary" children={textButton} href={childrenHref}></Button>
+</section>
+
+
+<style>
+  .card {
+    background-color: var(--color-white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px var(--color-grey-shadow);
+    max-width: 250px;
+    margin: 1rem auto;
+    text-align: center;
+  }
+</style>

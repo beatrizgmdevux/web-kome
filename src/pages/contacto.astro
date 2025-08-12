@@ -8,16 +8,42 @@ const pageDescription = "¿Quieres contarnos algo? Ponte en contacto con nosotro
 
 <BaseLayout title={pageTitle} description={pageDescription}>
   <section class="contact-container">
-    <h1>Contacto</h1>
+    <div class="contact-text">
+        <h1>Contacto</h1>
 
-    <p>¿Quieres pedir o consultarnos algo?</p>
-    <p>Llámanos directamente al  
-      <Button href="tel:+34952376259" variant="primary" children="952 376 259"></Button>
-    </p>
+        <p>¿Quieres pedir ahora?</p>
+        
+        <Button href="tel:+34952376259" variant="primary" children="952 376 259"></Button>
+    </div>
 
+    <div class="contact-image">
+        <img src="/pollo.jpg" alt="Nuestro pollo asado" class="img-pollo">
+    </div>
+
+      <section class="location-container">
+    <h1>Ubicación</h1>
+    <p>Estamos junto al Parque de la Batería en Torremolinos, listos para atenderte.</p>
+    <p>Aquí tienes nuestra dirección:</p>
+    
+    <p><strong>Avenida del Carmelo, 21 - Torremolinos (Málaga)</strong></p>
+
+    <div class="map-container">
+      <iframe
+        src= "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6404.977916444645!2d-4.5090629!3d36.614615400000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd72fb8856eebdc1%3A0xf399a48f9f5e2c92!2sAsador%20de%20pollos%20Kome%20Kome!5e0!3m2!1ses!2ses!4v1754746073166!5m2!1ses!2ses"
+        width="100%"
+        height="400"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+  </section>
+
+    <!-- ! Quito formulario
     <h2>¿Quieres contarnos algo?</h2>
     <form name="contact" method="POST" data-netlify="true">
-      <!-- Campo oculto para Netlify -->
+       Campo oculto para Netlify 
       <input type="hidden" name="form-name" value="contact" />
 
         <label for="name">Nombre</label>
@@ -34,32 +60,7 @@ const pageDescription = "¿Quieres contarnos algo? Ponte en contacto con nosotro
 
       <Button type="submit" variant="primary" children="Enviar"></Button>
     </form>
+     -->
   </section>
 
-  <style>
-    .contact-container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    form {
-      margin-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    label {
-      font-weight: bold;
-      margin-bottom: 0.3rem;
-    }
-
-    input, textarea {
-      padding: 0.6rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-  </style>
 </BaseLayout>
