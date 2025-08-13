@@ -1,15 +1,27 @@
----
-import reviews from '../data/reviews.json';
+<!-- 
+ ---
+interface Review {
+  profile_photo_url: string;
+  author_name: string;
+  rating: number;
+  text: string;
+}
+
+const res = await fetch('/reviews.js');
+const data = await res.json();
+const reviews: Review[] = data.reviews; // Tipamos las reseñas
 ---
 
-<section class="reviews">
-    <h2>Lo que opinan nuestros clientes</h2>
-    <div class="review-list">
-      {reviews.map((review) => (
-        <div class="review">
-          <p class="review-text">“{review.text}”</p>
-          <p class="review-author">– {review.author}</p>
-        </div>
-      ))}
+
+<section>
+  <h2>Opiniones de nuestros clientes</h2>
+  {reviews.map((r: Review) => (
+    <div class="reviews" > 
+      <img src={r.profile_photo_url} alt={r.author_name} width="50" />
+      <strong>{r.author_name}</strong>
+      <span>⭐ {r.rating}</span>
+      <p>{r.text}</p>
     </div>
-  </section>
+  ))}
+</section>
+ -->
