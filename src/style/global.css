@@ -138,6 +138,123 @@ em {
   cursor: pointer;
 }
 
+/* -------------------------------
+  * NAVEGACIÓN PRINCIPAL DE LA WEB
+  -------------------------------- */
+
+/* Navegación principal de la web: Inicio, Carta, Contacto, Ubicación*/
+.nav {
+  padding: 1rem;
+  text-align: center;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  border-end-end-radius: 20px;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 0;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--color-beige);
+  font-size: 20px;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: var(--color-red-hover);
+}
+
+.nav-links a.active {
+  color: var(--color-red);
+  border-bottom: 2px solid var(--color-red);
+}
+
+/* Estilos logo Nav*/
+.logo {
+  height: 150px;
+  width: auto;
+  cursor: pointer;
+}
+
+/* Menú hamburguesa para pantallas móvil o tablet*/
+.hamburger {
+  display: none;
+  position: relative;
+  width: 30px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 11;
+}
+
+.hamburger .bar {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-black);
+  border-radius: 2px;
+  transition: 
+      transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+      opacity 0.4s ease,
+      background-color 0.3s ease;
+}
+
+.hamburger .bar:nth-child(1){
+  top: 0;
+}
+
+.hamburger .bar:nth-child(2){
+  top: 10px;
+}
+
+.hamburger .bar:nth-child(3){
+  top: 20px;
+}
+
+.hamburger.open .bar{
+  background-color: var(--color-red-hover);
+}
+
+.hamburger.open .bar:nth-child(1){
+  width: 48px;
+  transform: rotate(45deg) translateY(10px);
+}
+
+.hamburger.open .bar:nth-child(2){
+  opacity: 0;
+}
+
+.hamburger.open .bar:nth-child(3){
+  width: 48px;
+  transform: rotate(-45deg) translateY(-10px);
+}
+
 /* ------------------------------
   * INICIO
   ------------------------------- */
@@ -188,17 +305,7 @@ em {
   margin-right: 0.5rem;
 }
 
-/* Animación de flotación */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-/* Navegación del menú principal */
+/* Navegación de la carta */
 .menu {
   padding: 3rem 1.5rem;
   max-width: 850px;
@@ -334,119 +441,6 @@ em {
   color: var(--color-grey-description);
 }
 
-/* Navegación principal de la web: Inicio, Carta, Contacto, Ubicación*/
-.nav {
-  padding: 1rem;
-  text-align: center;
-  border-radius: 16px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
-  align-items: center;
-  align-content: center;
-  border-end-end-radius: 20px;
-}
-
-.nav-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  
-  margin: 0 auto;
-  gap: 2rem;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  padding: 0;
-  margin: 0;
-  flex-wrap: wrap;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: var(--color-beige);
-  font-size: 20px;
-  font-weight: bold;
-  transition: color 0.3s;
-}
-
-.nav-links a:hover {
-  color: var(--color-red-hover);
-}
-
-.nav-links a.active {
-  color: var(--color-red);
-  border-bottom: 2px solid var(--color-red);
-}
-
-/* Estilos logo Nav*/
-.logo {
-  height: 150px;
-  width: auto;
-  cursor: pointer;
-}
-
-/* Menú hamburguesa para pantallas móvil o tablet*/
-.hamburger {
-  display: none;
-  position: relative;
-  width: 30px;
-  height: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  z-index: 11;
-}
-
-.hamburger .bar {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: var(--color-black);
-  border-radius: 2px;
-  transition: 
-      transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
-      opacity 0.4s ease,
-      background-color 0.3s ease;
-}
-
-.hamburger .bar:nth-child(1){
-  top: 0;
-}
-
-.hamburger .bar:nth-child(2){
-  top: 10px;
-}
-
-.hamburger .bar:nth-child(3){
-  top: 20px;
-}
-
-.hamburger.open .bar{
-  background-color: var(--color-red-hover);
-}
-
-.hamburger.open .bar:nth-child(1){
-  width: 48px;
-  transform: rotate(45deg) translateY(10px);
-}
-
-.hamburger.open .bar:nth-child(2){
-  opacity: 0;
-}
-
-.hamburger.open .bar:nth-child(3){
-  width: 48px;
-  transform: rotate(-45deg) translateY(-10px);
-}
-
 
 
 /* --------------------- 
@@ -496,36 +490,163 @@ em {
   height: 32px;
 }
 
-/* PANTALLAS RESPONSIVE */
+
+/* ----------------------------
+  * TRABAJA CON NOSOTROS
+------------------------------*/
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  gap: 1rem;
+}
+
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.form-group label {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.75rem;
+  border: 1px solid var(--color-grey-shadow);
+  border-radius: 6px;
+  font-size: var(--font-size-base);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--color-red);
+  outline: none;
+}
+
+.form-send {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 24px;
+}
+/* --------------------------
+  * BUTTONS
+----------------------------- */
+.btn {
+  font-family: 'Montserrat', sans-serif;
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+.btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 5px var(--color-grey-shadow);
+  opacity: 0.8;
+}
+
+/* Botón primario */
+.btn.primary {
+  background-color: var(--color-red);
+  color: var(--color-white);
+  border: 2px solid var(--color-red-hover);
+  border: none;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+.btn.primary:hover {
+  background-color: var(--color-red-hover);
+  color: var(--color-white);
+}
+
+/* Botón secundario */
+.btn.secondary {
+  background-color: var(--color-white);
+  border: 2px solid var(--color-grey);
+  color: var(--color-black);
+}
+.btn.secondary:hover {
+  background-color: var(--color-white);
+  border: 2px solid var(--color-black);
+  color: var(--color-black);
+}
+
+/* Botón terciario */
+.btn.tertiary {
+  background: none;
+  color: var(--color-black);
+  font-size: 0.9rem;
+  border: none;
+  padding: 0.5rem 0.75rem;
+}
+.btn.tertiary:hover {
+  text-decoration: underline;
+  font-weight: 500;
+  color: var(--color-red-hover);
+}
+
+/* Estilos botones dentro de una card */
+/* Solo botones dentro de .card-container */
+.card-container .btn {
+  /* Escritorio: más compacto */
+  width: auto;
+  max-width: 200px;
+}
+
+/* Móvil: el botón ocupa todo el ancho de la card */
+@media (max-width: 768px) {
+  .card-container .btn {
+      width: 100%;
+      max-width: none;
+  }
+}
+
+/* ---------------------------
+  * PANTALLAS RESPONSIVE 
+------------------------------ */
 /* Responsive: para móviles pequeños */
 @media (max-width: 480px) {
-    .hero-img {
-        max-width: 320px;
-    }
-    .nav-container{
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        gap: 1rem;
-    }
+.hero-img {
+  max-width: 320px;
+}
+.nav-container{
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+}
 
-    .hamburger {
-        display: flex;
-    }
+.hamburger {
+  display: flex;
+}
 
-    .nav-links {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        text-align: center;
-        background-color: var(--color-beige);
-        padding: 1rem 0;
-    }
+.nav-links {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+  background-color: var(--color-beige);
+  padding: 1rem 0;
+}
 
-    .nav-links.open {
-        display: flex;
-    }
+.nav-links.open {
+  display: flex;
+}
 }
 
 /* Responsive: para tablets */

@@ -1,4 +1,5 @@
 ---
+
 const {
   variant = "primary", // Existen las variantes: primary, secondary y tertiary
   href,                // Si se pasa href -> <a>; si no -> <button>
@@ -8,85 +9,8 @@ const {
 ---
 
 {href ? (
-  <a href={href} class={`btn ${variant}`}>{children}</a>
-) : (
-  <button type={type} class={`btn ${variant}`}>{children}</button>
+    <a href={href} class={`btn ${variant}`}>{children}</a>
+    ) : (
+    <button type={type} class={`btn ${variant}`}>{children}</button>
 )}
 
-<style>
-    .btn {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.75rem 1.5rem;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    .btn:hover {
-    transform: scale(1.03);
-    }
-
-    .btn:active {
-    transform: scale(0.97);
-    box-shadow: 0 2px 5px var(--color-grey-shadow);
-    opacity: 0.8;
-
-    }
-
-    /* Botón primario */
-    .btn.primary {
-    background-color: var(--color-red);
-    color: var(--color-white);
-    border: 2px solid var(--color-red-hover);
-    border: none;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-    }
-    .btn.primary:hover {
-    background-color: var(--color-red-hover);
-    color: var(--color-white);
-    }
-
-    /* Botón secundario */
-    .btn.secondary {
-    background-color: var(--color-white);
-    border: 2px solid var(--color-grey);
-    color: var(--color-black);
-    }
-    .btn.secondary:hover {
-    background-color: var(--color-white);
-    border: 2px solid var(--color-black);
-    color: var(--color-black);
-    }
-
-    /* Botón terciario */
-    .btn.tertiary {
-    background: none;
-    color: var(--color-black);
-    font-size: 0.9rem;
-    border: none;
-    padding: 0.5rem 0.75rem;
-    }
-    .btn.tertiary:hover {
-    text-decoration: underline;
-    font-weight: 500;
-    color: var(--color-red-hover);
-    }
-
-  /* Estilos botones dentro de una card */
-  /* Solo botones dentro de .card-container */
-    .card-container .btn {
-        /* Escritorio: más compacto */
-        width: auto;
-        max-width: 200px;
-    }
-
-    /* Móvil: el botón ocupa todo el ancho de la card */
-    @media (max-width: 768px) {
-    .card-container .btn {
-        width: 100%;
-        max-width: none;
-    }
-    }
-
-</style>

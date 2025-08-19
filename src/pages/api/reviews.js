@@ -1,3 +1,4 @@
+/*
 export async function get({ params, request }) {
   const API_KEY = "AIzaSyAw5cNknvTI4bD-WnqPIA4MbxhG9_RGefQ";
   const PLACE_ID = "ChIJwb3uVoj7cg0Rkixen4-kmfM";
@@ -11,3 +12,4 @@ export async function get({ params, request }) {
     headers: { "Content-Type": "application/json" }
   });
 }
+ */
