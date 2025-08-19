@@ -63,7 +63,7 @@ body {
   min-height: 100vh;
 }
 
-header, footer {
+header {
   text-align: center;
   padding: 1rem;
   background: var(--color-black);
@@ -279,6 +279,7 @@ em {
   border-radius: 12px;
   box-shadow: 0 4px 6px var(--color-grey-shadow);
   width: 100%;
+  max-width: 350px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -286,19 +287,30 @@ em {
   gap: 0.75rem;
 }
 
-/* Pantallas responsive medianas y grandes (tablet y ordenador) */
-@media (min-width: 768px) {
+/* Pantallas responsive medianas: tablet */
+@media (min-width: 768px) and (max-width: 1199px) {
   .info{
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    justify-content: center;
+    grid-template-columns: repeat(2, minmax(350px, 1fr));
+    gap: 2rem;
+    justify-items: center;
   }
-
-  .card-container {
-    width: 100%;
-    max-width: 300px;
+  .info > .card-container:last-child {
+    grid-column: 1 / -1;
+    justify-self: center;
+    max-width: 350px;
   }
 }
+
+/* Pantallas responsive grandes: desktop */
+@media (min-width: 1200px) {
+  .info {
+    grid-template-columns: repeat(3, minmax(350px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+  }
+}
+
+
 
 /* Estilos reseñas */
 .review {
@@ -531,12 +543,6 @@ em {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* Estilos logo Instagram del footer*/
-#logo-insta {
-  width: 32px;
-  height: 32px;
-}
-
 
 /* ----------------------------
   * TRABAJA CON NOSOTROS
@@ -549,7 +555,6 @@ em {
   padding: 16px;
   gap: 1rem;
 }
-
 
 .form-group {
   display: flex;
@@ -583,6 +588,7 @@ em {
   justify-content: center;
   gap: 24px;
 }
+
 /* --------------------------
   * BUTTONS
 ----------------------------- */
@@ -651,15 +657,8 @@ em {
 .card-container .btn {
   /* Escritorio: más compacto */
   width: auto;
-  max-width: 200px;
-}
-
-/* Móvil: el botón ocupa todo el ancho de la card */
-@media (max-width: 768px) {
-  .card-container .btn {
-      width: 100%;
-      max-width: none;
-  }
+  max-width: 220px;
+  align-self: center;
 }
 
 /* ---------------------------
@@ -719,4 +718,59 @@ em {
         display: flex;
     }
 
+}
+
+/* ----------------------------
+  * FOOTER
+------------------------------- */
+
+/* Estilos logo Instagram del footer*/
+#logo-insta {
+  width: 32px;
+  height: 32px;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: var(--color-black);
+}
+
+/* Contenedor principal de info */
+.footer-content{
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Bloques de info */
+.footer-info h4 {
+  margin-bottom: 0.5rem;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+}
+
+.footer-info p,
+.footer-info a {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-beige);
+  text-decoration: none;
+}
+
+.footer-info a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+}
+
+/* Responsive para pantallas más grandes*/
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: center;
+    gap: 3rem;
+  }
 }
