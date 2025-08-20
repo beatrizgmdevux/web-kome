@@ -1,8 +1,19 @@
 ---
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
-const { title, description } = Astro.props;
 import "../style/global.css";
+
+const { title, description} = Astro.props;
+
+// URL base del sitio web
+const siteUrl = "https://asadorkomekome.netlify.app";
+
+// URL de la página actual dinámica
+const currentUrl = siteUrl + Astro.url.pathname;
+
+// Imagen por defecto para compartir
+const defaultImage = siteUrl + "/pollo.jpg";
+
 
 ---
 
@@ -12,8 +23,11 @@ import "../style/global.css";
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Título y descripción -->
     <title>{title}</title>
     <meta name="description" content={description} />
+
+    <!-- Favicon -->
     <link rel="icon" href="/NuevoLogoBlack250px.png" type="image/x-icon">
 
 
@@ -28,15 +42,42 @@ import "../style/global.css";
     <!-- Open Graph (para redes sociales) -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/pollo.jpg"/>
+    <meta property="og:image" content={defaultImage}/>
+    <meta property="og:image:alt" content="Pollo asado del Asador Kome Kome">
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://asadorkomekome.netlify.app/" />
+    <meta property="og:url" content={currentUrl} />
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="/pollo.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://asadorkomekome.netlify.app/pollo.jpg" />
+    <meta name="twitter:image" content={defaultImage} />
+    <meta name="twitter:url" content={currentUrl} />
+
+  
+    <!-- Schema.org JSON-LD para comida rápida -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FastFoodRestaurant",
+      "name": "Asador Kome Kome",
+      "image": ["{https://asadorkomekome.netlify.app/pollo.jpg}"],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Avenida del Carmelo, 21",
+        "addressLocality": "Málaga",
+        "postalCode": "29620",
+        "addressCountry": "ES"
+      },
+      "telephone": "+34 952 376 259",
+      "url": "https://asadorkomekome.netlify.app/",
+      "servesCuisine": "Pollo asado, camperos, hamburguesas, comida casera",
+      "priceRange": "€"
+    }
+    </script>
+  
   </head>
   <body>
     <header>
