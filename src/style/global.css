@@ -142,7 +142,7 @@ em {
   * NAVEGACIÓN PRINCIPAL DE LA WEB
   -------------------------------- */
 
-/* Navegación principal de la web: Inicio, Carta, Contacto, Ubicación*/
+/* Nav contenedor*/
 .nav {
   padding: 1rem;
   text-align: center;
@@ -156,19 +156,21 @@ em {
   border-end-end-radius: 20px;
 }
 
+/* Container interno*/
 .nav-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  
   margin: 0 auto;
   gap: 2rem;
 }
 
+/* Lista de links de navegación */
 .nav-links {
   list-style: none;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   gap: 1.5rem;
   padding: 0;
@@ -176,6 +178,7 @@ em {
   flex-wrap: wrap;
 }
 
+/* Enlaces de navegación */
 .nav-links a {
   text-decoration: none;
   color: var(--color-beige);
@@ -217,7 +220,7 @@ em {
   left: 0;
   width: 100%;
   height: 3px;
-  background-color: var(--color-black);
+  background-color: var(--color-beige);
   border-radius: 2px;
   transition: 
       transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
@@ -238,7 +241,7 @@ em {
 }
 
 .hamburger.open .bar{
-  background-color: var(--color-red-hover);
+  background-color: var(--color-beige);
 }
 
 .hamburger.open .bar:nth-child(1){
@@ -255,12 +258,93 @@ em {
   transform: rotate(-45deg) translateY(-10px);
 }
 
+/* ---------------------------
+  * RESPONSIVE: Navegación
+------------------------------ */
+/* Responsive: para móviles pequeños */
+@media (max-width: 480px) {
+  .nav-container{
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0;
+  }
+
+  .hamburger {
+    display: flex;
+    margin-left: auto;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 0;
+    background: var(--color-black);
+    display: none;
+    gap: 1.5rem;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+}
+
+/* Responsive: para tablets */
+@media (min-width: 481px) and (max-width: 768px) {
+  .nav-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hamburger {
+    display: flex;
+    margin-left: auto;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem 0;
+    background: var(--color-black);
+    display: none;
+    gap: 1.5rem;
+  }
+
+  .nav-links.open {
+      display: flex;
+  }
+
+}
+
 /* ------------------------------
   * INICIO
   ------------------------------- */
 .hero {
   text-align: center;
   padding: 2rem;
+}
+
+@media (max-width: 480px) {
+  .hero-img {
+    max-width: 320px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .hero-img {
+      max-width: 500px;
+  }
 }
 
 /* Contenedor de las cards con info: horario, teléfono y ubicación*/
@@ -661,65 +745,6 @@ em {
   align-self: center;
 }
 
-/* ---------------------------
-  * PANTALLAS RESPONSIVE 
------------------------------- */
-/* Responsive: para móviles pequeños */
-@media (max-width: 480px) {
-.hero-img {
-  max-width: 320px;
-}
-.nav-container{
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 1rem;
-}
-
-.hamburger {
-  display: flex;
-}
-
-.nav-links {
-  display: none;
-  flex-direction: column;
-  width: 100%;
-  text-align: center;
-  background-color: var(--color-beige);
-  padding: 1rem 0;
-}
-
-.nav-links.open {
-  display: flex;
-}
-}
-
-/* Responsive: para tablets */
-@media (min-width: 481px) and (max-width: 768px) {
-    .hero-img {
-        max-width: 500px;
-    }
-
-    .hamburger {
-        display: flex;
-    }
-
-    .nav-links {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        text-align: center;
-        background-color: var(--color-beige);
-        padding: 1rem 0;
-    }
-
-    .nav-links.open {
-        display: flex;
-    }
-
-}
-
 /* ----------------------------
   * FOOTER
 ------------------------------- */
@@ -763,7 +788,7 @@ footer {
 .footer-info a:hover {
   text-decoration: underline;
   cursor: pointer;
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
 }
 
 /* Responsive para pantallas más grandes*/
