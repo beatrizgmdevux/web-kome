@@ -1,0 +1,79 @@
+// base/_typography.scss
+@use '@/scss/theme/mixins' as *;
+@use '@/scss/theme/variables' as *;
+
+// Base tipográfica
+body {
+  font-family: $font-family-main;
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+  font-style: $font-style-normal;
+  line-height: 1.6;
+  color: $color-black;
+}
+
+// Jerarquía de titulares
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family-main;
+  font-weight: $font-weight-bold;
+  margin-bottom: 0.5rem;
+}
+
+h1 {
+  font-size: $font-size-xxl; // 28px en móvil
+  @include mq-mobile { font-size: 2rem; }    // 32px
+  @include mq-desktop { font-size: 2.5rem; }  // 40px
+}
+
+h2 {
+  font-size: $font-size-xl; // 22px
+  @include mq-mobile { font-size: 1.625rem; } // 26px
+  @include mq-desktop { font-size: 2rem; }     // 32px
+}
+
+h3 {
+  font-size: $font-size-lg; // 20px
+  @include mq-mobile { font-size: 1.125rem; } // 18px
+  @include mq-desktop { font-size: 1.5rem; }   // 24px
+}
+
+h4 { font-size: $font-size-base; }
+h5 { font-size: $font-size-sm; }
+h6 { font-size: $font-size-xs; }
+
+// Párrafos
+p {
+  font-size: $font-size-base;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+
+  @include mq-mobile { font-size: 0.95rem; }
+}
+
+// Texto destacado
+strong { font-weight: $font-weight-bold; }
+em     { font-style: $font-style-italic; }
+
+// Helpers
+.text-light   { font-weight: $font-weight-light; }
+.text-normal  { font-weight: $font-weight-normal; }
+.text-medium  { font-weight: $font-weight-medium; }
+.text-bold    { font-weight: $font-weight-bold; }
+.text-italic  { font-style: italic; }
+.text-uppercase { text-transform: uppercase; }
+.text-center  { text-align: center; }
+
+// Casos específicos
+.p-copyright {
+  color: $color-white;
+}
+
+/* -------------------------------
+  * Iconos Material Symbols Design 
+  -------------------------------- */
+.material-symbols-outlined {
+  font-size: $font-size-xxl;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  color: $color-black;
+  cursor: pointer;
+}

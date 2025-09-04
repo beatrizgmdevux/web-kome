@@ -1,0 +1,94 @@
+// src/scss/components/_contact.scss
+@use '@/scss/theme/variables' as *;
+@use '@/scss/theme/mixins' as *;
+
+/* --------------------- 
+ * CONTACTO Y UBICACIÓN
+ * --------------------- */
+
+.contact-container {
+  @include container;
+  max-width: 1000px;
+  padding: 2rem 1rem;
+
+  /* Mobile-first: 1 columna */
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+  justify-items: center;
+
+  /* NUEVO: áreas en móvil (apilan texto sobre imagen) */
+  grid-template-areas:
+    "text"
+    "image";
+}
+
+.contact-text,
+.contact-image {
+  min-width: 250px;
+  width: 100%;
+  display: flex;
+}
+
+/* Asignamos áreas */
+.contact-text  { grid-area: text; }
+.contact-image { grid-area: image; }
+
+.contact-text {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center; // móvil centrado
+}
+
+.contact-image {
+  justify-content: center;
+}
+
+/* Imagen del pollo y mapa embebido comparten estilo */
+.img-pollo,
+.contact-image iframe {
+  width: 100%;
+  max-width: 400px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba($color-black, .15);
+}
+
+/* Tablet */
+@include mq-tablet {
+  .contact-container {
+    grid-template-columns: 1fr 1fr;
+    /* En tablet por defecto: texto izquierda, imagen derecha */
+    grid-template-areas: "text image";
+  }
+
+  .contact-text {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+/* Desktop (≥ $bp-desktop) */
+@include mq-desktop {
+  .contact-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    /* En desktop, por defecto seguimos "text image" */
+    grid-template-areas: "text image";
+  }
+
+  /* Variante que invierte (imagen/mapa a la izquierda, texto a la derecha) */
+  .contact-container--reverse {
+    grid-template-areas: "image text";
+  }
+
+  /* Más grandes en desktop */
+  .img-pollo,
+  .contact-image iframe {
+    max-width: 480px;
+    height: 340px;
+  }
+}

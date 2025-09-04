@@ -25,10 +25,29 @@ const pageDescription = "¿Quieres unirte a nuestro equipo?";
                 <textarea id="message" name="message" rows="4" required></textarea>
             </div>
 
-            <div class="form-group">
-                <label for="cv">Adjuntar CV</label>
-                <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required />
+            <div class="form-group form-group--file">
+            <label for="cv">Adjuntar CV</label>
+
+            <!-- Input real (oculto visualmente, necesario para Netlify) -->
+            <input
+                class="file-input--visually-hidden"
+                type="file"
+                id="cv"
+                name="cv"
+                accept=".pdf,.doc,.docx"
+                required
+            />
+
+            <!-- UI personalizada -->
+            <div class="file-ui">
+                <Button type="button" variant="primary" id="cv-trigger" children="Seleccionar archivo"></Button>
+                <span class="file-name" id="cv-file-name">Ningún archivo seleccionado</span>
             </div>
+
+            <!-- mensaje de error de validación -->
+            <small class="form-help" id="cv-error" style="display:none;">El archivo debe ser PDF/DOC/DOCX y no superar 5 MB.</small>
+            </div>
+
             
             <div class="form-send">
                 <Button type="reset" variant="secondary" children="Eliminar datos"></Button>
@@ -37,4 +56,54 @@ const pageDescription = "¿Quieres unirte a nuestro equipo?";
             </div>
         </form>
     </section>
+    <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('cv');
+        const out   = document.getElementById('cv-file-name');
+        const btn   = document.getElementById('cv-trigger');
+        const err   = document.getElementById('cv-error');
+        const form  = document.querySelector('form[name="join-form"]');
+
+        if (!input || !out || !btn) return;
+
+        const MAX_MB = 5;
+        const ALLOWED = ['pdf','doc','docx'];
+
+        btn.addEventListener('click', () => input.click());
+
+        input.addEventListener('change', () => {
+            const file = input.files && input.files[0];
+            if (!file) { out.textContent = 'Ningún archivo seleccionado'; hideError(); return; }
+
+            // Validación extensión
+            const ext = (file.name.split('.').pop() || '').toLowerCase();
+            const badExt = !ALLOWED.includes(ext);
+
+            // Validación tamaño
+            const tooBig = file.size > MAX_MB * 1024 * 1024;
+
+            if (badExt || tooBig) {
+                showError();
+                out.textContent = file.name + ' (no válido)';
+                input.value = ''; // limpia selección inválida
+            } else {
+                hideError();
+                out.textContent = file.name;
+            }
+        });
+
+        // Reset del formulario → resetea texto del nombre
+        form?.addEventListener('reset', () => {
+            setTimeout(() => { // permite al reset limpiar el input
+                out.textContent = 'Ningún archivo seleccionado';
+                hideError();
+            }, 0);
+        });
+
+        function showError() { if (err) err.style.display = 'block'; }
+        function hideError() { if (err) err.style.display = 'none'; }
+    });
+    </script>
+
+
 </BaseLayout>

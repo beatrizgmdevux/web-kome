@@ -1,0 +1,31 @@
+// base/_global.scss
+@use '@/scss/theme/mixins' as *;
+@use '@/scss/theme/variables' as *;
+
+html, body {
+  overflow-x: hidden;
+  height: 100%;
+  margin: 0;
+  background: $color-white;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: $font-family-main;
+}
+
+header {
+  text-align: center;
+  padding: 1rem;
+  background: $color-black;
+  color: $color-white;
+}
+
+main {
+  flex: 1;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: $color-black;
+}

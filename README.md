@@ -36,6 +36,14 @@ Está desarrollada en **Astro**, con HTML, CSS y algo de JavaScript para lograr 
 
 ---
 
+## 🚀 Despliegue
+dev (HMR para Astro+SCSS)
+dev:host (prueba en móvil en la red local)
+dev:nf (HMR + Functions (/.netlify/functions/*))
+serve (build + preview (producción))
+
+---
+
 ## 📸 Captura de Pantalla
 
 *Próximamente una imagen del diseño final aquí...*

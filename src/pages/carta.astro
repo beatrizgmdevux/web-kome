@@ -1,87 +1,227 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import menu from '../data/menu.json';
-import { slugify } from '../utils/slugify.js';
+// @ts-nocheck
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import rawMenu from '@/data/menu.json';
 
-const categoryNames = Object.keys(menu);
+// Mapea claves "icon" → ilustraciones (pon los SVG/PNG en /public/icons/)
+const ICONS: Record<string, string> = {
+  bocata: '/icons/bocata.png',
+  campero: '/icons/campero.png',
+  ensalada: '/icons/ensalada.png',
+  burger: '/icons/hamburguesa.png',
+  kebab: '/icons/kebab.png',
+  lata: '/icons/lata.png',
+  new: '/icons/new.png',
+  pan: '/icons/pan.png',
+  patatas: '/icons/patatas.png',
+  picante: '/icons/picante.png',
+  pollo: '/icons/pollo-asado.png',
+  refrescos: '/icons/refrescos.png',
+  salsa: '/icons/salsa.png',
+  chef: '/icons/sombrero-de-chef.png',
+};
 
-const pageTitle = "Carta | Kome Kome";
-const pageDescription = "El pollo asado es nuestra especialidad. Pídelo para llevar o domicilio y que no falte en tu mesa.";
+// Slug sencillo (sin emojis, sin acentos, sin espacios)
+function slugify(s: string) {
+  return String(s)
+    .trim()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quita acentos
+    .replace(/[^a-zA-Z0-9]+/g, '-')                  // no alfanum → guion
+    .replace(/^-+|-+$/g, '')                         // bordes
+    .toLowerCase();
+}
+
+// 1) Fuerzo un orden deseado por etiqueta
+const ORDER = [
+  'Nuestro fuerte',
+  'Para compartir',
+  'Ensaladas de la huerta',
+  'Entrepanes',
+  'Nuestros camperos',
+  'Bebidas',
+];
+
+// Convierte el objeto de categorías → array
+type Item = {
+  name: string;
+  price?: string | Record<string,string>;
+  description?: string;
+  icon?: string;
+  badge?: string;
+};
+
+// 2) Construimos categorías con ese orden; si alguna no existe, la saltamos.
+const categories = ORDER
+  .filter((label) => Object.prototype.hasOwnProperty.call(rawMenu, label))
+  .map((label) => {
+    const cfg = rawMenu[label] || {};
+    const id = slugify(label);
+    const iconKey = cfg.icon || null;
+    const iconPath = iconKey && ICONS[iconKey] ? ICONS[iconKey] : null;
+    return {
+      id,
+      label,
+      iconPath,
+      description: cfg.description || '',
+      items: Array.isArray(cfg.items) ? cfg.items : [],
+    };
+  });
+
+function normalizeItem(it: Item) {
+  const badge = it.badge === 'new' || (typeof it.name === 'string' && it.name.includes('🆕')) ? 'Nuevo' : null;
+  const cleanName = typeof it.name === 'string' ? it.name.replace('🆕','').trim() : it.name;
+
+  // icono por item (ilustración)
+  const itemIconKey = it.icon && it.icon !== 'new' ? it.icon : null;
+  const itemIconPath = itemIconKey && ICONS[itemIconKey] ? ICONS[itemIconKey] : null;
+
+  // precio: string o objeto
+  const isMulti = it.price && typeof it.price === 'object' && !Array.isArray(it.price);
+  const priceSingle = !isMulti ? (it.price as string ?? null) : null;
+  const priceMulti  = isMulti ? Object.entries(it.price as Record<string,string>) : null;
+
+  return {
+    name: cleanName,
+    description: it.description ?? '',
+    priceSingle,
+    priceMulti,
+    badge,
+    iconPath: itemIconPath
+  };
+}
+
+const pageTitle = 'Nuestra carta';
+const pageDescription = 'Pollos asados, camperos, hamburguesas y más en Kome Kome';
 ---
 
-
 <BaseLayout title={pageTitle} description={pageDescription}>
-  <header class="sticky-header">
-    <nav class="menu-nav">
-      <ul class="menu-links">
-        {categoryNames.map((cat) => {
-          const cleanId = slugify(cat);
-          return (
-            <li><a href={`#${cleanId}`}>{cat}</a></li>
-          );
-        })}
+  <main class="menu">
+    <!-- NAV (chips con icono de categoría si existe) -->
+    <nav class="menu-nav sticky-header" aria-label="Categorías de la carta">
+      <ul>
+        {categories.map((c) => (
+          <li>
+            <a href={`#${c.id}`}>
+              {c.iconPath && (
+                <span class="chip__icon" aria-hidden="true">
+                  <img src={c.iconPath} alt="" loading="lazy" decoding="async" />
+                </span>
+              )}
+              <span class="chip__label">{c.label}</span>
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
-  </header>
 
-  <section class="menu">
-    {Object.entries(menu).map(([categoryName, categoryData]) => {
-      const cleanId = slugify(categoryName);
-      return (
-        <section id={cleanId} class="category-section">
-          <h3>{categoryName}</h3>
-          {categoryData.description && <p class="category-description">{categoryData.description}</p>}
-          <ul>
-            {categoryData.items.map((item) => (
+    {/* Secciones */}
+    {categories.map((c) => (
+      <section id={c.id} class="category-section">
+        <h2>
+          {c.iconPath && <img class="cat-icon" src={c.iconPath} alt="" loading="lazy" decoding="async" />} {c.label}
+        </h2>
+
+        {c.description && <p class="category-description">{c.description}</p>}
+
+        <ul>
+          {c.items.map((raw) => {
+            const it = normalizeItem(raw);
+            return (
               <li class="menu-item">
                 <div class="item-header">
-                  <strong>{item.name}</strong>
-                  {typeof item.price === "object" ? (
-                    <ul class="multi-price">
-                      {Object.entries(item.price).map(([portion, price]) => (
-                        <li>
-                          <span class="portion">{portion}</span>
-                          <span class="price">{price}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <span class="single-price">{item.price}</span>
-                  )}
+                  <strong>
+                    {it.iconPath && <img class="item-icon" src={it.iconPath} alt="" loading="lazy" decoding="async" />}
+                    {it.name}
+                    {it.badge && <span class="badge badge--new">{it.badge}</span>}
+                  </strong>
+
+                  {it.priceSingle && <span class="single-price">{it.priceSingle}</span>}
                 </div>
-                {item.description && <p class="item-description">{item.description}</p>}
+
+                {it.priceMulti && (
+                  <ul class="multi-price">
+                    {it.priceMulti.map(([portion, price]) => (
+                      <li>
+                        <span class="portion">{portion}</span>
+                        <span class="price">{price}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {it.description && <p class="item-description">{it.description}</p>}
               </li>
-            ))}
-          </ul>
-        </section>
-      );
-    })}
-  </section>
+            );
+          })}
+        </ul>
+      </section>
+    ))}
+  </main>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const links = document.querySelectorAll('.menu-nav a');
-      const sections = [...document.querySelectorAll('.category-section')];
+  <!-- Scroll suave + Scrollspy (activa pestaña al hacer scroll) -->
+  <script is:inline>
+    const prefersNoMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach(entry => {
-            const id = entry.target.id;
-            const link = document.querySelector(`.menu-nav a[href="#${id}"]`);
+    // Enlaces de la nav (chips)
+    const navLinks = Array.from(document.querySelectorAll('.menu-nav a[href^="#"]'));
 
-            if (entry.isIntersecting) {
-              document.querySelectorAll('.menu-nav a').forEach(l => l.classList.remove('active'));
-              if (link) link.classList.add('active');
-              entry.target.classList.add('active-section');
-            } else {
-              entry.target.classList.remove('active-section');
-            }
-          });
-        },
-        { rootMargin: '-50% 0px -50% 0px', threshold: 0.1 }
-      );
+    // Scroll suave al hacer clic
+    navLinks.forEach((a) => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href') || '';
+        const id = href.startsWith('#') ? href.slice(1) : '';
+        if (!id) return;
 
-      sections.forEach(section => observer.observe(section));
+        const target = document.getElementById(id);
+        if (!target) return;
+
+        e.preventDefault();
+        target.scrollIntoView({ behavior: prefersNoMotion ? 'auto' : 'smooth', block: 'start' });
+        history.replaceState(null, '', `#${id}`);
+      });
     });
+
+    // Mapa id -> enlace (para activar/desactivar)
+    const linksMap = new Map(
+      navLinks.map((a) => {
+        const href = a.getAttribute('href') || '';
+        const id = href.replace(/^#/, '');
+        return [id, a];
+      })
+    );
+
+    const setActive = (id) => {
+      linksMap.forEach((link, key) => {
+        const active = key === id;
+        link.classList.toggle('active', active);
+        if (active) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+    };
+
+    // Secciones observadas
+    const sections = Array.from(document.querySelectorAll('.category-section[id]'));
+
+    const io = new IntersectionObserver((entries) => {
+      // elige la que más área visible tenga
+      const visible = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (visible && visible.target && visible.target.id) {
+        setActive(visible.target.id);
+      }
+    }, {
+      root: null,
+      rootMargin: '-160px 0px -60% 0px', // ajusta si cambia tu header sticky
+      threshold: [0.15, 0.4, 0.6, 0.8],
+    });
+
+    sections.forEach((s) => io.observe(s));
+
+    // Si cargas con hash, activa el chip correspondiente
+    const initialId = (location.hash || '').slice(1);
+    if (initialId && document.getElementById(initialId)) setActive(initialId);
   </script>
+
 </BaseLayout>

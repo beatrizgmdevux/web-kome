@@ -1,27 +1,214 @@
-<!-- 
- ---
-interface Review {
-  profile_photo_url: string;
-  author_name: string;
-  rating: number;
-  text: string;
-}
-
-const res = await fetch('/reviews.js');
-const data = await res.json();
-const reviews: Review[] = data.reviews; // Tipamos las reseñas
+---
+const TITLE = 'Reseñas de Google';
+const LIMIT = 12; // cargas hasta 12 y el usuario navega por “pases”
 ---
 
+<section class="reviews" aria-labelledby="reviews-title" role="region">
+  <h2 id="reviews-title">{TITLE}</h2>
 
-<section>
-  <h2>Opiniones de nuestros clientes</h2>
-  {reviews.map((r: Review) => (
-    <div class="reviews" > 
-      <img src={r.profile_photo_url} alt={r.author_name} width="50" />
-      <strong>{r.author_name}</strong>
-      <span>⭐ {r.rating}</span>
-      <p>{r.text}</p>
+  <!-- Resumen (rating medio, total) -->
+  <div id="reviews-summary" class="reviews-header">
+    <p id="reviews-skeleton">Cargando reseñas…</p>
+  </div>
+
+  <!-- Carrusel -->
+  <div class="reviews-carousel">
+    <button class="reviews-arrow reviews-arrow--prev" aria-controls="reviews-track" aria-label="Ver reseñas anteriores" disabled>
+      ‹
+    </button>
+
+    <div class="reviews-viewport" id="reviews-viewport">
+      <ul id="reviews-track" class="reviews-track" aria-live="polite"></ul>
     </div>
-  ))}
+
+    <button class="reviews-arrow reviews-arrow--next" aria-controls="reviews-track" aria-label="Ver reseñas siguientes">
+      ›
+    </button>
+  </div>
+
+  <p class="attribution">
+    Datos de reseñas: <a href="https://www.google.com/maps/place/Asador+de+pollos+Kome+Kome/" target="_blank" rel="noopener">Google</a>
+  </p>
 </section>
- -->
+<script is:inline>
+  const LIMIT = 12;
+
+  const viewport = document.getElementById('reviews-viewport');
+  const track    = document.getElementById('reviews-track');
+  const prevBtn  = document.querySelector('.reviews-arrow--prev');
+  const nextBtn  = document.querySelector('.reviews-arrow--next');
+  const summary  = document.getElementById('reviews-summary');
+  const skeleton = document.getElementById('reviews-skeleton');
+
+  let baseReviews = []; // reseñas originales (sin clones)
+  let cloneCount  = 1;  // cuántas clonamos en cada extremo (depende de viewport)
+
+  async function loadReviews() {
+    try {
+      const res = await fetch('/.netlify/functions/reviews');
+      if (!res.ok) throw new Error('Respuesta no OK: ' + res.status);
+      const data = await res.json();
+
+      baseReviews = Array.isArray(data.reviews) ? data.reviews.slice(0, LIMIT) : [];
+      const rating  = data.rating ?? '—';
+      const total   = data.user_ratings_total ?? 0;
+
+      if (skeleton) skeleton.remove();
+      summary.innerHTML = `
+        <p class="reviews-summary">
+          Valoración media: <strong>${rating}</strong> (${total} reseñas)
+        </p>
+      `;
+
+      if (!baseReviews.length) {
+        const empty = document.createElement('p');
+        empty.textContent = 'Aún no hay reseñas disponibles.';
+        summary.after(empty);
+        document.querySelector('.reviews-carousel')?.remove();
+        return;
+      }
+
+      buildCarousel();   // pinta + clona + coloca scroll
+      initControls();    // flechas + teclado
+      window.addEventListener('resize', debounce(rebuildOnResize, 150));
+    } catch (err) {
+      if (skeleton) skeleton.textContent = 'No se pudieron cargar las reseñas ahora mismo.';
+      console.error('Reviews error:', err);
+    }
+  }
+
+  function buildCarousel() {
+    // 1) limpiar pista
+    track.innerHTML = '';
+
+    // 2) pintar las tarjetas base
+    const baseEls = baseReviews.map(createSlide);
+    const fragBase = document.createDocumentFragment();
+    baseEls.forEach(el => fragBase.appendChild(el));
+
+    // 3) decidir cuántas caben en pantalla (1/2/3) y clonar extremos
+    cloneCount = getVisibleCount();
+    const leftClones  = baseEls.slice(-cloneCount).map(cloneSlide);
+    const rightClones = baseEls.slice(0, cloneCount).map(cloneSlide);
+
+    // 4) ensamblar: [left clones] + base + [right clones]
+    const fragAll = document.createDocumentFragment();
+    leftClones.forEach(el => fragAll.appendChild(el));
+    baseEls.forEach(el => fragAll.appendChild(el));
+    rightClones.forEach(el => fragAll.appendChild(el));
+    track.appendChild(fragAll);
+
+    // 5) situar scroll en el primer elemento REAL (después de los clones izquierdos)
+    requestAnimationFrame(() => alignToIndex(cloneCount));
+
+    // 6) normalizar en scroll (para bucle infinito)
+    viewport.removeEventListener('scroll', _onScrollNormalize);
+    viewport.addEventListener('scroll', _onScrollNormalize);
+  }
+
+  function createSlide(r) {
+    const li = document.createElement('li');
+    li.className = 'review-card';
+    const text = (r.text ?? '').trim();
+
+    li.innerHTML = `
+      <div class="review-head">
+        <span class="review-author">${r.author_name ?? 'Cliente'}</span>
+        <span class="review-stars">${'★'.repeat(r.rating ?? 0)}${'☆'.repeat(5 - (r.rating ?? 0))}</span>
+      </div>
+      <p class="review-text"></p>
+      <a class="review-link" href="${r.author_url ?? '#'}" target="_blank" rel="noopener">Ver en Google</a>
+    `;
+    li.querySelector('.review-text').textContent = text;
+    return li;
+  }
+
+  function cloneSlide(el) {
+    const c = el.cloneNode(true);
+    c.dataset.clone = 'true';
+    return c;
+  }
+
+  // cuántos “slides” caben a la vez (1/2/3) según viewport
+  function getVisibleCount() {
+    const w = viewport.clientWidth || window.innerWidth;
+    if (w >= 1200) return 3;   // tu desktop
+    if (w >= 768)  return 2;   // tu tablet
+    return 1;                  // móvil
+  }
+
+  // alinear el scroll para que la izquierda del slide i toque el borde del viewport
+  function alignToIndex(i) {
+    const target = track.children[i];
+    if (!target) return;
+    viewport.scrollTo({ left: target.offsetLeft, behavior: 'auto' });
+  }
+
+  // encuentra el índice del slide más cercano a la posición actual
+  function findNearestIndex() {
+    const x = viewport.scrollLeft;
+    const children = Array.from(track.children);
+    let best = 0, bestDelta = Infinity;
+    for (let i = 0; i < children.length; i++) {
+      const d = Math.abs(children[i].offsetLeft - x);
+      if (d < bestDelta) { best = i; bestDelta = d; }
+    }
+    return best;
+  }
+
+  // normaliza cuando entramos en clones (bucle infinito sin “salto” visible)
+  const _onScrollNormalize = debounce(() => {
+    const total = baseReviews.length;
+    if (!total) return;
+
+    const i = findNearestIndex();
+    const firstReal = cloneCount;
+    const lastRealStart = cloneCount + total - 1; // start de la última tarjeta real
+
+    if (i < firstReal) {
+      // estamos en clones de la izquierda → saltar al original equivalente
+      alignToIndex(i + total);
+    } else if (i > lastRealStart) {
+      // estamos en clones de la derecha → saltar al original equivalente
+      alignToIndex(i - total);
+    }
+  }, 80);
+
+  function initControls() {
+    // flechas SIEMPRE activas en modo infinito
+    prevBtn?.addEventListener('click', () => scrollByPage(-1));
+    nextBtn?.addEventListener('click', () => scrollByPage( 1));
+    // teclado (viewport enfocable)
+    viewport.setAttribute('tabindex', '0');
+    viewport.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft')  scrollByPage(-1);
+      if (e.key === 'ArrowRight') scrollByPage( 1);
+    });
+  }
+
+  function getPageWidth() {
+    return viewport.clientWidth || 0;
+  }
+
+  function scrollByPage(direction) {
+    const delta = getPageWidth() * (direction > 0 ? 1 : -1);
+    viewport.scrollBy({ left: delta, behavior: 'smooth' });
+  }
+
+  // reconstruir clones al cambiar de breakpoint (resize)
+  function rebuildOnResize() {
+    const newCount = getVisibleCount();
+    if (newCount !== cloneCount) buildCarousel(); // repinta y recoloca
+  }
+
+  // debounce utilitario
+  function debounce(fn, ms) {
+    let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+  }
+
+  document.addEventListener('DOMContentLoaded', loadReviews);
+</script>
+
+<style lang="scss">
+  @use '@/scss/components/reviews';
+</style>

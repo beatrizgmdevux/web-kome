@@ -1,0 +1,28 @@
+//  /scss/main.scss
+
+// 1. Configuración y utilidades
+@use 'theme/mixins' as *;
+@use 'theme/variables' as *;
+
+// 2. Base global
+@use 'base/global' as *;
+@use 'base/typography' as *;
+
+// 3. Componentes reutilizables
+@use 'components/buttons' as *;
+@use 'components/hero' as *;
+@use 'components/cards' as *;
+@use 'components/work' as *;
+@use 'components/forms' as *;
+@use 'components/reviews' as *;
+
+// 4. Layout general
+@use 'layout/header' as *;
+@use 'layout/nav' as *;
+@use 'layout/footer' as *;
+
+// 5. Estilos específicos de páginas
+@use 'pages/contact' as *;
+@use 'pages/home' as *;
+@use 'pages/menu' as *;
+@use 'pages/jobs' as *;

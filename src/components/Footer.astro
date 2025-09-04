@@ -1,39 +1,79 @@
 ---
-import Button from "./Button.astro"
 ---
-    
 <footer>
+  <div class="footer-inner">
+    <!-- Bloques de información -->
     <div class="footer-content">
-    <!-- Bloques de información: Horario, teléfono y dirección -->
-        <div class="footer-info">
-            <h4>Horario</h4>
-            <p>Miércoles a Domingo</p>
-            <p>12:00 - 16:00 / 20:00 - 23:00</p>
-        </div>
+      <div class="footer-info">
+        <h4>Horario</h4>
+        <p>Miércoles a Domingo</p>
+        <p>12:00 – 16:00 · 20:00 – 23:00</p>
+      </div>
 
-        <div class="footer-info">
-            <h4>Teléfono</h4>
-            <a href="tel:+34952376259">952 37 62 59</a>
-        </div>
+      <div class="footer-info">
+        <h4>Teléfono</h4>
+        <p><a href="tel:+34952376259">952 37 62 59</a></p>
+      </div>
 
-        <div class="footer-info">
-            <h4>¿Dónde estamos?</h4>
-            <p>Avenida del Carmelo, 21</p>
-        </div>
-    </div>
-    <!-- Enlaces y redes sociales -->
-    <div class="redes-container">
-        <a href="https://www.instagram.com/komekomehamb/?hl=es" target="_blank" >
-            <img id="logo-footer" src="/instagram.png" alt="Logo oficial de Instagram que te enlaza con nuestra cuenta de Kome Kome">
-        </a>
-        <a href="https://www.google.com/maps/place/Asador+de+pollos+Kome+Kome/@36.6213635,-4.5108872,15z/data=!4m6!3m5!1s0xd72fb8856eebdc1:0xf399a48f9f5e2c92!8m2!3d36.6146154!4d-4.5090629!16s%2Fg%2F1q5bp42zn?authuser=0&entry=ttu&g_ep=EgoyMDI1MDgxNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" >
-            <img id="logo-footer" src="/buscar.png" alt="Logo oficial de Google que te lleva a nuestro asador Kome Kome en Google Maps">
-        </a>
-        <a href="mailto:hamburgueseria.komekome20@gmail.com" target="_blank" >
-            <img id="logo-footer" src="/gmail.png" alt="Logo oficial de Gmail que al clicar te enlaza con nuestro email directamente">
-        </a>
+      <div class="footer-info">
+        <h4>¿Dónde estamos?</h4>
+        <p>Avenida del Carmelo, 21</p>
+      </div>
     </div>
 
-    <p class="p-copyright">&copy; {new Date().getFullYear()} Asador Kome Kome</p>
+    <!-- Redes sociales / enlaces -->
+    <nav class="footer-social" aria-label="Redes sociales y enlaces">
+      <a
+        href="https://www.instagram.com/komekomehamb/?hl=es"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Instagram de Kome Kome"
+      >
+        <img
+          class="footer-social__icon"
+          src="/instagram.png"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+
+      <a
+        href="https://www.google.com/maps/place/Asador+de+pollos+Kome+Kome/@36.6213635,-4.5108872,15z/data=!4m6!3m5!1s0xd72fb8856eebdc1:0xf399a48f9f5e2c92!8m2!3d36.6146154!4d-4.5090629!16s%2Fg%2F1q5bp42zn"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Ver Asador Kome Kome en Google Maps"
+      >
+        <img
+          class="footer-social__icon"
+          src="/buscar.png"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+
+      <a
+        href="mailto:hamburgueseria.komekome20@gmail.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Enviar correo a Kome Kome"
+      >
+        <img
+          class="footer-social__icon"
+          src="/gmail.png"
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+    </nav>
+
+    <!-- Línea inferior -->
+    <div class="footer-bottom">
+      <p class="p-copyright">
+        &copy; {new Date().getFullYear()} Asador Kome Kome. Todos los derechos reservados
+      </p>
+    </div>
+  </div>
 </footer>
-

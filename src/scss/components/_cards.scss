@@ -1,0 +1,57 @@
+// src/scss/components/_cards.scss
+@use '@/scss/theme/variables' as *;
+@use '@/scss/theme/mixins' as *;
+
+/* Contenedor (grid) — mobile-first */
+.info {
+  display: grid;
+  grid-template-columns: 1fr; // 1 columna en móvil
+  gap: 1.5rem;
+  justify-items: center;
+  padding: 1rem;
+}
+
+/* Card */
+.card-container {
+  @include card();
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 350px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+
+  .btn {
+    width: auto;
+    max-width: 220px;
+    align-self: center;
+  }
+
+}
+
+/* Tablet (min 768px y máx $bp-tablet) */
+@include mq-tablet {
+  .info {
+    grid-template-columns: repeat(2, minmax(350px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+  }
+
+  /* La última card ocupa toda la fila en tablet */
+  .info > .card-container:last-child {
+    grid-column: 1 / -1;
+    justify-self: center;
+    max-width: 350px;
+  }
+}
+
+/* Desktop (≥ $bp-desktop) */
+@include mq-desktop {
+  .info {
+    grid-template-columns: repeat(3, minmax(350px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+  }
+}

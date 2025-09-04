@@ -1,0 +1,171 @@
+// src/scss/pages/_menu.scss
+@use '@/scss/theme/variables' as *;
+@use '@/scss/theme/mixins' as *;
+
+/* =========================
+ * NUESTRA CARTA (mobile-first)
+ * ========================= */
+
+.menu {
+  @include container;          // ancho centrado del layout
+  max-width: 850px;            // tu límite específico
+  padding: 3rem 1.5rem;
+}
+
+/* Barra de categorías (scroll horizontal) */
+.menu-nav {
+  background: $color-black;
+  color: $color-white;
+  padding: 1rem .5rem;
+  border-bottom: 1px solid $color-cream;
+
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+
+  /* Ocultar scrollbar (opcional) */
+  &::-webkit-scrollbar { height: 0; }
+  scrollbar-width: none;
+
+  ul {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li { flex-shrink: 0; }
+
+    a {
+      display: inline-block;
+      padding: .5rem 1rem;
+      border-radius: 20px;
+      color: $color-white;
+      text-decoration: none;
+      font-weight: $font-weight-bold;
+      transition: background .3s ease, color .3s ease;
+
+      &:hover,
+      &:focus-visible {
+        background: $color-white;
+        color: $color-black;
+      }
+
+      &.active,
+      &:focus {
+        background: $color-primary;
+        color: $color-white;
+      }
+    }
+  }
+}
+
+/* Cabecera “sticky” opcional para la nav de categorías */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background: $color-black;
+  color: $color-cream;
+  border-bottom: 1px solid $color-grey;
+  z-index: 10;
+}
+
+/* Secciones de categoría */
+.category-section {
+  scroll-margin-top: 160px;  // espacio para sticky nav
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+
+  &.active-section {
+    border-left: 4px solid $color-primary;
+    background-color: $color-cream;
+    transition: background-color .3s ease, border-left .3s ease;
+    padding-left: 1rem;
+  }
+}
+
+.category-description {
+  font-style: $font-style-italic;
+  color: $color-grey;
+  margin-bottom: 1rem;
+}
+
+/* Ítems de la carta */
+.menu-item {
+  list-style: none;
+  margin: 1rem;
+  padding: .5rem;
+  border-bottom: 1px solid $color-cream;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: .2rem;
+
+  strong {
+    font-weight: 600;
+    flex: 1;
+  }
+}
+
+/* Precio simple */
+.single-price {
+  font-weight: $font-weight-bold;
+  color: $color-black;
+}
+
+/* Precio múltiple */
+.multi-price {
+  list-style: none;
+  padding: 0;
+  margin: .3rem 0;
+  font-size: .9rem;
+  color: $color-grey;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .1rem 0;
+  }
+}
+
+.portion { font-weight: 500; }
+.price   { font-weight: $font-weight-bold; white-space: nowrap; }
+
+/* Descripción del ítem */
+.item-description {
+  margin: .3rem;
+  font-size: $font-size-sm;
+  color: $color-grey-description;
+}
+
+/* Iconos e insignias de la carta */
+.cat-icon  { inline-size: 1.25em; block-size: 1.25em; vertical-align: -.2em; }
+.item-icon { inline-size: 1.05em; block-size: 1.05em; vertical-align: -.15em; margin-right: .35rem; }
+
+.badge {
+  display: inline-block;
+  margin-left: .5rem;
+  padding: .15rem .5rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  line-height: 1;
+  vertical-align: .1rem;
+  background: #ffecf0; color: #b4003b;
+
+  &--new { background: rgba(255,0,80,.08); color: #ff0050; }
+}
+
+.menu-nav .chip__icon {
+  display: inline-flex;
+  inline-size: 1.1em; block-size: 1.1em;
+  align-items: center; justify-content: center;
+
+  img { max-inline-size: 100%; max-block-size: 100%; object-fit: contain; }
+}
+

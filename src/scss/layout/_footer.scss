@@ -1,0 +1,96 @@
+// src/scss/components/_footer.scss
+@use '@/scss/theme/variables' as *;
+@use '@/scss/theme/mixins' as *;
+
+/* ----------------------------
+ * FOOTER (estructura interna)
+   ---------------------------- */
+
+.footer-inner {
+  @include container;     // centra y limita ancho
+  padding-block: 2rem;    // espaciado interno
+}
+
+/* Iconos redes sociales */
+.footer-social__icon {
+  inline-size: 32px;
+  block-size: 32px;
+}
+
+/* Contenedor principal de info */
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  @include mq-tablet {
+    flex-direction: row;
+    justify-content: center;
+    gap: 3rem;
+  }
+
+  @include mq-desktop {
+    flex-direction: row;
+    justify-content: center;
+    gap: 4rem;
+  }
+}
+
+/* Bloques de info (columna) */
+.footer-info {
+  h4 {
+    margin-bottom: .5rem;
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $color-white;
+  }
+
+  p,
+  a {
+    margin: 0;
+    font-size: $font-size-sm;
+    color: $color-white;
+    text-decoration: none;
+  }
+
+  /* Evitamos cambiar font-size en hover para no provocar layout shift */
+  a:hover,
+  a:focus-visible {
+    text-decoration: underline;
+    color: $color-white;
+  }
+}
+
+/* fila de redes */
+.footer-social {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 40px;
+    block-size: 40px;
+    border-radius: 999px;
+    transition: background-color .2s ease;
+
+    &:hover,
+    &:focus-visible {
+      background: rgba($color-white, .08);
+    }
+  }
+}
+
+/* línea inferior: copyright, etc. */
+.footer-bottom {
+  border-top: 1px solid rgba($color-white, .12);
+  padding-top: 1rem;
+  text-align: center;
+  font-size: clamp(.8rem, 1.5vw, .9rem);
+  color: rgba($color-grey-shadow, .9);
+}
+
+

@@ -1,16 +1,23 @@
 ---
-
 const {
-  variant = "primary", // Existen las variantes: primary, secondary y tertiary
-  href,                // Si se pasa href -> <a>; si no -> <button>
-  type = "button",     // Para formularios: button, submit, reset
-  children             // Children será el "nombre" del botón. Por ejemplo: Aceptar, Ver carta, etc.
+  variant = "primary",   // "primary" | "secondary" | "tertiary"
+  href,                  // si hay href -> <a>, si no -> <button>
+  type = "button",       // "button" | "submit" | "reset" (solo aplica en <button>)
+  children,              // texto del botón
+  class: className,      // permitir pasar class desde fuera
+  ...rest                // <- AQUI: resto de props (id, aria-*, data-*, etc.)
 } = Astro.props;
+
+// Fusionar clases sin pisar las internas
+const classes = ["btn", variant, className].filter(Boolean).join(" ");
 ---
 
 {href ? (
-    <a href={href} class={`btn ${variant}`}>{children}</a>
-    ) : (
-    <button type={type} class={`btn ${variant}`}>{children}</button>
+  <a href={href} class={classes} {...rest}>
+    {children}
+  </a>
+) : (
+  <button type={type} class={classes} {...rest}>
+    {children}
+  </button>
 )}
-

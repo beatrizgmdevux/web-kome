@@ -7,48 +7,65 @@ const links = [
   { href: "/trabajo", label: "Únete al equipo" },
 ];
 ---
-
-<nav class="nav">
-  <div class="nav-container">
-    <!-- Logo que lleva al Inicio -->
-    <a href="/" class="logo-link">
-      <img src="/NuevoLogoWhite250px.png" alt="Logo Asador Kome Kome" class="logo" />
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-logo" href="/">
+      <img src="/NuevoLogoWhite250px.png" alt="Kome Kome" />
     </a>
 
-    <!-- Botón del menú hamburguesa, solo visible en móvil -->
-    <button class="hamburger" id="hamburger" aria-label="Abrir menú">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
+    <!-- Botón hamburguesa (visible en móvil) -->
+    <button class="nav-toggle" aria-controls="site-nav" aria-expanded="false">
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+      <span class="sr-only">Abrir menú</span>
     </button>
 
-
-    <!-- Menú de navegación -->
-    <ul class="nav-links" id="nav-links">
-        {links.map(link => (
-            <li><a href={link.href}>{link.label}</a></li>
-        ))}
-    </ul>
+    <!-- Navegación -->
+    <nav id="site-nav" class="site-nav" data-open="false">
+      <ul class="site-nav__list">
+        <li><a href="/" aria-current="page">Inicio</a></li>
+        <li><a href="/carta/">Carta</a></li>
+        <li><a href="/contacto/">Contacto</a></li>
+        <li><a href="/trabajo/">Trabajo</a></li>
+      </ul>
+    </nav>
   </div>
-</nav>
+</header>
 
-<!-- Script para controlar el menú hamburguesa y marcar el enlace activo -->
-<!-- TODO: el enlace activo aún no funciona en ordenador. En móvil sí. -->
-<script type="module" is:inline>
-    const hamburger = document.getElementById('hamburger');
-    const nav = document.getElementById('nav-links');
+<!-- Estilos específicos -->
+<style lang="scss">
+  /* helper accesible para el texto del botón */
+  @use '@/scss/theme/mixins' as *;
+  .sr-only { @include hide-visually; }
+</style>
 
-    // Mostrar/ocultar menú y cambiar icono
-    hamburger.addEventListener('click', () => {
-        nav.classList.toggle('open');
-        hamburger.classList.toggle('open');
-    });
+<script is:inline>
+  // Toggle accesible (abre/cierra y actualiza ARIA)
+  const btn = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('site-nav');
 
-    // Active link
-    const currentPath = window.location.pathname;
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-        link.classList.add('active');
-        }
-    });
+  function toggleNav(force) {
+    const open = (typeof force === 'boolean') ? force : (nav.dataset.open !== 'true');
+    nav.dataset.open = String(open);
+    btn.setAttribute('aria-expanded', String(open));
+  }
+
+  btn?.addEventListener('click', () => toggleNav());
+
+  // Cerrar al pulsar Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') toggleNav(false);
+  });
+
+  // Cerrar al hacer click fuera
+  document.addEventListener('click', (e) => {
+    if (!nav.contains(e.target) && !btn.contains(e.target)) toggleNav(false);
+  });
+
+  // Cerrar al hacer click en link
+  nav?.addEventListener('click', (e) => {
+    const a = e.target.closest('a');
+    if (a) toggleNav(false);
+  });
 </script>

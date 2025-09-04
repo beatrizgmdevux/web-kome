@@ -1,151 +1,156 @@
 {
-  "👨🏻‍🍳 Nuestro fuerte": {
-        "description": "¡Pregunta por nuestra comida casera! 🥘",
+  "Nuestro fuerte": {
+      "icon": "pollo",
+      "description": "¡Pregunta por nuestra comida casera! 🥘",
+      "items": [
+          { "name": "1/2 Pollo asado", "price": "6,00€", "description": "" },
+          { "name": "Pollo asado", "price": "10,50€", "description": "" }
+          
+      ]
+    },
+
+  "Para compartir": {
+      "icon": "patatas",
+      "description": "La mejor manera de ir abriendo boca 😋",
+      "items": [
+        { "name": "Alitas", "price": "6,00€", "description": "" },
+        { "name": "Patatas fritas",
+          "price": {
+            "Media ración": "3,00€",
+            "Ración": "4,00€"
+          },
+          "description": ""
+        },
+        { "name": "Patatas Kome Kome", 
+          "price": {
+            "Media ración": "4,50€",
+            "Ración": "6,50€"
+          },
+          "description": "Patatas fritas nuestra salsa especial"
+        },
+        { "name": "Patatas turcas", 
+          "price": {
+            "Media ración": "5,00€",
+            "Ración": "7,00€"
+          },
+          "description": "Patatas fritas, kebab y salsa casera de yogur"
+        },
+        { "name": "Nuggets", 
+          "price": {
+            "Media ración": "4,00€",
+            "Ración": "7,00€"
+          },
+          "description": ""
+        },
+        { "name": "Pollo Kajún", "price": "7,00€", "description": "" },
+        { "name": "Croquetas", 
+          "price": "8,00€", 
+          "description": "Elige entre: cocido, rabo de toro, jamón, setas o bacalao"
+        } 
+      ]
+    },
+
+    "Ensaladas de la huerta": {
+      "icon": "ensalada",
+      "description": "No te pierdas nuestra selección de ensaladas frescas 🥑🥬",
+      "items": [
+          { "name": "Kome Kome", "price": "10,50€", "description": "Lechuga, remolacha, zanahoria, maíz, tomate, cebolla, atún y huevo" },
+          { "name": "César", "price": "10,00€", "description": "Lechuga, pollo kajún, picatostes, cebolla crujiente, huevo duro, lascas de Grana Padano y salsa césar" },
+          { "name": "Especial", "price": "11,00€", "description": "Lechuga, pollo kajún, picatostes, queso de cabra, tomate cherry, cebolla crujiente y salsa miel y mostaza" }
+      ]
+    },
+
+    "Entrepanes": {
+        "icon":"burger",
+        "description": "Hamburguesas 🍔, bocatas 🥖 y rollos 🌯.",
         "items": [
-            { "name": "1/2 Pollo asado", "price": "6,00€", "description": "" },
-            { "name": "Pollo asado", "price": "10,50€", "description": "" }
-            
+          { "badge": "new", "icon": "burger", "name": "Burger Como Una ... Cabra", "price": "8,50€", "description": "Pan brioche, salsa de bacon casera, ternera nacional, cebolla caramelizada, mermelada de bacon y queso de cabra"},
+          { "badge": "new", "icon": "burger", "name": "Burger Capricho Trufado", "price": "8,50€", "description": "Ternera nacional, mayo trufada, queso ahumado, crujiente de patata y huevo frito"},
+          { "badge": "new", "icon": "burger", "name": "Burger Ibérica", "price": "???€", "description": "???"},
+          { "icon": "burger", "name": "Burger La de toda la vida", "price": "7,00€", "description": "Ternera nacional, queso, lechuga, tomate y cebolla"},
+          { "icon": "burger", "name": "Cresta de cerdo", "price": "7,00€", "description": "Cresta de cerdo, lechuga, tomate, cebolla y queso"},
+          
+          { "icon": "bocata", "name": "Serranito", "price": "6,50€", "description": "Filetes de cerdo o pollo, jamón serrano, pimiento frito y mayonesa" },
+          { "icon": "bocata", "name": "Montadito", "price": "6,50€", "description": "Filetes de cerdo o pollo, lechuga, tomate, cebolla y mayonesa" },
+          { "icon": "bocata", "name": "Malaka", "price": "6,00€", "description": "Lomo de cerdo, queso y ali-oli"},
+          { "icon": "bocata", "name": "Alobaito", "price": "6,00€", "description": "Lomo adobado, queso, tomate y mayonesa"},
+          { "icon": "bocata", "name": "Chicle francés", "price": "6,00€", "description": "Tortilla francesa, jamón york, queso, y mayonesa"},
+
+          { "icon": "kebab", "name": "Shawarma", "price": "7,50€", "description": "Rollo de carne kebab, lechuga, tomate, cebolla y salsa de yogur casera"},
+          { "icon": "kebab", "name": "Mexicano", "price": "7,20€", "description": "Pollo asado, cebolla, pimiento rojo, pimiento verde y salsa mexicana"},
+          { "icon": "kebab", "name": "Pollo", "price": "6,70€", "description": "Pollo asado, lechuga, tomate, cebolla y mayonesa"}
         ]
     },
 
-  "🍟 Para compatir": {
-        "description": "La mejor manera de ir abriendo boca 😋",
-        "items": [
-            { "name": "Alitas", "price": "6,00€", "description": "" },
-            { "name": "Patatas fritas", 
-              "price": {
-                "Media ración": "3,00€",
-                "Ración": "4,00€"
-              },
-              "description": ""
-            },
-            { "name": "Patatas Kome Kome", 
-              "price": {
-                "Media ración": "4,50€",
-                "Ración": "6,50€"
-              },
-              "description": "Patatas fritas, bacon y nuestra salsa especial"
-            },
-            { "name": "Patatas turcas", 
-              "price": {
-                "Media ración": "5,00€",
-                "Ración": "7,00€"
-              },
-              "description": "Patatas fritas, kebab y salsa casera de yogur"
-            },
-            { "name": "Nuggets", 
-              "price": {
-                "Media ración": "4,00€",
-                "Ración": "7,00€"
-              },
-              "description": "Patatas fritas, bacon y nuestra salsa especial"
-            },
-            { "name": "Pollo Kajún", "price": "7,00€", "description": "" },
-            { "name": "Croquetas", "price": "8,00€", "description": "Elige entre: cocido, rabo de toro, jamón, setas o bacalao" }
-            
-        ]
-    },
-
-    "🥗 Ensaladas de la huerta": {
-        "description": "No te pierdas nuestra selección de ensaladas frescas 🥑🥬",
-        "items": [
-            { "name": "Kome Kome", "price": "10,50€", "description": "Lechuga, remolacha, zanahoria, maíz, tomate, cebolla, atún y huevo" },
-            { "name": "César", "price": "10,00€", "description": "Lechuga, pollo kajún, picatostes, cebolla crujiente, huevo duro, lascas de Grana Padano y salsa césar" },
-            { "name": "Especial", "price": "11,00€", "description": "Lechuga, pollo kajún, picatostes, queso de cabra, tomate cherry, cebolla crujiente y salsa miel y mostaza" }
-        ]
-    },
-
-    "🥖 Entrepanes": {
-        "description": "Bocatas 🥖, rollos 🌯 y hamburguesas 🍔.",
-        "items": [
-            { "name": "🥖 Serranito", "price": "6,50€", "description": "Filetes de cerdo o pollo, jamón serrano, pimiento frito y mayonesa" },
-            { "name": "🥖 Montadito", "price": "6,50€", "description": "Filetes de cerdo o pollo, lechuga, tomate, cebolla y mayonesa" },
-            { "name": "🥖 Malaka", "price": "6,00€", "description": "Lomo de cerdo, queso y ali-oli"},
-            { "name": "🥖 Alobaito", "price": "6,00€", "description": "Lomo adobado, queso, tomate y mayonesa"},
-            { "name": "🥖 Chicle francés", "price": "6,00€", "description": "Tortilla francesa, jamón york, queso, y mayonesa"},
-            { "name": "🍔 Burger La de toda la vida", "price": "7,00€", "description": "Ternera nacional, queso, lechuga, tomate y cebolla"},
-            { "name": "🍔🆕 Burger Como Una ... Cabra", "price": "8,50€", "description": "Pan brioche, salsa de bacon casera, ternera nacional, cebolla caramelizada, mermelada de bacon y queso de cabra"},
-            { "name": "🍔🆕 Burger Capricho Trufado ", "price": "8,50€", "description": "Ternera nacional, mayo trufada, queso ahumado, crujiente de patata y huevo frito"},
-            { "name": "🍔 Cresta de cerdo", "price": "7,00€", "description": "Cresta de cerdo, lechuga, tomate, cebolla y queso"},
-            { "name": "🌯 Shawarma", "price": "7,50€", "description": "Rollo de carne kebab, lechuga, tomate, cebolla y salsa de yogur casera"},
-            { "name": "🌯 Mexicano", "price": "7,20€", "description": "Pollo asado, cebolla, pimiento rojo, pimiento verde y salsa mexicana"},
-            { "name": "🌯 Pollo", "price": "6,70€", "description": "Pollo asado, lechuga, tomate, cebolla y mayonesa"}
-        ]
-    },
-
-    "🍔 Nuestros camperos": {
+    "Nuestros camperos": {
+        "icon": "campero",
         "description": "Prueba el mejor campero malagueño 😉.",
         "items": [
-            { "name": "🆕 Como Una ... Cabra", "price": "7,70€", "description": "Salsa bacon casera, pollo asado, cebolla caramelizada, mermelada de bacon y queso de cabra" },
-            { "name": "Mixto", "price": "5,00€", "description": "Jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
-            { "name": "Pollo", "price": "6,70€", "description": "Pollo asado, lechuga, tomate, cebolla y mayonesa" },
-            { "name": "Granjero", "price": "6,00€", "description": "Queso, huevo cocido, lechuga, tomate, cebolla y mayonesa" },
-            { "name": "Pinchitos", "price": "6,50€", "description": "Pinchitos de pollo, lechuga, tomate, cebolla y mayonesa" },
-            { "name": "Bombay", "price": "7,20€", "description": "Pollo asado al curry, lechuga, tomate y cebolla" },
-            { "name": "Big Ben", "price": "6,00€", "description": "Bacon, queso, lechuga, tomate, cebolla y mayonesa" },
-            { "name": "Serrano", "price": "7,00€", "description": "Filetes de cerdo o pollo, jamón serrano, pimiento frito y mayonesa" },
-            { "name": "Kome Kome", "price": "7,70€", "description": "Pollo asado, jamón york, queso, hamburguesa, lechuga, tomate, cebolla y mayonesa" },
-            { "name": "Malaka", "price": "7,20€", "description": "Pollo asado, pimiento frito, huevo frito y ali-oli" },
-            { "name": "Turko", "price": "7,00€", "description": "Kebab, cebolla pochada, lechuga, tomate y salsa yogur casera" },
-            { "name": "Pollo Mixto", "price": "7,00€", "description": "Pollo asado, jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
-            { "name": "Tún-Tún", "price": "6,50€", "description": "Atún, jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
-            { "name": "Italiano", "price": "6,50€", "description": "Ternera boloñesa, huevo y queso" }
-            
+          { "badge":"new", "name": "Como Una ... Cabra", "price": "7,70€", "description": "Salsa bacon casera, pollo asado, cebolla caramelizada, mermelada de bacon y queso de cabra" },
+          { "name": "Mixto", "price": "5,00€", "description": "Jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Pollo", "price": "6,70€", "description": "Pollo asado, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Granjero", "price": "6,00€", "description": "Queso, huevo cocido, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Pinchitos", "price": "6,50€", "description": "Pinchitos de pollo, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Bombay", "price": "7,20€", "description": "Pollo asado al curry, lechuga, tomate y cebolla" },
+          { "name": "Big Ben", "price": "6,00€", "description": "Bacon, queso, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Serrano", "price": "7,00€", "description": "Filetes de cerdo o pollo, jamón serrano, pimiento frito y mayonesa" },
+          { "name": "Kome Kome", "price": "7,70€", "description": "Pollo asado, jamón york, queso, hamburguesa, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Malaka", "price": "7,20€", "description": "Pollo asado, pimiento frito, huevo frito y ali-oli" },
+          { "name": "Turko", "price": "7,00€", "description": "Kebab, cebolla pochada, lechuga, tomate y salsa yogur casera" },
+          { "name": "Pollo Mixto", "price": "7,00€", "description": "Pollo asado, jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Tún-Tún", "price": "6,50€", "description": "Atún, jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Italiano", "price": "6,50€", "description": "Ternera boloñesa, huevo y queso" }
         ]
     },
 
-      "🥤 Bebidas": {
-        "description": "",
-        "items": [
-            { "name": "Coca-Cola", 
-              "price": {
-                "Lata (33cl.)": "1,30€",
-                "Botella (2L)": "2,50€"
-              },
-             "description": "Coca-Cola, Coca-Cola Zero, Coca-Cola Zero Zero" },
+    "Bebidas": {
+      "icon": "refrescos",
+      "description": "",
+      "items": [
+        { "name": "Coca-Cola", 
+          "price": {
+            "Lata (33cl.)": "1,30€",
+            "Botella (2L)": "2,50€"
+          },
+          "description": "Coca-Cola, Coca-Cola Zero, Coca-Cola Zero Zero" },
 
-            { "name": "Fanta", 
-              "price": {
-                "Lata (33cl.)": "1,30€",
-                "Botella (2L)": "2,50€"
-              },
-             "description": "Fanta naranja, Fanta limón" },
+        { "name": "Fanta", 
+          "price": {
+            "Lata (33cl.)": "1,30€",
+            "Botella (2L)": "2,50€"
+          },
+          "description": "Fanta naranja, Fanta limón" },
 
-            { "name": "Nestea", 
-                "price": "1,60€",
-                "description": "Nestea limón, Nestea maracuyá" },
+        { "name": "Nestea", 
+            "price": "1,60€",
+            "description": "Nestea limón, Nestea maracuyá" },
 
-            { "name": "Aquarius", 
-              "price":"1,60€",
-             "description": "Aquarius limón, Aquarius naranja" },
-            
-            { "name": "Cerveza", 
-              "price": {
-                "Lata (33cl.)": "1,40€",
-                "Tercio": "2,00€",
-                "Botella (1L)": "2,50€"
-              },
-             "description": "" },
+        { "name": "Aquarius", 
+          "price":"1,60€",
+          "description": "Aquarius limón, Aquarius naranja" },
+        
+        { "name": "Cerveza", 
+          "price": {
+            "Lata (33cl.)": "1,40€",
+            "Tercio": "2,00€",
+            "Botella (1L)": "2,50€"
+          },
+          "description": "" },
 
-            { "name": "Agua", 
-              "price": {
-                "Pequeña (500ml.)": "1,20€",
-                "Grande (1,5L)": "2,00€"
-              },
-             "description": "" },
+        { "name": "Agua", 
+          "price": {
+            "Pequeña (500ml.)": "1,20€",
+            "Grande (1,5L)": "2,00€"
+          },
+          "description": "" },
 
-            { "name": "Tinto de Verano", 
-              "price":"1,50€",
-             "description": "" },
-
-            { "name": "Zumos", 
-              "price":"1,50€",
-             "description": "Melocotón, Piña" },
-            
-            { "name": "Monster", 
-              "price":"2,00€",
-             "description": "" }
-        ]
+        { "name": "Tinto de Verano", 
+          "price":"1,50€",
+          "description": "" },
+        
+        { "name": "Monster", 
+          "price":"2,00€",
+          "description": "" }
+      ]
     }
-  
 }

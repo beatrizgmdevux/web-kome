@@ -1,0 +1,27 @@
+// src/scss/components/_hero.scss
+@use '@/scss/theme/variables' as *; // colores, tipografías...
+@use '@/scss/theme/mixins' as *;    // container, respond, etc.
+
+.hero {
+  text-align: center;
+  padding: $space-8;
+}
+
+/* Mobile-first: base (móvil) → subimos tamaños con min-width 
+.hero-img {
+  display: block;
+  margin-inline: auto;
+  height: auto;
+  max-width: 320px; // móvil por defecto
+}
+*/
+
+/* Tablet */
+@include mq-tablet {
+  .hero-img { max-width: 500px; }
+}
+
+/* Desktop (≥ $bp-desktop) */
+@include mq-desktop {
+  .hero-img { max-width: 640px; }
+}

@@ -1,0 +1,85 @@
+// src/scss/components/_buttons.scss
+@use '@/scss/theme/variables' as *;
+@use '@/scss/theme/mixins' as *;
+
+.btn {
+  font-family: $font-family-main;
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none; // reseteo
+  transition:
+    background-color .3s ease,
+    color .3s ease,
+    box-shadow .2s ease,
+    transform .2s ease;
+
+  &:hover {
+    transform: scale(1.03);
+    cursor: pointer;
+  }
+  &:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 5px rgba($color-black, .15);
+    opacity: 0.9;
+  }
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  // Variantes
+  &.primary {
+    background-color: $color-primary;
+    color: $color-white;
+    // (Tenías un border y un "border: none"; dejamos sin borde)
+    &:hover {
+      background-color: $color-primary-hover;
+      color: $color-white;
+    }
+  }
+
+  &.secondary {
+    background-color: $color-white;
+    border: 2px solid $color-grey;
+    color: $color-black;
+
+    &:hover {
+      background-color: $color-white;
+      border-color: $color-black;
+      color: $color-black;
+    }
+  }
+
+  &.tertiary {
+    background: none;
+    color: $color-black;
+    font-size: 0.9rem;
+    border: none;
+    padding: 0.5rem 0.75rem;
+
+    &:hover {
+      text-decoration: underline;
+      font-weight: 500;
+      color: $color-primary-hover;
+    }
+  }
+
+  // Estados comunes
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+// Respeta preferencias de movimiento
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+    &:hover, &:active { transform: none; }
+  }
+}

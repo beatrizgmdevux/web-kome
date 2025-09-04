@@ -2,13 +2,20 @@
   "name": "web-kome",
   "type": "module",
   "version": "0.0.1",
+
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev",                         
+    "dev:host": "astro dev --host",            
+    "dev:nf": "netlify dev",                   
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "serve": "astro build && astro preview"    
   },
+
   "dependencies": {
     "astro": "^5.10.0"
+  },
+  "devDependencies": {
+    "sass": "^1.91.0"
   }
 }

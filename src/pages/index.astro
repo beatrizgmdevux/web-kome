@@ -17,17 +17,6 @@ const pageDescription = "Descubre nuestro pollo asado y los mejores camperos de 
       En Asador Kome Kome llevamos el sabor callejero al siguiente nivel.
     </p>
     <p>Disfruta de hamburguesas jugosas, camperos malagueños y nuestros famosos pollos asados hechos con ingredientes frescos.</p>
-    <!-- NO IMPLEMENTADO
-    <div class="carrousel-platos">
-      <strong>Vuestros favoritos</strong>
-      <div class="track">
-        <div class="slide">🍟 Patatas Kome Kome</div>
-        <div class="slide">⁠🔥 Campero Malaka</div>
-        <div class="slide">🐐 Burger Como Una ... Cabra </div>
-        <div class="slide">🔥🍗 Pollos asados</div>
-      </div>
-    </div>
-     -->
     <Button href="/carta" variant="primary" children="Ver nuestra carta"></Button>
   </section>
 
@@ -61,41 +50,7 @@ const pageDescription = "Descubre nuestro pollo asado y los mejores camperos de 
     </div>
 
   </section>
-  
-  <Reviews />
-  <!-- NO IMPLEMENTADO
-   * Script del carrusel 
-  <script is:inline>
-    document.addEventListener("DOMContentLoaded", () => {
-      const slides = document.querySelectorAll(".slide");
-      let currentIndex = 0;
 
-      - Inicializa la primera diapositiva como visible
-      slides.forEach((slide, index) => {
-        slide.style.opacity = index === 0 ? 1 : 0; // Solo la primera diapositiva es visible
-      });
-
-      function showNextSlide() {
-        slides[currentIndex].style.opacity = 0; // Oculta la diapositiva actual
-        currentIndex = (currentIndex + 1) % slides.length; // Avanza al siguiente índice
-        slides[currentIndex].style.opacity = 1; // Muestra la siguiente diapositiva
-      }
-
-      - Cambia de diapositiva cada 4 segundos
-      setInterval(showNextSlide, 4000);
-
-      - Pausa si pasa el ratón encima
-      slides.forEach(slide => {
-        slide.addEventListener("mouseenter", () => {
-          clearInterval(interval); // Detiene el cambio de diapositivas
-        });
-        slide.addEventListener("mouseleave", () => {
-          interval = setInterval(showNextSlide, 4000); // Reinicia el cambio de diapositivas
-        });
-      });
-    });
-  </script>
-   -->
   <section class="work">
     <div class="work-container">
       <h2>¿Quieres trabajar con nosotros?</h2>

@@ -1,0 +1,131 @@
+// src/scss/components/_reviews.scss
+@use '@/scss/theme/variables' as *;
+@use '@/scss/theme/mixins' as *;
+
+/* Sección */
+.reviews {
+  @include container;
+  padding-block: 2rem;
+}
+
+.reviews-header { margin-bottom: 1rem; }
+.reviews-summary { font-weight: 500; }
+
+/* Carrusel */
+.reviews-carousel {
+  position: relative;
+}
+
+/* Viewport con scroll horizontal + scroll-snap */
+.reviews-viewport {
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  /* padding para que el primer/último slide no queden pegados */
+  scroll-padding-left: 1rem;
+}
+
+/* Ocultar scrollbar (opcional) */
+.reviews-viewport::-webkit-scrollbar { height: 0; }
+.reviews-viewport { scrollbar-width: none; }
+
+/* Pista de tarjetas */
+.reviews-track {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1rem;
+}
+
+/* Tarjeta */
+.review-card {
+  @include card();          /* fondo + radio + sombra unificados */
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+
+  /* Scroll snap en cada tarjeta */
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+
+  /* Ancho por “slide” → 1 en móvil, 2 en tablet, 3 en desktop */
+  min-width: 88%;           /* móvil: 1 tarjeta vista */
+}
+
+@include mq-tablet {
+  .review-card { min-width: calc(50% - .5rem); }  /* ~2 por vista */
+}
+
+@include mq-desktop {
+  .review-card { min-width: calc(33.333% - .67rem); } /* ~3 por vista */
+}
+
+/* Cabezera de la tarjeta: autor + estrellas */
+.review-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+}
+.review-author { font-weight: 600; }
+.review-stars  { letter-spacing: 1px; white-space: nowrap; font-size: .95rem; }
+
+/* Texto (con clamp) */
+.review-text {
+  margin: .25rem 0 .75rem;
+  line-height: 1.5;
+  @include clamp-lines(8);
+}
+
+/* Enlace */
+.review-link {
+  font-size: .9rem;
+  text-decoration: underline;
+  align-self: flex-start;
+
+  &:hover, &:focus-visible { color: $color-primary; }
+}
+
+/* Flechas */
+.reviews-arrow {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px; height: 40px;
+  border: 1px solid rgba($color-dark-bg, .12);
+  border-radius: 999px;
+  background: rgba($color-bg, .95);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: background-color .15s ease, transform .15s ease, opacity .15s ease;
+
+  &:hover { background: rgba($color-primary, .08); }
+  &:focus-visible { @include focus-ring; }
+  &:active { transform: translateY(-50%) scale(.98); }
+
+  &--prev { left: -.25rem; }
+  &--next { right: -.25rem; }
+
+  &:disabled {
+    opacity: .35;
+    pointer-events: none;
+  }
+}
+
+/* Skeleton simple (si lo usas) */
+#reviews-skeleton {
+  width: 100%;
+  height: 2.25rem;
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba($color-black, .05) 0%, rgba($color-black, .08) 50%, rgba($color-black, .05) 100%);
+  background-size: 200% 100%;
+  animation: reviews-skeleton 1.2s ease-in-out infinite;
+}
+@keyframes reviews-skeleton { 0% {background-position:0 0;} 100% {background-position:200% 0;} }
