@@ -32,9 +32,7 @@ const links = [
     </nav>
   </div>
 </header>
-
 <script is:inline>
-  // Toggle accesible (abre/cierra y actualiza ARIA + tooltip)
   const btn = document.querySelector('.nav-toggle');
   const nav = document.getElementById('site-nav');
   const sr  = btn?.querySelector('.sr-only');
@@ -43,8 +41,8 @@ const links = [
     const label = open ? 'Cerrar' : 'Abrir menú';
     btn?.setAttribute('aria-expanded', String(open));
     btn?.setAttribute('aria-label', label);
-    btn?.setAttribute('title', label);      // tooltip del navegador en hover
-    if (sr) sr.textContent = label;         // texto invisible para lectores de pantalla
+    btn?.setAttribute('title', label);
+    if (sr) sr.textContent = label;
   }
 
   function toggleNav(force) {
@@ -53,22 +51,18 @@ const links = [
     setButtonLabels(open);
   }
 
-  // Estado inicial
   setButtonLabels(false);
 
   btn?.addEventListener('click', () => toggleNav());
 
-  // Cerrar al pulsar Escape
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') toggleNav(false);
   });
 
-  // Cerrar al hacer click fuera
   document.addEventListener('click', (e) => {
     if (!nav.contains(e.target) && !btn.contains(e.target)) toggleNav(false);
   });
 
-  // Cerrar al hacer click en link
   nav?.addEventListener('click', (e) => {
     const a = e.target.closest('a');
     if (a) toggleNav(false);
