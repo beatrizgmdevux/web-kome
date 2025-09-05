@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
-import Reviews from '../components/Reviews.astro';
-import Card from "../components/Card.astro";
+import { Picture } from 'astro:assets';
+import workImg from '@/assets/buscar-trabajo.jpg';
 
 const pageTitle = "Kome Kome";
 const pageDescription = "Descubre nuestro pollo asado y los mejores camperos de Málaga en Asador Kome Kome, ubicado en Torremolinos.";
@@ -17,7 +17,7 @@ const pageDescription = "Descubre nuestro pollo asado y los mejores camperos de 
       En Asador Kome Kome llevamos el sabor callejero al siguiente nivel.
     </p>
     <p>Disfruta de hamburguesas jugosas, camperos malagueños y nuestros famosos pollos asados hechos con ingredientes frescos.</p>
-    <Button href="/carta" variant="primary" children="Ver nuestra carta"></Button>
+    <Button href="/carta" variant="primary" children="Nuestra carta"></Button>
   </section>
 
   <section class="info">
@@ -55,10 +55,20 @@ const pageDescription = "Descubre nuestro pollo asado y los mejores camperos de 
     <div class="work-container">
       <h2>¿Quieres trabajar con nosotros?</h2>
       <p>Siempre estamos en busca de ofrecer nuevas oportunidades 😉</p>
-      <Button children="Envíanos tu CV" variant="secondary" href="/trabajo"></Button>
+      <Button variant="secondary" href="/trabajo" children="Envíanos tu CV"></Button>
     </div>
+
     <div class="work-img">
-      <img src="/buscar-trabajo.jpg" alt="Imagen de un/a cocinero/a haciendo una burger con muy buena pinta" srcset="">
+      <Picture
+        src={workImg}
+        formats={['avif','webp']}
+        widths={[360, 480, 768, 1024]}
+        sizes="(max-width: 768px) 100vw, 480px"
+        alt="Cocinero/a preparando una burger jugosa en Kome Kome"
+        loading="lazy"
+        decoding="async"
+      />
     </div>
   </section>
+
 </BaseLayout>
