@@ -33,23 +33,28 @@ const links = [
   </div>
 </header>
 
-<!-- Estilos específicos -->
-<style lang="scss">
-  /* helper accesible para el texto del botón */
-  @use '@/scss/theme/mixins' as *;
-  .sr-only { @include hide-visually; }
-</style>
-
 <script is:inline>
-  // Toggle accesible (abre/cierra y actualiza ARIA)
+  // Toggle accesible (abre/cierra y actualiza ARIA + tooltip)
   const btn = document.querySelector('.nav-toggle');
   const nav = document.getElementById('site-nav');
+  const sr  = btn?.querySelector('.sr-only');
+
+  function setButtonLabels(open) {
+    const label = open ? 'Cerrar' : 'Abrir menú';
+    btn?.setAttribute('aria-expanded', String(open));
+    btn?.setAttribute('aria-label', label);
+    btn?.setAttribute('title', label);      // tooltip del navegador en hover
+    if (sr) sr.textContent = label;         // texto invisible para lectores de pantalla
+  }
 
   function toggleNav(force) {
     const open = (typeof force === 'boolean') ? force : (nav.dataset.open !== 'true');
     nav.dataset.open = String(open);
-    btn.setAttribute('aria-expanded', String(open));
+    setButtonLabels(open);
   }
+
+  // Estado inicial
+  setButtonLabels(false);
 
   btn?.addEventListener('click', () => toggleNav());
 

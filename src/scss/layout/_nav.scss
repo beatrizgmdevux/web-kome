@@ -3,17 +3,8 @@
 @use '@/scss/theme/mixins' as *;
 
 /* ===========================
- * CABECERA + NAVEGACIÓN (mobile-first)
+ * NAVEGACIÓN (mobile-first)
  * =========================== */
-
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  backdrop-filter: blur(6px);
-  background: transparent;
-  border-bottom: 1px solid rgba($color-dark-bg, .08);
-}
 
 .site-header__inner {
   @include container;
@@ -22,22 +13,11 @@
   align-items: center;
   gap: $space-3;
   padding-block: $space-3;
+  position: relative;
 }
 
-/* Logo */
-.site-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: $space-2;
-  text-decoration: none;
-  color: inherit;
-
-  img {
-    height: 48px;
-    width: auto;
-    display: block;
-  }
-}
+/* helper accesible para el texto del botón */
+.sr-only { @include hide-visually; }
 
 /* === Botón hamburguesa === */
 .nav-toggle {
@@ -50,9 +30,13 @@
   border-radius: .6rem;
   transition: background-color .15s ease;
 
+  justify-self: end;
+  align-self: center;
+  inline-size: auto;
+
   &, * { cursor: pointer; }
 
-  &:hover { background: rgba($color-primary, .08); }
+  &:hover { background: rgba($color-cream, .08); }
   &:focus-visible { @include focus-ring; }
 
   &__bar {
@@ -74,14 +58,18 @@
 /* === Panel de navegación (mobile) === */
 .site-nav {
   position: absolute;
-  left: $space-4;
   right: $space-4;
+  left: auto;
   top: calc(100% + $space-2);
   z-index: 1001;
+
+  /* Tamaño de panel tipo tarjeta */
+  inline-size: clamp(240px, 80vw, 320px);   /* ancho "cuadrado" */
 
   /* Cerrado */
   opacity: 0;
   transform: translateY(-6px) scale(.98);
+  transform-origin: top right;
   pointer-events: none;
   transition: opacity .18s ease, transform .18s ease;
 
@@ -112,12 +100,11 @@
       border-radius: .5rem;
       font-weight: 600;
       text-decoration: none;
-      color: $color-cream;
+      color: $color-black;
 
       &:hover,
       &:focus-visible {
-        color: $color-bg;
-        background: rgba($color-bg, .06);
+        background: rgba($color-black, .06);
         text-decoration: none;
       }
 
@@ -151,6 +138,20 @@
       align-items: center;
       gap: $space-4;
       background: none;
+
+      a {
+        color: $color-cream;
+
+        &:hover,
+        &:focus-visible {
+          background: rgba($color-bg, .06);
+          text-decoration: none;
+        }
+        &.active {
+          color: $color-primary;
+          box-shadow: inset 0 -2px 0 $color-primary;
+        }
+      }
     }
   }
 }
