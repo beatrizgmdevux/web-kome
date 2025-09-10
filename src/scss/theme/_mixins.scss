@@ -19,10 +19,18 @@
   white-space: nowrap; border: 0;
 }
 
-@mixin card($bg: $color-white, $radius: 12px, $shadow: 0 4px 10px rgba($color-black, .08)) {
-  background: $bg;
-  border-radius: $radius;
+@mixin card() {
+  background: $color-black;
+  border-radius: 12px;
   box-shadow: $shadow;
+  color: $color-bg;
+  text-align: center;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 250px;
 }
 
 // Limita un bloque a N líneas (mobile-first, con estándar + WebKit)

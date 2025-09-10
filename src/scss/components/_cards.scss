@@ -14,14 +14,6 @@
 /* Card */
 .card-container {
   @include card();
-  padding: 1.5rem;
-  width: 100%;
-  max-width: 350px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .75rem;
 
   .btn {
     width: auto;

@@ -7,15 +7,6 @@
   padding: $space-8;
 }
 
-/* Mobile-first: base (móvil) → subimos tamaños con min-width 
-.hero-img {
-  display: block;
-  margin-inline: auto;
-  height: auto;
-  max-width: 320px; // móvil por defecto
-}
-*/
-
 /* Tablet */
 @include mq-tablet {
   .hero-img { max-width: 500px; }

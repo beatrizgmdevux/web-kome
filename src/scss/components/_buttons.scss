@@ -33,7 +33,6 @@
   &.primary {
     background-color: $color-primary;
     color: $color-white;
-    // (Tenías un border y un "border: none"; dejamos sin borde)
     &:hover {
       background-color: $color-primary-hover;
       color: $color-white;
