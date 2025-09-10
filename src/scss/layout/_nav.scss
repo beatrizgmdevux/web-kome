@@ -11,8 +11,8 @@
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: $space-3;
-  padding-block: $space-3;
+  gap: $space-6;
+  padding: $space-3;
   position: relative;
 }
 
@@ -93,12 +93,13 @@
     margin: 0;
     padding: 0;
     display: grid;
-    gap: $space-2;
+    gap: $space-3;
 
     a {
+      font-family: $font-family-heading;
+      font-size: 20px;
       padding: .5rem .75rem;
       border-radius: .5rem;
-      font-weight: 600;
       text-decoration: none;
       color: $color-black;
 
@@ -130,16 +131,19 @@
     background: none;
     border: 0;
     box-shadow: none;
-    padding: 0;
+    padding: $space-8;
 
     &__list {
-      display: grid;
-      grid-auto-flow: column;
-      align-items: center;
-      gap: $space-4;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-content: center;
+      gap: $space-6;
       background: none;
 
       a {
+        font-family: $font-family-heading;
+        font-size: 24px;
         color: $color-cream;
 
         &:hover,
