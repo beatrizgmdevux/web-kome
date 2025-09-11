@@ -23,13 +23,16 @@
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
+
   /* padding para que el primer/último slide no queden pegados */
   scroll-padding-left: 1rem;
-}
 
-/* Ocultar scrollbar (opcional) */
-.reviews-viewport::-webkit-scrollbar { height: 0; }
-.reviews-viewport { scrollbar-width: none; }
+  /* --- Alto visual acorde a las cards (sombra incluida) --- */
+  padding-block: 1rem;   /* da “aire” arriba/abajo para la sombra */
+
+  /* BFC: evita colapsos de margen y mide altura por su contenido */
+  display: flow-root;
+}
 
 /* Pista de tarjetas */
 .reviews-track {
@@ -38,6 +41,7 @@
   margin: 0;
   display: flex;
   gap: 1rem;
+  align-items: stretch;
 }
 
 /* Tarjeta */
@@ -48,16 +52,33 @@
   scroll-snap-align: start;
   scroll-snap-stop: always;
 
-  /* Ancho por “slide” → 1 en móvil, 2 en tablet, 3 en desktop */
-  min-width: 88%;           /* móvil: 1 tarjeta vista */
+  /*
+    Móvil: 1 tarjeta visible, pero no al 100% de ancho.
+    clamp(minimo, preferido, máximo) → evitamos cards gigantes.
+  */
+  min-width: clamp(10rem, 75vw, 14rem);
+  max-width: 22rem;
 }
 
 @include mq-tablet {
-  .review-card { min-width: calc(50% - .5rem); }  /* ~2 por vista */
+  /* 
+    Tablet: 2 reseñas por vista, algo más estrechas para que "respiren".
+    El clamp permite que no se vayan demasiado grandes en tablets anchas.
+  */
+  .review-card { 
+    min-width: clamp(10rem, 46vw, 14rem);
+    max-width: 24rem;
+  }
 }
 
 @include mq-desktop {
-  .review-card { min-width: calc(33.333% - .67rem); } /* ~3 por vista */
+  /* 
+    Desktop: 3 reseñas por vista aprox. El clamp evita que sobresalgan.
+  */
+  .review-card { 
+    min-width: clamp(10rem, 30vw, 14rem);
+    max-width: 24rem;
+  }
 }
 
 /* Cabezera de la tarjeta: autor + estrellas */
@@ -86,7 +107,15 @@
 .review-text {
   margin: .25rem 0 .75rem;
   line-height: 1.8;
+  // texto ajustado y justificado para que no haya espacios innecesarios a la vista
   text-align: justify;
+  text-justify: inter-word;
+  text-wrap: pretty;            /* Chrome/Safari modernos suavizan espacios */
+  hyphens: auto;                /* cortes silábicos según lang=es */
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  overflow-wrap: anywhere;      /* permite romper palabras larguísimas */
+  word-break: normal;
 
   @include clamp-lines(8);
 }
@@ -169,6 +198,11 @@
   &:disabled {
     opacity: .35;
     pointer-events: none;
+  }
+
+  .material-symbols-outlined {
+    font-size: 22px;   /* icono dentro del botón de 40x40 */
+    line-height: 1;
   }
 }
 

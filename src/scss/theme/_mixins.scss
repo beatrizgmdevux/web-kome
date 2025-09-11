@@ -19,19 +19,21 @@
   white-space: nowrap; border: 0;
 }
 
+// Mixin de tarjeta parametrizable.
+// - el ancho es opcional (por defecto 'auto'), así cada componente decide.
 @mixin card() {
   background: $color-black;
-  border-radius: 12px;
+  border-radius: $radius;
   box-shadow: $shadow;
   color: $color-bg;
   text-align: center;
-  padding: 2rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  max-width: 250px;
+  width: auto; // si no pasas nada, será 'auto'
 }
+
 
 // Limita un bloque a N líneas (mobile-first, con estándar + WebKit)
 @mixin clamp-lines($lines: 3) {

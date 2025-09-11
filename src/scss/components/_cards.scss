@@ -2,32 +2,64 @@
 @use '@/scss/theme/variables' as *;
 @use '@/scss/theme/mixins' as *;
 
-/* Contenedor (grid) — mobile-first */
+/* 
+  Tokens de tamaño para tarjetas:
+  - Ajusta estos 3 valores y todo se reequilibra sin tocar 20 sitios.
+*/
+$card-min: 10rem;  // ~288px → mínimo cómodo en móvil
+$card-ideal: 12rem; // ~352px → tamaño preferente
+$card-max: 14rem;  // tope para que no se desmadre en desktop
+
+/* Contenedor (grid) — mobile-first
+   - 1 columna de entrada
+   - centramos cada card y dejamos un gap agradable
+*/
 .info {
   display: grid;
-  grid-template-columns: 1fr; // 1 columna en móvil
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;                 // un pelín menos que 1.5 para no “ensanchar”
   justify-items: center;
   padding: 1rem;
 }
 
-/* Card */
+/* Card base (compartida) */
 .card-container {
   @include card();
+
+  /* 
+    Controla ANCHO de la card:
+    - width fluida con clamp para que nunca sea microscópica ni gigante
+    - max-width para impedir "monstruos" en monitores grandes
+  */
+  width: clamp($card-min, 92vw, $card-ideal);
+  max-width: $card-max;
+
+  :where(h3, .card-title) {
+    font-size: 1.1rem;
+    line-height: 1.3;
+    margin-bottom: .5rem;
+  }
+
+  :where(p, .card-text) {
+    font-size: .95rem;
+    line-height: 1.7;
+  }
 
   .btn {
     width: auto;
     max-width: 220px;
     align-self: center;
   }
-
 }
 
-/* Tablet (min 768px y máx $bp-tablet) */
+/* Tablet (≥768px)
+   - Pasamos a 2 columnas
+   - minmax(280px, 1fr) evita “bloques gigantes” y permite 2 por fila
+*/
 @include mq-tablet {
   .info {
-    grid-template-columns: repeat(2, minmax(350px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    gap: 1rem;
     justify-items: center;
   }
 
@@ -35,15 +67,17 @@
   .info > .card-container:last-child {
     grid-column: 1 / -1;
     justify-self: center;
-    max-width: 350px;
+    max-width: $card-max;
   }
 }
 
-/* Desktop (≥ $bp-desktop) */
+/* Desktop (≥ $bp-desktop)
+   - 3 columnas con un MIN de 300px (no 350): más limpio y flexible.
+*/
 @include mq-desktop {
   .info {
-    grid-template-columns: repeat(3, minmax(350px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(3, minmax(250px, 1fr));
+    gap: 1.75rem;
     justify-items: center;
   }
 }

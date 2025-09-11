@@ -2,7 +2,7 @@
 const TITLE = 'Nuestros clientes';
 ---
 
-<section class="reviews" aria-labelledby="reviews-title" role="region">
+<section class="reviews" aria-labelledby="reviews-title" role="region" lang="es">
   <h2 id="reviews-title">{TITLE}</h2>
 
   <!-- Resumen (rating medio, total) -->
@@ -12,8 +12,8 @@ const TITLE = 'Nuestros clientes';
 
   <!-- Carrusel -->
   <div class="reviews-carousel">
-    <button class="reviews-arrow reviews-arrow--prev" aria-controls="reviews-track" aria-label="Ver reseñas anteriores" disabled>
-      ‹
+    <button class="reviews-arrow reviews-arrow--prev" aria-controls="reviews-track" aria-label="Ver reseñas anteriores">
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
     </button>
 
     <div class="reviews-viewport" id="reviews-viewport">
@@ -21,8 +21,9 @@ const TITLE = 'Nuestros clientes';
     </div>
 
     <button class="reviews-arrow reviews-arrow--next" aria-controls="reviews-track" aria-label="Ver reseñas siguientes">
-      ›
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
     </button>
+
   </div>
 
 </section>
@@ -74,30 +75,34 @@ const TITLE = 'Nuestros clientes';
   }
 
   function buildCarousel() {
-    // 1) limpiar pista
+    // Asegura que ambas flechas queden habilitadas en modo infinito
+    prevBtn?.removeAttribute('disabled');
+    nextBtn?.removeAttribute('disabled');
+
+    // limpiar pista
     track.innerHTML = '';
 
-    // 2) pintar las tarjetas base
+    // pintar las tarjetas base
     const baseEls = baseReviews.map(createSlide);
     const fragBase = document.createDocumentFragment();
     baseEls.forEach(el => fragBase.appendChild(el));
 
-    // 3) decidir cuántas caben en pantalla (1/2/3) y clonar extremos
+    // decidir cuántas caben en pantalla (1/2/3) y clonar extremos
     cloneCount = getVisibleCount();
     const leftClones  = baseEls.slice(-cloneCount).map(cloneSlide);
     const rightClones = baseEls.slice(0, cloneCount).map(cloneSlide);
 
-    // 4) ensamblar: [left clones] + base + [right clones]
+    // ensamblar: [left clones] + base + [right clones]
     const fragAll = document.createDocumentFragment();
     leftClones.forEach(el => fragAll.appendChild(el));
     baseEls.forEach(el => fragAll.appendChild(el));
     rightClones.forEach(el => fragAll.appendChild(el));
     track.appendChild(fragAll);
 
-    // 5) situar scroll en el primer elemento REAL (después de los clones izquierdos)
+    // situar scroll en el primer elemento REAL (después de los clones izquierdos)
     requestAnimationFrame(() => alignToIndex(cloneCount));
 
-    // 6) normalizar en scroll (para bucle infinito)
+    // normalizar en scroll (para bucle infinito)
     viewport.removeEventListener('scroll', _onScrollNormalize);
     viewport.addEventListener('scroll', _onScrollNormalize);
   }
