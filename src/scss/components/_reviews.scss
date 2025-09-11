@@ -58,17 +58,16 @@
   */
   min-width: clamp(10rem, 75vw, 14rem);
   max-width: 22rem;
-}
 
-@include mq-tablet {
-  /* 
-    Tablet: 2 reseñas por vista, algo más estrechas para que "respiren".
-    El clamp permite que no se vayan demasiado grandes en tablets anchas.
-  */
-  .review-card { 
-    min-width: clamp(10rem, 46vw, 14rem);
-    max-width: 24rem;
-  }
+  @include mq-tablet {
+    /* 
+      Tablet: 2 reseñas por vista, algo más estrechas para que "respiren".
+      El clamp permite que no se vayan demasiado grandes en tablets anchas.
+    */
+    .review-card { 
+      min-width: clamp(10rem, 46vw, 14rem);
+      max-width: 24rem;
+    }
 }
 
 @include mq-desktop {
@@ -80,6 +79,9 @@
     max-width: 24rem;
   }
 }
+}
+
+
 
 /* Cabezera de la tarjeta: autor + estrellas */
 .review-head {
