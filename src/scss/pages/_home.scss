@@ -2,6 +2,13 @@
 @use '@/scss/theme/variables' as *;
 @use '@/scss/theme/mixins' as *;
 
+/* Iconos de las cards */
+.material-symbols-outlined {
+  font-size: $font-size-xxl;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  color: $color-bg;
+}
+
 /* Sección Trabajo en Home (bajo el hero) — base (móvil) */
 .work {
   @include container;
