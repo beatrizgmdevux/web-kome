@@ -73,18 +73,11 @@
   position: sticky;
   top: 0;
   background: rgba($color-white, 0.80);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(8px);
   border-bottom: 2px solid $color-grey;
   background-clip: padding-box;
   z-index: 10;
   padding: 1rem 0.5rem;
-
-  @supports ((backdrop-filter: blur(6px)) or (-webkit-backdrop-filter: blur(6px))) {
-  .sticky-header {
-    -webkit-backdrop-filter: saturate(120%) blur(6px);
-    backdrop-filter: saturate(120%) blur(6px);
-  }
-}
 }
 
 

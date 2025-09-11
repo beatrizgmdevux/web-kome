@@ -87,6 +87,7 @@
         "description": "Prueba el mejor campero malagueño 😉.",
         "items": [
           { "badge":"new", "name": "Como Una ... Cabra", "price": "7,70€", "description": "Salsa bacon casera, pollo asado, cebolla caramelizada, mermelada de bacon y queso de cabra" },
+          { "badge":"new", "name": "Yankee", "price": "7,90€", "description": "Pulled pork BBQ, mayo chipotle casera, queso cheddar fundido, col y pepinillos agridulces" },
           { "name": "Mixto", "price": "5,00€", "description": "Jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
           { "name": "Pollo", "price": "6,70€", "description": "Pollo asado, lechuga, tomate, cebolla y mayonesa" },
           { "name": "Granjero", "price": "6,00€", "description": "Queso, huevo cocido, lechuga, tomate, cebolla y mayonesa" },
@@ -108,18 +109,20 @@
       "description": "",
       "items": [
         { "name": "Coca-Cola", 
+          "description": "Coca-Cola, Coca-Cola Zero, Coca-Cola Zero Zero",
           "price": {
             "Lata (33cl.)": "1,30€",
             "Botella (2L)": "2,50€"
-          },
-          "description": "Coca-Cola, Coca-Cola Zero, Coca-Cola Zero Zero" },
+          }
+        },
 
         { "name": "Fanta", 
+          "description": "Fanta naranja, Fanta limón",
           "price": {
             "Lata (33cl.)": "1,30€",
             "Botella (2L)": "2,50€"
-          },
-          "description": "Fanta naranja, Fanta limón" },
+          }
+        },
 
         { "name": "Nestea", 
             "price": "1,60€",
