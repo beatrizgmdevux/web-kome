@@ -6,9 +6,9 @@
   Tokens de tamaño para tarjetas:
   - Ajusta estos 3 valores y todo se reequilibra sin tocar 20 sitios.
 */
-$card-min: 10rem;  // ~288px → mínimo cómodo en móvil
-$card-ideal: 12rem; // ~352px → tamaño preferente
-$card-max: 14rem;  // tope para que no se desmadre en desktop
+$card-min: 10rem;
+$card-ideal: 12rem;
+$card-max: 18rem;
 
 /* Contenedor (grid) — mobile-first
    - 1 columna de entrada
@@ -17,15 +17,14 @@ $card-max: 14rem;  // tope para que no se desmadre en desktop
 .info {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;                 // un pelín menos que 1.5 para no “ensanchar”
+  gap: 1.25rem;
   justify-items: center;
   padding: 1rem;
 }
 
-/* Card base (compartida) */
+/* Card base */
 .card-container {
   @include card();
-
   /* 
     Controla ANCHO de la card:
     - width fluida con clamp para que nunca sea microscópica ni gigante
@@ -45,11 +44,6 @@ $card-max: 14rem;  // tope para que no se desmadre en desktop
     line-height: 1.7;
   }
 
-  .btn {
-    width: auto;
-    max-width: 220px;
-    align-self: center;
-  }
 }
 
 /* Tablet (≥768px)
@@ -58,7 +52,7 @@ $card-max: 14rem;  // tope para que no se desmadre en desktop
 */
 @include mq-tablet {
   .info {
-    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
     gap: 1rem;
     justify-items: center;
   }
@@ -72,11 +66,11 @@ $card-max: 14rem;  // tope para que no se desmadre en desktop
 }
 
 /* Desktop (≥ $bp-desktop)
-   - 3 columnas con un MIN de 300px (no 350): más limpio y flexible.
+   - 3 columnas con un MIN de 300px: más limpio y flexible.
 */
 @include mq-desktop {
   .info {
-    grid-template-columns: repeat(3, minmax(250px, 1fr));
+    grid-template-columns: repeat(3, minmax(300px, 1fr));
     gap: 1.75rem;
     justify-items: center;
   }
