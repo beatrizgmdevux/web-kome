@@ -6,7 +6,7 @@
   font-family: $font-family-main;
   display: inline-block;
   margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 1.2rem;
   text-decoration: none;
   border-radius: $radius-btn;
   border: none;
@@ -33,7 +33,14 @@
   &.primary {
     background-color: $color-primary;
     color: $color-white;
+
     &:hover {
+      background-color: transparent;
+      color: $color-primary;
+      border: 1px solid $color-primary;
+    }
+
+    &:active {
       background-color: $color-primary-hover;
       color: $color-white;
     }
@@ -45,9 +52,9 @@
     color: $color-black;
 
     &:hover {
-      background-color: $color-white;
-      border-color: $color-black;
-      color: $color-black;
+      background-color: transparent;
+      border: 1px solid $color-bg;
+      color: $color-bg;
     }
   }
 
