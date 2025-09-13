@@ -85,15 +85,28 @@ const defaultImage = siteUrl + "/pollo.jpg";
     </script>
   
   </head>
-  <>
-    <header>
+  <body>
+    <header class="site-header" id="site-header">
       <Nav />
     </header>
+
 
     <main>
       <slot />
     </main>
 
     <Footer />
+
+    <!-- Altura real del header expuesta a CSS -->
+    <script is:inline>
+      const hdr = document.querySelector('.site-header');
+      const setHeaderH = () => {
+        const h = hdr?.offsetHeight || 0;
+        document.documentElement.style.setProperty('--header-h', `${h}px`);
+      };
+      setHeaderH();
+      addEventListener('resize', setHeaderH);
+      addEventListener('load', setHeaderH);
+    </script>
   </body>
 </html>

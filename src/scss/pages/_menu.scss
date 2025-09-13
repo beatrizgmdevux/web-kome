@@ -18,6 +18,7 @@
   overflow-x: auto;
   white-space: nowrap;
   scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
 
   ul {
     display: flex;
@@ -68,22 +69,24 @@
   }
 }
 
-/* Cabecera “sticky” opcional para la nav de categorías */
+/* Cabecera “sticky” de la nav de categorías */
 .sticky-header {
   position: sticky;
-  top: 0;
+  // usa la altura real del header (runtime) con fallback al token Sass
+  top: var(--header-h, #{$header-h});
+  z-index: 900; // por debajo del .site-header (1000)
   background: rgba($color-white, 0.80);
   backdrop-filter: blur(8px);
   border-bottom: 2px solid $color-grey;
   background-clip: padding-box;
-  z-index: 10;
   padding: 1rem 0.5rem;
 }
 
 
-/* Secciones de categoría */
+/* Secciones de categoría (offset dinámico) */
 .category-section {
-  scroll-margin-top: 160px;  // espacio para sticky nav
+  // 👉 header + chips, medidos en JS (fallback a token + 100px)
+  scroll-margin-top: var(--sticky-total, calc(#{$header-h} + 100px));
   margin-bottom: 2rem;
   padding-bottom: 1rem;
 

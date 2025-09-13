@@ -56,35 +56,33 @@
 }
 
 /* === Panel de navegación (mobile) === */
+/* === Panel de navegación (mobile) === */
 .site-nav {
-  position: absolute;
-  right: $space-4;
-  left: auto;
-  top: calc(100% + $space-2);
+  position: fixed;
+  top: var(--header-h, #{$header-h}); /* 👈 pegado al header real */
+  left: 0;
+  right: 0;
   z-index: 1001;
 
-  /* Tamaño de panel tipo tarjeta */
-  inline-size: clamp(240px, 80vw, 320px);   /* ancho "cuadrado" */
+  /* Full-width sheet */
+  inline-size: 100%;
+  max-inline-size: none;
 
-  /* Cerrado */
+  /* Cerrado (animación sutil desde arriba) */
   opacity: 0;
-  transform: translateY(-6px) scale(.98);
-  transform-origin: top right;
+  transform: translateY(-8px);
   pointer-events: none;
   transition: opacity .18s ease, transform .18s ease;
 
-  /* Estética */
-  background: rgba($color-bg, .99);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba($color-dark-bg, .12);
-  border-radius: $radius;
+  /* Estética del panel */
+  background: $color-white;
+  border-top: 1px solid rgba($color-dark-bg, .12);
   box-shadow: 0 10px 30px rgba(0,0,0,.12);
-  padding: $space-3;
+  padding: $space-4;
 
-  /* Abierto */
   &[data-open="true"] {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
     pointer-events: auto;
   }
 
@@ -109,7 +107,8 @@
         text-decoration: none;
       }
 
-      &.active {
+      &.active,
+      &[aria-current="true"] {
         color: $color-primary;
         box-shadow: inset 0 -2px 0 $color-primary;
       }
@@ -117,10 +116,26 @@
   }
 }
 
+/* Overlay para oscurecer el fondo y dar “pegado” visual */
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba($color-black, .45);
+  backdrop-filter: blur(2px);
+  z-index: 1000; /* por debajo de .site-nav (1001) pero por encima del contenido */
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+  &[data-open="true"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
 /* === Desktop === */
 @include mq-desktop {
   .site-header__inner { grid-template-columns: auto 1fr; }
-
   .nav-toggle { display: none; }
 
   .site-nav {
@@ -151,11 +166,15 @@
           background: rgba($color-bg, .06);
           text-decoration: none;
         }
-        &.active {
+
+        &.active,
+        &[aria-current="true"] {
           color: $color-primary;
           box-shadow: inset 0 -2px 0 $color-primary;
         }
       }
     }
   }
+
+  .nav-overlay { display: none; }
 }

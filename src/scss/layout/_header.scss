@@ -11,8 +11,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  backdrop-filter: blur(6px);
-  background: transparent;
+  background: $color-black;
   border-bottom: 1px solid rgba($color-dark-bg, .08);
 }
 

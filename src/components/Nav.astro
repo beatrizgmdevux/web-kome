@@ -7,7 +7,7 @@ const links = [
   { href: "/trabajo", label: "Únete al equipo" },
 ];
 ---
-<header class="site-header">
+<nav class="primary-nav" aria-label="Navegación principal">
   <div class="site-header__inner">
     <a class="site-logo" href="/">
       <img src="/NuevoLogoWhite250px.png" alt="Kome Kome" />
@@ -22,19 +22,24 @@ const links = [
     </button>
 
     <!-- Navegación -->
-    <nav id="site-nav" class="site-nav" data-open="false">
+    <div id="site-nav" class="site-nav" data-open="false">
       <ul class="site-nav__list">
         <li><a href="/" aria-current="page">Inicio</a></li>
         <li><a href="/carta/">Carta</a></li>
         <li><a href="/contacto/">Contacto</a></li>
         <li><a href="/trabajo/">Trabajo</a></li>
       </ul>
-    </nav>
+    </div>
   </div>
-</header>
+</nav>
+
+<!-- overlay para “pegar” el panel al header y cerrar al tocar fuera -->
+<div class="nav-overlay" data-open="false" aria-hidden="true"></div>
+
 <script is:inline>
   const btn = document.querySelector('.nav-toggle');
   const nav = document.getElementById('site-nav');
+  const overlay = document.querySelector('.nav-overlay');
   const sr  = btn?.querySelector('.sr-only');
 
   function setButtonLabels(open) {
@@ -48,21 +53,25 @@ const links = [
   function toggleNav(force) {
     const open = (typeof force === 'boolean') ? force : (nav.dataset.open !== 'true');
     nav.dataset.open = String(open);
+    overlay?.setAttribute('data-open', String(open));
     setButtonLabels(open);
+    // bloquear scroll de fondo cuando abrimos
+    document.documentElement.classList.toggle('no-scroll', open);
   }
 
   setButtonLabels(false);
 
   btn?.addEventListener('click', () => toggleNav());
 
+  // Cerrar con tecla ESC
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') toggleNav(false);
   });
 
-  document.addEventListener('click', (e) => {
-    if (!nav.contains(e.target) && !btn.contains(e.target)) toggleNav(false);
-  });
+  // Cerrar al pulsar en overlay
+  overlay?.addEventListener('click', () => toggleNav(false));
 
+  // Cerrar al hacer click en cualquier enlace del menú
   nav?.addEventListener('click', (e) => {
     const a = e.target.closest('a');
     if (a) toggleNav(false);
