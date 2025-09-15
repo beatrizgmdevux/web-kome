@@ -46,19 +46,28 @@
     color: $color-bg;
   }
 
-  p,
-  a {
+  p{
     margin: 0;
     font-size: $font-size-sm;
     color: $color-bg;
     text-decoration: none;
+    a {
+      margin: 0;
+      font-size: $font-size-sm;
+      color: $color-bg;
+      text-decoration: none;
+
+      &:hover, :focus-visible {
+        cursor: pointer;
+        text-decoration: underline;
+        text-decoration-color: $color-white;
+        color: $color-white;
+        text-underline-offset: 5px;
+      }
+    }
+
   }
 
-  /* Evitamos cambiar font-size en hover para no provocar layout shift */
-  & :hover, :focus-visible {
-    text-decoration: underline;
-    color: $color-white;
-  }
 }
 
 /* fila de redes */
