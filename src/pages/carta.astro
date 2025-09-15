@@ -1,9 +1,35 @@
 ---
 // @ts-nocheck
+/**
+ * CARTA.ASTRO - Página de la carta
+ * ================================================================
+ * 
+ * Esta página genera dinámicamente el menú a partir 
+ * de un archivo JSON, organizando las categorías en secciones 
+ * navegables con scroll suave y navegación sticky.
+ * 
+ * Funcionalidades principales:
+ * - Navegación sticky con chips scrolleables horizontalmente
+ * - Scroll suave entre secciones con offset dinámico
+ * - Scrollspy que activa automáticamente la pestaña correspondiente
+ * - Soporte completo para precios simples y múltiples
+ * - Sistema de iconos y badges para items especiales
+ * - Responsive y accesible
+ * 
+ * @author Beatriz García
+ * @version 1.0.0
+ * @since 2025
+ */
+
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import rawMenu from '@/data/menu.json';
 
-// Mapea claves "icon" → ilustraciones (pon los SVG/PNG en /public/icons/)
+/**
+ * CONFIGURACIÓN DE ICONOS
+ * ================================================================
+ * Mapeo de claves de iconos a rutas de archivos.
+ * Los iconos deben estar en /public/icons/ y ser PNG o SVG.
+ */
 const ICONS: Record<string, string> = {
   bocata: '/icons/bocata.png',
   campero: '/icons/campero.png',
@@ -21,43 +47,90 @@ const ICONS: Record<string, string> = {
   chef: '/icons/sombrero-de-chef.png',
 };
 
-// Slug sencillo (sin emojis, sin acentos, sin espacios)
-function slugify(s: string) {
+/**
+ * UTILIDAD: Generador de slugs
+ * ================================================================
+ * Convierte texto con acentos, espacios y caracteres especiales
+ * en un slug válido para URLs y IDs de HTML.
+ * 
+ * @param s - String a convertir
+ * @returns String limpio para usar como ID/slug
+ * 
+ * @example
+ * slugify('Nuestros camperos') // 'nuestros-camperos'
+ * slugify('Ensaladas de la huerta') // 'ensaladas-de-la-huerta'
+ */
+function slugify(s: string): string {
   return String(s)
     .trim()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // quita acentos
-    .replace(/[^a-zA-Z0-9]+/g, '-')                  // no alfanum → guion
-    .replace(/^-+|-+$/g, '')                         // bordes
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Quita acentos
+    .replace(/[^a-zA-Z0-9]+/g, '-')                   // No alfanuméricos → guion
+    .replace(/^-+|-+$/g, '')                          // Limpia bordes
     .toLowerCase();
 }
 
-// 1) Fuerzo un orden deseado por etiqueta
+/**
+ * ORDEN DE CATEGORÍAS
+ * ================================================================
+ * Define el orden deseado de aparición de las categorías.
+ * Si una categoría existe en menu.json pero no está aquí, se omite.
+ */
 const ORDER = [
   'Nuestro fuerte',
-  'Para compartir',
+  'Para compartir', 
   'Ensaladas de la huerta',
   'Entrepanes',
   'Nuestros camperos',
   'Bebidas',
-];
+] as const;
 
-// Convierte el objeto de categorías → array
+/**
+ * TIPOS DE DATOS
+ * ================================================================
+ */
+
+/** Estructura de un item individual del menú */
 type Item = {
+  /** Nombre del producto */
   name: string;
-  price?: string | Record<string,string>;
+  /** Precio: string simple u objeto con múltiples opciones */
+  price?: string | Record<string, string>;
+  /** Descripción opcional del item */
   description?: string;
+  /** Clave del icono (debe existir en ICONS) */
   icon?: string;
+  /** Badge especial (ej: 'new') */
   badge?: string;
 };
 
-// 2) Construimos categorías con ese orden; si alguna no existe, la saltamos.
-const categories = ORDER
+/** Estructura de una categoría procesada */
+interface ProcessedCategory {
+  /** ID único para navegación (slug) */
+  id: string;
+  /** Nombre visible de la categoría */
+  label: string;
+  /** Ruta del icono o null si no tiene */
+  iconPath: string | null;
+  /** Descripción de la categoría */
+  description: string;
+  /** Array de items de la categoría */
+  items: Item[];
+}
+
+/**
+ * PROCESAMIENTO DE CATEGORÍAS
+ * ================================================================
+ * Convierte el objeto del JSON en un array ordenado de categorías,
+ * procesando iconos y generando IDs únicos.
+ */
+const categories: ProcessedCategory[] = ORDER
   .filter((label) => Object.prototype.hasOwnProperty.call(rawMenu, label))
   .map((label) => {
     const cfg = rawMenu[label] || {};
     const id = slugify(label);
     const iconKey = cfg.icon || null;
     const iconPath = iconKey && ICONS[iconKey] ? ICONS[iconKey] : null;
+    
     return {
       id,
       label,
@@ -67,18 +140,48 @@ const categories = ORDER
     };
   });
 
-function normalizeItem(it: Item) {
-  const badge = it.badge === 'new' || (typeof it.name === 'string' && it.name.includes('🆕')) ? 'Nuevo' : null;
-  const cleanName = typeof it.name === 'string' ? it.name.replace('🆕','').trim() : it.name;
+/**
+ * UTILIDAD: Normalizador de items
+ * ================================================================
+ * Procesa un item del menú para extraer y limpiar:
+ * - Badges (nuevos, especiales)
+ * - Iconos individuales
+ * - Precios simples vs múltiples
+ * - Nombres limpios (sin emojis)
+ * 
+ * @param it - Item sin procesar del JSON
+ * @returns Item procesado y tipado
+ */
+interface ProcessedItem {
+  name: string;
+  description: string;
+  priceSingle: string | null;
+  priceMulti: [string, string][] | null;
+  badge: string | null;
+  iconPath: string | null;
+}
 
-  // icono por item (ilustración)
+function normalizeItem(it: Item): ProcessedItem {
+  // Detecta badge 'new' por bandera o emoji
+  const badge = it.badge === 'new' || 
+    (typeof it.name === 'string' && it.name.includes('🆕')) ? 'Nuevo' : null;
+  
+  // Limpia el nombre quitando emojis
+  const cleanName = typeof it.name === 'string' ? 
+    it.name.replace('🆕', '').trim() : it.name;
+
+  // Procesa icono del item (excluyendo el badge 'new')
   const itemIconKey = it.icon && it.icon !== 'new' ? it.icon : null;
   const itemIconPath = itemIconKey && ICONS[itemIconKey] ? ICONS[itemIconKey] : null;
 
-  // precio: string o objeto
-  const isMulti = it.price && typeof it.price === 'object' && !Array.isArray(it.price);
-  const priceSingle = !isMulti ? (it.price as string ?? null) : null;
-  const priceMulti  = isMulti ? Object.entries(it.price as Record<string,string>) : null;
+  // Determina tipo de precio: simple (string) o múltiple (objeto)
+  const isMultiPrice = it.price && 
+    typeof it.price === 'object' && 
+    !Array.isArray(it.price);
+  
+  const priceSingle = !isMultiPrice ? (it.price as string ?? null) : null;
+  const priceMulti = isMultiPrice ? 
+    Object.entries(it.price as Record<string, string>) : null;
 
   return {
     name: cleanName,
@@ -90,21 +193,37 @@ function normalizeItem(it: Item) {
   };
 }
 
+/**
+ * METADATOS SEO
+ * ================================================================
+ */
 const pageTitle = 'Nuestra carta';
 const pageDescription = 'Los mejores pollos asados, camperos, hamburguesas y más en Torremolinos';
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
   <main class="menu">
-    <!-- NAV (chips con icono de categoría si existe) -->
+    
+    <!-- 
+      NAVEGACIÓN STICKY DE CATEGORÍAS
+      ================================================================
+      Barra horizontal scrolleable que se mantiene fija en la parte 
+      superior. Cada chip es clickeable y muestra el icono de categoría.
+    -->
     <nav class="menu-nav sticky-header" aria-label="Categorías de la carta">
       <ul>
         {categories.map((c) => (
           <li>
             <a href={`#${c.id}`}>
+              {/* Icono de categoría si existe */}
               {c.iconPath && (
                 <span class="chip__icon" aria-hidden="true">
-                  <img src={c.iconPath} alt="" loading="lazy" decoding="async" />
+                  <img 
+                    src={c.iconPath} 
+                    alt="" 
+                    loading="lazy" 
+                    decoding="async" 
+                  />
                 </span>
               )}
               <span class="chip__label">{c.label}</span>
@@ -114,30 +233,68 @@ const pageDescription = 'Los mejores pollos asados, camperos, hamburguesas y má
       </ul>
     </nav>
 
-    {/* Secciones */}
+    <!-- 
+      SECCIONES DE CATEGORÍAS
+      ================================================================
+      Cada sección corresponde a una categoría del menú y contiene
+      sus items organizados.
+    -->
     {categories.map((c) => (
       <section id={c.id} class="category-section">
+        
+        {/* Título de sección con icono */}
         <h2>
-          {c.iconPath && <img class="cat-icon" src={c.iconPath} alt="" loading="lazy" decoding="async" />} {c.label}
+          {c.iconPath && (
+            <img 
+              class="cat-icon" 
+              src={c.iconPath} 
+              alt="" 
+              loading="lazy" 
+              decoding="async" 
+            />
+          )}
+          {c.label}
         </h2>
 
-        {c.description && <p class="category-description">{c.description}</p>}
+        {/* Descripción de categoría si existe */}
+        {c.description && (
+          <p class="category-description">{c.description}</p>
+        )}
 
+        {/* Lista de items de la categoría */}
         <ul>
           {c.items.map((raw) => {
             const it = normalizeItem(raw);
             return (
               <li class="menu-item">
+                
+                {/* Cabecera del item: nombre + precio simple */}
                 <div class="item-header">
                   <strong>
-                    {it.iconPath && <img class="item-icon" src={it.iconPath} alt="" loading="lazy" decoding="async" />}
+                    {/* Icono del item si existe */}
+                    {it.iconPath && (
+                      <img 
+                        class="item-icon" 
+                        src={it.iconPath} 
+                        alt="" 
+                        loading="lazy" 
+                        decoding="async" 
+                      />
+                    )}
                     {it.name}
-                    {it.badge && <span class="badge badge--new">{it.badge}</span>}
+                    {/* Badge si es nuevo u especial */}
+                    {it.badge && (
+                      <span class="badge badge--new">{it.badge}</span>
+                    )}
                   </strong>
 
-                  {it.priceSingle && <span class="single-price">{it.priceSingle}</span>}
+                  {/* Precio simple (solo si no tiene múltiples opciones) */}
+                  {it.priceSingle && (
+                    <span class="single-price">{it.priceSingle}</span>
+                  )}
                 </div>
 
+                {/* Precios múltiples (ej: Media ración / Ración completa) */}
                 {it.priceMulti && (
                   <ul class="multi-price">
                     {it.priceMulti.map(([portion, price]) => (
@@ -149,7 +306,10 @@ const pageDescription = 'Los mejores pollos asados, camperos, hamburguesas y má
                   </ul>
                 )}
 
-                {it.description && <p class="item-description">{it.description}</p>}
+                {/* Descripción del item si existe */}
+                {it.description && (
+                  <p class="item-description">{it.description}</p>
+                )}
               </li>
             );
           })}
@@ -158,30 +318,61 @@ const pageDescription = 'Los mejores pollos asados, camperos, hamburguesas y má
     ))}
   </main>
 
-  <!-- Scroll suave + Scrollspy (activa pestaña al hacer scroll) -->
+<!-- 
+  FUNCIONALIDAD JAVASCRIPT
+  ================================================================
+  Script que maneja:
+  - Scroll suave entre secciones
+  - Scrollspy (activación automática de pestañas)
+  - Navegación horizontal automática de chips
+  - Cálculo dinámico de alturas sticky
+  - Intersection Observer para resaltado de secciones
+-->
 <script is:inline>
+  /**
+   * CONFIGURACIÓN INICIAL
+   * ================================================================
+   */
+  
+  // Detecta preferencia de movimiento reducido
   const prefersNoMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // --- NODOS CLAVE ---
+  // Selecciona elementos clave del DOM
   const siteHeader = document.querySelector('.site-header');
   const chipsNav   = document.querySelector('.menu-nav.sticky-header');
   const navLinks   = Array.from(document.querySelectorAll('.menu-nav a[href^="#"]'));
   const sections   = Array.from(document.querySelectorAll('.category-section[id]'));
 
-  // --- ALTURAS DINÁMICAS → CSS VARS ---
+  /**
+   * GESTIÓN DE ALTURAS DINÁMICAS
+   * ================================================================
+   * Calcula y establece variables CSS para manejar el offset sticky
+   * que cambia según el tamaño del header y la navegación.
+   */
   const setStickyVars = () => {
     const headerH = siteHeader?.offsetHeight ?? 0;
     const chipsH  = chipsNav?.offsetHeight ?? 0;
+    
+    // Establece variables CSS custom para uso en estilos
     document.documentElement.style.setProperty('--chips-h', `${chipsH}px`);
     document.documentElement.style.setProperty('--sticky-total', `${headerH + chipsH}px`);
+    
+    // Recalcula posiciones y actualiza estado
     computeSectionTops();
     rafUpdate();
   };
+
+  // Actualiza alturas en eventos clave
   addEventListener('resize', setStickyVars);
   addEventListener('load', setStickyVars);
-  setStickyVars();
+  setStickyVars(); // Ejecución inicial
 
-  // --- MAPA id → link ---
+  /**
+   * MAPEADO DE NAVEGACIÓN
+   * ================================================================
+   * Crea un Map bidireccional entre IDs de sección y sus enlaces
+   * para optimizar las búsquedas durante el scrollspy.
+   */
   const linksMap = new Map();
   for (const a of navLinks) {
     const href = a.getAttribute('href') || '';
@@ -189,7 +380,12 @@ const pageDescription = 'Los mejores pollos asados, camperos, hamburguesas y má
     if (id) linksMap.set(id, a);
   }
 
-  // --- SCROLL SUAVE EN CLIC ---
+  /**
+   * NAVEGACIÓN POR CLIC
+   * ================================================================
+   * Maneja clics en los chips de navegación con scroll suave
+   * y actualización inmediata del estado activo.
+   */
   navLinks.forEach((a) => {
     a.addEventListener('click', (e) => {
       const href = a.getAttribute('href') || '';
@@ -198,53 +394,121 @@ const pageDescription = 'Los mejores pollos asados, camperos, hamburguesas y má
       if (!target) return;
 
       e.preventDefault();
-      target.scrollIntoView({ behavior: prefersNoMotion ? 'auto' : 'smooth', block: 'start' });
+
+      // Marca activo inmediatamente (UX más responsive)
+      setActive(id);
+
+      // Scroll suave respetando preferencias de accesibilidad
+      target.scrollIntoView({ 
+        behavior: prefersNoMotion ? 'auto' : 'smooth', 
+        block: 'start' 
+      });
+      
+      // Actualiza URL sin recargar página
       history.replaceState(null, '', `#${id}`);
     });
   });
 
-  // --- PINTAR ACTIVO + AUTO-SCROLL HORIZONTAL DE CHIPS ---
+  /**
+   * GESTIÓN DE ESTADO ACTIVO
+   * ================================================================
+   * Actualiza visualmente qué pestaña está activa y hace scroll
+   * automático de la navegación horizontal si es necesario.
+   */
+  
+  /**
+   * Hace scroll del chip activo al centro de la vista
+   * @param {Element} link - Enlace a centrar
+   */
   const scrollChipIntoView = (link) => {
     if (!link) return;
-    link.scrollIntoView({ behavior: prefersNoMotion ? 'auto' : 'smooth', block: 'nearest', inline: 'center' });
+    link.scrollIntoView({ 
+      behavior: prefersNoMotion ? 'auto' : 'smooth', 
+      block: 'nearest', 
+      inline: 'center' 
+    });
   };
 
+  /**
+   * Establece qué enlace está activo
+   * @param {string} id - ID de la sección activa
+   */
   const setActive = (id) => {
     let activeLink = null;
+    
     linksMap.forEach((link, key) => {
       const isActive = key === id;
+      
+      // Toggle clase y atributo aria
       link.classList.toggle('active', isActive);
       link.toggleAttribute('aria-current', isActive);
+      
       if (isActive) activeLink = link;
     });
+    
+    // Auto-scroll horizontal del chip activo
     scrollChipIntoView(activeLink);
   };
 
-  // --- TABLA DE POSICIONES (ROBUSTA) ---
+  /**
+   * SCROLLSPY - DETECCIÓN AUTOMÁTICA DE SECCIÓN
+   * ================================================================
+   */
+  
+  /** Cache de posiciones de secciones para optimizar cálculos */
   let sectionTops = [];
+  
+  /**
+   * Recalcula posiciones de todas las secciones
+   * Se ejecuta en resize y cambios de layout
+   */
   const computeSectionTops = () => {
     sectionTops = sections
-      .map((s) => ({ id: s.id, top: s.getBoundingClientRect().top + scrollY }))
+      .map((s) => ({ 
+        id: s.id, 
+        top: s.getBoundingClientRect().top + scrollY 
+      }))
       .sort((a, b) => a.top - b.top);
   };
-  computeSectionTops();
+  computeSectionTops(); // Cálculo inicial
 
-  // --- DETERMINAR ACTIVA POR POSICIÓN (header + chips) ---
+  /**
+   * Determina qué sección está actualmente visible
+   * teniendo en cuenta el offset del header sticky
+   * @returns {string|null} ID de la sección activa
+   */
   const getCurrentSectionId = () => {
-    const stickyTotal = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sticky-total')) || 0;
-    const y = scrollY + stickyTotal + 1; // holgura
+    const stickyTotal = parseFloat(
+      getComputedStyle(document.documentElement)
+        .getPropertyValue('--sticky-total')
+    ) || 0;
+    
+    const y = scrollY + stickyTotal + 1; // +1 para holgura
     let current = sectionTops[0]?.id || null;
+    
+    // Encuentra la última sección que hemos pasado
     for (let i = 0; i < sectionTops.length; i++) {
-      if (y >= sectionTops[i].top) current = sectionTops[i].id; else break;
+      if (y >= sectionTops[i].top) {
+        current = sectionTops[i].id;
+      } else {
+        break;
+      }
     }
+    
     return current;
   };
 
-  // --- RAF THROTTLING ---
+  /**
+   * OPTIMIZACIÓN CON RAF (RequestAnimationFrame)
+   * ================================================================
+   * Throttling para evitar ejecutar scrollspy en cada frame
+   */
   let ticking = false;
+  
   const rafUpdate = () => {
     if (ticking) return;
     ticking = true;
+    
     requestAnimationFrame(() => {
       const id = getCurrentSectionId();
       if (id) setActive(id);
@@ -252,23 +516,47 @@ const pageDescription = 'Los mejores pollos asados, camperos, hamburguesas y má
     });
   };
 
+  /**
+   * EVENT LISTENERS PRINCIPALES
+   * ================================================================
+   */
+  
+  // Scrollspy en scroll
   document.addEventListener('scroll', rafUpdate, { passive: true });
-  addEventListener('resize', () => { computeSectionTops(); rafUpdate(); });
-  addEventListener('load',  () => { computeSectionTops(); rafUpdate(); });
-  rafUpdate();
+  
+  // Recálculo en cambios de viewport
+  addEventListener('resize', () => { 
+    computeSectionTops(); 
+    rafUpdate(); 
+  });
+  
+  // Activación inicial
+  addEventListener('load', () => { 
+    computeSectionTops(); 
+    rafUpdate(); 
+  });
+  
+  rafUpdate(); // Primera ejecución
 
-  // --- (Opcional) resaltar sección visible en el contenido ---
+  /**
+   * INTERSECTION OBSERVER - RESALTADO VISUAL
+   * ================================================================
+   * Añade clase visual a secciones que están en viewport
+   * para efectos de resaltado (opcional, mejora UX)
+   */
   const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => e.target.classList.toggle('active-section', e.isIntersecting));
+    entries.forEach((e) => {
+      e.target.classList.toggle('active-section', e.isIntersecting);
+    });
   }, {
     root: null,
-    // arriba quitamos header+chips, abajo dejamos 50% para que el resaltado no “parpadee”
+    // Offset superior: quita header+chips, inferior: 50% para estabilidad
     rootMargin: `calc(-1 * var(--sticky-total, 0px)) 0px -50% 0px`,
     threshold: 0.2,
   });
+
+  // Observa todas las secciones
   sections.forEach((s) => io.observe(s));
 </script>
-
-
 
 </BaseLayout>

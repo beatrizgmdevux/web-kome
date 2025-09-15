@@ -2,183 +2,314 @@
 @use '@/scss/theme/variables' as *;
 @use '@/scss/theme/mixins' as *;
 
-/* =========================
- * NUESTRA CARTA (mobile-first)
- * ========================= */
+/* =================================================================
+ * NUESTRA CARTA - PÁGINA PRINCIPAL
+ * ================================================================= */
 
+/* -----------------------------------------------------------------
+ * CONTENEDOR PRINCIPAL
+ * ----------------------------------------------------------------- */
 .menu {
-  @include container;          // ancho centrado del layout
-  max-width: 850px;            // tu límite específico
-  padding: 3rem 1.5rem;
+  @include container;
+  max-width: 850px;
+  padding: $space-12 $space-6;
+
+  @include mq-mobile {
+    padding: $space-8 $space-4;
+  }
 }
 
-/* Barra de categorías (scroll horizontal) */
+/* -----------------------------------------------------------------
+ * NAVEGACIÓN DE CATEGORÍAS (Sticky Header)
+ * ----------------------------------------------------------------- */
 .menu-nav {
+  // Estilos base de la navegación
   border-bottom: 1px solid $color-grey;
   overflow-x: auto;
   white-space: nowrap;
   scroll-behavior: smooth;
   scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
 
+  // Lista de navegación
   ul {
     display: flex;
-    gap: 1rem;
+    gap: $space-4;
     list-style: none;
     padding: 0;
     margin: 0;
 
-    li { flex-shrink: 0; }
+    @include mq-mobile {
+      gap: $space-2;
+    }
 
-    a {
-      display: inline-block;
-      padding: .5rem 1rem;
-      border-radius: $radius-btn;
-      color: $color-black;
-      text-decoration: none;
-      font-weight: $font-weight-bold;
-      transition: background .3s ease, color .3s ease;
+    // Items de navegación
+    li {
+      flex-shrink: 0;
+      scroll-snap-align: center;
 
-      &:hover{
-        text-decoration: underline;       // subrayado
-        text-underline-offset: 5px;       // separa el subrayado para mejor legibilidad
-        transform: scale(1.03);           // “ligeramente” más grande
-        cursor: pointer;                  // cursor pointer
-      }
+      // Enlaces de navegación
+      a {
+        // Estilos base
+        display: inline-block;
+        padding: $space-2 $space-4;
+        border-radius: $radius-btn;
+        color: $color-text;
+        text-decoration: none;
+        font-weight: $font-weight-bold;
+        font-size: $font-size-base;
+        transition: all 0.3s ease;
 
-      &:focus-visible {
-        outline: none;
-        text-decoration: underline;
-        text-underline-offset: 3px;
-        /* mixin de focus ring */
-        @include focus-ring;
-      }
+        @include mq-mobile {
+          padding: $space-2 $space-3;
+          font-size: $font-size-sm;
+        }
 
-      &.active{
-        color: $color-primary;
-        text-decoration: underline;
-        text-underline-offset: 3px;
-      }
+        // Estados interactivos
+        &:hover {
+          transform: scale(1.03);
+          cursor: pointer;
+          &:not(.active) {
+            text-decoration: underline;
+            text-underline-offset: 5px;
+            transform: scale(1.03);
+            cursor: pointer;
+          }
+        }
 
-      /* Respeto a usuarios con “reducir movimiento”: sin escala en hover */
-      @media (prefers-reduced-motion: reduce) {
-        .menu-nav ul a:hover {
-          transform: none;
+        &:focus-visible {
+          outline: none;
+          text-decoration: underline;
+          text-underline-offset: 3px;
+          @include focus-ring;
+        }
+
+        // Estado activo
+        &:active,
+        &[aria-current="true"] {
+          color: $color-primary;
+          text-decoration: underline;
+          text-underline-offset: 3px;
         }
       }
     }
   }
+
+  // Iconos dentro de los chips
+  .chip__icon {
+    display: inline-flex;
+    inline-size: 1.1em;
+    block-size: 1.1em;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      max-inline-size: 100%;
+      max-block-size: 100%;
+      object-fit: contain;
+    }
+  }
+
+  // Comportamiento sticky
+  &.sticky-header {
+    position: sticky;
+    top: var(--header-h, #{$header-h});
+    z-index: 900;
+    background: rgba($color-white, 0.8);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid $color-grey;
+    background-clip: padding-box;
+    padding: $space-4 $space-2;
+
+    @include mq-mobile {
+      padding: $space-3 $space-2;
+    }
+  }
 }
 
-/* Cabecera “sticky” de la nav de categorías */
-.sticky-header {
-  position: sticky;
-  // usa la altura real del header (runtime) con fallback al token Sass
-  top: var(--header-h, #{$header-h});
-  z-index: 900; // por debajo del .site-header (1000)
-  background: rgba($color-white, 0.80);
-  backdrop-filter: blur(8px);
-  border-bottom: 2px solid $color-grey;
-  background-clip: padding-box;
-  padding: 1rem 0.5rem;
-}
-
-
-/* Secciones de categoría (offset dinámico) */
+/* -----------------------------------------------------------------
+ * SECCIONES DE CATEGORÍAS
+ * ----------------------------------------------------------------- */
 .category-section {
-  // 👉 header + chips, medidos en JS (fallback a token + 100px)
+  // Espaciado y posicionamiento
   scroll-margin-top: var(--sticky-total, calc(#{$header-h} + 100px));
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
+  margin-bottom: $space-8;
+  padding-bottom: $space-4;
 
+  @include mq-mobile {
+    margin-bottom: $space-6;
+  }
+
+  // Estado activo (cuando está visible)
   &.active-section {
     border-left: 4px solid $color-primary;
     background-color: $color-cream;
-    transition: background-color .3s ease, border-left .3s ease;
-    padding-left: 1rem;
+    padding-left: $space-4;
+    transition: background-color 0.3s ease, border-left 0.3s ease;
+  }
+
+  // Título de categoría con icono
+  h2 {
+    font-family: $font-family-heading;
+    font-size: $font-size-xxl;
+    margin-bottom: $space-4;
+
+    @include mq-desktop {
+      font-size: 2.25rem; // 36px en desktop
+    }
+
+    .cat-icon {
+      inline-size: 1.25em;
+      block-size: 1.25em;
+      vertical-align: -0.2em;
+      margin-right: $space-2;
+    }
   }
 }
 
 .category-description {
+  font-family: $font-family-main;
   font-style: $font-style-normal;
+  font-size: $font-size-base;
   color: $color-grey;
-  margin-bottom: 1rem;
+  margin-bottom: $space-4;
 }
 
-/* Ítems de la carta */
+/* -----------------------------------------------------------------
+ * ITEMS DEL MENÚ
+ * ----------------------------------------------------------------- */
 .menu-item {
   list-style: none;
-  margin: 1rem;
-  padding: .5rem;
+  margin: $space-4;
+  padding: $space-2;
   border-bottom: 1px solid $color-cream;
-}
 
-.item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: .2rem;
-
-  strong {
-    font-weight: 600;
-    flex: 1;
+  @include mq-mobile {
+    margin: $space-2;
   }
-}
 
-/* Precio simple */
-.single-price {
-  font-weight: $font-weight-bold;
-  color: $color-black;
-}
-
-/* Precio múltiple */
-.multi-price {
-  list-style: none;
-  padding: 0;
-  margin: .3rem 0;
-  font-size: .9rem;
-  color: $color-grey;
-
-  li {
+  // Cabecera del item (nombre + precio simple)
+  .item-header {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
-    padding: .1rem 0;
+    align-items: flex-start;
+    gap: $space-4;
+    margin-bottom: $space-1;
+
+    @include mq-mobile {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $space-2;
+    }
+
+    strong {
+      font-family: $font-family-main;
+      font-weight: $font-weight-bold;
+      font-size: $font-size-base;
+      flex: 1;
+
+      // Icono del item
+      .item-icon {
+        inline-size: 1.05em;
+        block-size: 1.05em;
+        vertical-align: -0.15em;
+        margin-right: $space-2;
+      }
+    }
+  }
+
+  // Precio simple (una sola opción)
+  .single-price {
+    font-family: $font-family-main;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-base;
+    color: $color-primary;
+  }
+
+  // Precios múltiples (varias opciones)
+  .multi-price {
+    list-style: none;
+    padding: 0;
+    margin: $space-2 0;
+    font-family: $font-family-main;
+    font-size: $font-size-sm;
+    color: $color-grey;
+
+    @include mq-mobile {
+      font-size: $font-size-xs;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      gap: $space-4;
+      padding: $space-1 0;
+    }
+
+    .portion {
+      font-weight: $font-weight-medium;
+    }
+
+    .price {
+      font-weight: $font-weight-bold;
+      color: $color-primary;
+      white-space: nowrap;
+    }
+  }
+
+  // Descripción del item
+  .item-description {
+    margin: $space-2;
+    font-family: $font-family-main;
+    font-size: $font-size-sm;
+    color: $color-grey-description;
+    line-height: 1.4;
   }
 }
 
-.portion { font-weight: 500; }
-.price   { font-weight: $font-weight-bold; white-space: nowrap; }
-
-/* Descripción del ítem */
-.item-description {
-  margin: .3rem;
-  font-size: $font-size-sm;
-  color: $color-grey-description;
-}
-
-/* Iconos e insignias de la carta */
-.cat-icon  { inline-size: 1.25em; block-size: 1.25em; vertical-align: -.2em; }
-.item-icon { inline-size: 1.05em; block-size: 1.05em; vertical-align: -.15em; margin-right: .35rem; }
-
+/* -----------------------------------------------------------------
+ * BADGES Y ETIQUETAS
+ * ----------------------------------------------------------------- */
 .badge {
   display: inline-block;
-  margin-left: .5rem;
-  padding: .15rem .5rem;
+  margin-left: $space-2;
+  padding: $space-1 $space-2;
   border-radius: 999px;
-  font-size: .75rem;
+  font-family: $font-family-main;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
   line-height: 1;
-  vertical-align: .1rem;
-  background: #ffecf0; color: #b4003b;
+  vertical-align: 0.1rem;
+  background: rgba($color-mostaza, 0.15);
+  color: darken($color-mostaza, 20%);
 
-  &--new { background: rgba(255,0,80,.08); color: #ff0050; }
+  // Badge específico para items nuevos
+  &--new {
+    background: rgba($color-aguacate, 0.15);
+    color: darken($color-aguacate, 20%);
+  }
 }
 
-.menu-nav .chip__icon {
-  display: inline-flex;
-  inline-size: 1.1em; block-size: 1.1em;
-  align-items: center; justify-content: center;
+/* -----------------------------------------------------------------
+ * RESPONSIVE & ACCESSIBILITY
+ * ----------------------------------------------------------------- */
 
-  img { max-inline-size: 100%; max-block-size: 100%; object-fit: contain; }
+// Respeto a usuarios con "reducir movimiento"
+@media (prefers-reduced-motion: reduce) {
+  .menu-nav {
+    ul li a:hover {
+      transform: none;
+    }
+  }
 }
 
+// Mejoras para tablet
+@include mq-tablet {
+  .menu {
+    padding: $space-8 $space-8;
+  }
+
+  .category-section h2 {
+    font-size: 2rem; // 32px en tablet
+  }
+}
