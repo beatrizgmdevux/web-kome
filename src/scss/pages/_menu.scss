@@ -26,10 +26,46 @@
   // Estilos base de la navegación
   border-bottom: 1px solid $color-grey;
   overflow-x: auto;
+  overflow-y: hidden;
   white-space: nowrap;
+  
+  /* ===== Scrollbar para .menu-nav ===== */
   scroll-behavior: smooth;
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
+  --kk-scroll-track: rgba(0, 0, 0, .08); /* pista */
+  --kk-scroll-thumb: $color-mostaza;       /* pulgar (rojo Kome Kome) */
+  --kk-scroll-size: 8px;                   /* grosor/alto */
+  --kk-scroll-radius: 999px;               /* forma “pill” */
+  
+  /* Para Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: var(--kk-scroll-thumb) var(--kk-scroll-track);
+  
+  /* Chromium/WebKit (Chrome, Edge, Safari) */
+  &::-webkit-scrollbar {
+    height: var(--kk-scroll-size); /* horizontal */
+    width:  var(--kk-scroll-size); /* por si hubiera scroll vertical */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--kk-scroll-track);
+    border-radius: var(--kk-scroll-radius);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--kk-scroll-thumb);
+    border-radius: var(--kk-scroll-radius);
+    border: 2px solid var(--kk-scroll-track); /* mejor contraste */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    filter: brightness(.95);
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }  
 
   // Lista de navegación
   ul {

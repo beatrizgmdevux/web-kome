@@ -1,5 +1,6 @@
 // scss/theme/_mixins.scss
 @use '@/scss/theme/variables' as *;
+@use 'sass:color';
 
 @mixin container {
   width: min(100% - 2rem, $container-max);
@@ -47,7 +48,7 @@
   overflow: hidden; // recorta el excedente
 }
 
-// media queries para pantallas responsive
+// Media queries para pantallas responsive
 @mixin mq-desktop { @media (min-width: $bp-desktop) { @content; } }
 @mixin mq-tablet { @media (min-width: 768px) and (max-width: $bp-tablet) { @content; } }
 @mixin mq-mobile { @media (max-width: $bp-mobile) { @content; } }
