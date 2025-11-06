@@ -103,7 +103,7 @@ Está desarrollada en **Astro**, con HTML, CSS y algo de JavaScript para lograr 
 
 ## 🧪 Estado del Proyecto
 
-⚙️ Proyecto en proceso de mejora
+⚙️ Proyecto en proceso de mejora (a la espera de actualización de carta y precios por parte del cliente)
 🚀 Desplegado en Netlify 
 📱 Totalmente responsive
 
