@@ -64,15 +64,15 @@
         "icon":"bocata",
         "description": "Bocatas y rollos",
         "items": [          
-          { "icon": "bocata", "name": "Serranito", "price": "6,50€", "description": "Filetes de cerdo o pollo, jamón serrano, pimiento frito y mayonesa" },
-          { "icon": "bocata", "name": "Montadito", "price": "6,50€", "description": "Filetes de cerdo o pollo, lechuga, tomate, cebolla y mayonesa" },
-          { "icon": "bocata", "name": "Malaka", "price": "6,00€", "description": "Lomo de cerdo, queso y ali-oli"},
-          { "icon": "bocata", "name": "Alobaito", "price": "6,00€", "description": "Lomo adobado, queso, tomate y mayonesa"},
-          { "icon": "bocata", "name": "Chicle francés", "price": "6,00€", "description": "Tortilla francesa, jamón york, queso, y mayonesa"},
+          { "icon": "bocata", "name": "Serranito", "price": "6,50€", "description": "Filete de cerdo o pollo, pimiento frito, jamón serrano y mayonesa" },
+          { "icon": "bocata", "name": "Montadito", "price": "6,50€", "description": "Filete de cerdo o pollo, lechuga, tomate, cebolla y mayonesa" },
+          { "icon": "bocata", "name": "Malaka", "price": "6,20€", "description": "Filete de cerdo, queso y ali-oli"},
+          { "icon": "bocata", "name": "Alobaito", "price": "6,20€", "description": "Lomo adobado, queso, tomate y mayonesa"},
+          { "icon": "bocata", "name": "Chicle francés", "price": "6,50€", "description": "Tortilla francesa, jamón york, queso, y mayonesa"},
 
-          { "icon": "kebab", "name": "Shawarma", "price": "7,50€", "description": "Rollo de carne kebab, lechuga, tomate, cebolla y salsa de yogur casera"},
-          { "icon": "kebab", "name": "Mexicano", "price": "7,20€", "description": "Pollo asado, cebolla, pimiento rojo, pimiento verde y salsa mexicana"},
-          { "icon": "kebab", "name": "Pollo", "price": "6,70€", "description": "Pollo asado, lechuga, tomate, cebolla y mayonesa"}
+          { "icon": "kebab", "name": "Shawarma", "price": "7,50€", "description": "Rollo de carne kebab, lechuga, tomate, cebolla y salsa de yogurt casera"},
+          { "icon": "kebab", "name": "Mexicano", "price": "7,50€", "description": "Pollo asado, pimiento frito, pimiento morrón, cebolla y salsa mexicana"},
+          { "icon": "kebab", "name": "Pollo", "price": "7,50€", "description": "Pollo asado, lechuga, tomate, cebolla y mayonesa"}
         ]
     },
 
