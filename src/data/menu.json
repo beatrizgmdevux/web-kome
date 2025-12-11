@@ -65,7 +65,7 @@
       "items": [
           { "name": "Kome Kome", "price": "10,50€", "description": "Lechuga, remolacha, zanahoria, maíz, tomate, cebolla, atún y huevo" },
           { "name": "César", "price": "10,00€", "description": "Lechuga, pollo kajún, picatostes, cebolla crujiente, huevo duro, lascas de Grana Padano y salsa césar" },
-          { "name": "Especial", "price": "11,00€", "description": "Lechuga, pollo kajún, picatostes, queso de cabra, tomate cherry, cebolla crujiente y salsa miel y mostaza" }
+          { "name": "Especial", "price": "11,00€", "description": "Lechuga, pollo kajún, picatostes, queso de cabra, tomate cherry, cebolla crujiente y vinagreta miel y mostaza" }
       ]
     },
 
