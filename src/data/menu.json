@@ -92,7 +92,7 @@
           { "badge": "new", "name": "Ibérica", "price": "10,90€", "description": "Carne nacional 120gr., crema de queso curado, pimiento frito, jamón serrano, tomate seco y huevo frito"},  
           { "badge": "new", "name": "Como una cabra!!", "price": "10,50€", "description": "Carne nacional 120gr., salsa bacon,  mermelada de bacon, cebolla caramelizada y queso de cabra"},
           { "badge": "new", "name": "Glotona", "price": "8,90€", "description": "Carne nacional 120gr., bacon, queso, huevo, lechuga, tomate y cebolla"},
-          { "icon": "burger", "name": "Burger La de toda la vida", "price": "7,50€", "description": "Carne nacional 120gr., lechuga, tomate y cebolla y queso"}
+          { "name": "Burger La de toda la vida", "price": "7,50€", "description": "Carne nacional 120gr., lechuga, tomate y cebolla y queso"}
         ]
     },
 
