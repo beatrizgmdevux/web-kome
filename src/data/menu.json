@@ -34,17 +34,26 @@
           "description": ""
         },
         { "name": "Patatas Kome Kome", 
-          "price": "7,00€",
+          "price": {
+            "Media ración": "5,00€",
+            "Ración": "7,00€"
+          },
           "description": "Patatas fritas con salsa de queso y bacon"
         },
         { "name": "Patatas turcas", 
-          "price": "7,00€",
+          "price": {
+            "Media ración": "5,00€",
+            "Ración": "7,00€"
+          },
           "description": "Patatas con salsa de yogur casera y carne kebab"
         },
         { "badge": "new",
           "name": "Patatas gochas", 
-          "price": "7,00€",
-          "description": "Patatas con salsa de yogur casera y carne kebab"
+          "price": {
+            "Media ración": "6,50€",
+            "Ración": "8,90€"
+          },
+          "description": "Patatas, pulled pork, cebolla crunch, cheddar y mayonesa chipotle"
         },
         {"name": "Bolitas de queso y chili", "price": "6,50€", "description": "" }
       ]
@@ -78,7 +87,7 @@
 
     "Burgers": {
         "icon":"burger",
-        "description": "¿Te atreves con nuestras burger más atrevidas?",
+        "description": "¿Has probado nuestras burger más atrevidas?",
         "items": [  
           { "badge": "new", "name": "Ibérica", "price": "10,90€", "description": "Carne nacional 120gr., crema de queso curado, pimiento frito, jamón serrano, tomate seco y huevo frito"},  
           { "badge": "new", "name": "Como una cabra!!", "price": "10,50€", "description": "Carne nacional 120gr., salsa bacon,  mermelada de bacon, cebolla caramelizada y queso de cabra"},
