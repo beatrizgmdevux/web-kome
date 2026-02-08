@@ -329,234 +329,200 @@ const pageDescription = 'Los mejores pollos asados, camperos, hamburguesas y má
   - Intersection Observer para resaltado de secciones
 -->
 <script is:inline>
-  /**
-   * CONFIGURACIÓN INICIAL
-   * ================================================================
-   */
+// Detecta preferencia de movimiento reducido
+const prefersNoMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Selecciona elementos clave del DOM
+const siteHeader = document.querySelector('.site-header');
+const chipsNav = document.querySelector('.menu-nav.sticky-header');
+const navLinks = Array.from(document.querySelectorAll('.menu-nav a[href^="#"]'));
+const sections = Array.from(document.querySelectorAll('.category-section[id]'));
+
+/**
+ * GESTIÓN DE ALTURAS DINÁMICAS
+ */
+const setStickyVars = () => {
+  const headerH = siteHeader?.offsetHeight ?? 0;
+  const chipsH = chipsNav?.offsetHeight ?? 0;
   
-  // Detecta preferencia de movimiento reducido
-  const prefersNoMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.documentElement.style.setProperty('--chips-h', `${chipsH}px`);
+  document.documentElement.style.setProperty('--sticky-total', `${headerH + chipsH}px`);
+};
 
-  // Selecciona elementos clave del DOM
-  const siteHeader = document.querySelector('.site-header');
-  const chipsNav   = document.querySelector('.menu-nav.sticky-header');
-  const navLinks   = Array.from(document.querySelectorAll('.menu-nav a[href^="#"]'));
-  const sections   = Array.from(document.querySelectorAll('.category-section[id]'));
+// Actualiza alturas en eventos clave
+window.addEventListener('resize', setStickyVars);
+window.addEventListener('load', setStickyVars);
+setStickyVars();
 
-  /**
-   * GESTIÓN DE ALTURAS DINÁMICAS
-   * ================================================================
-   * Calcula y establece variables CSS para manejar el offset sticky
-   * que cambia según el tamaño del header y la navegación.
-   */
-  const setStickyVars = () => {
-    const headerH = siteHeader?.offsetHeight ?? 0;
-    const chipsH  = chipsNav?.offsetHeight ?? 0;
+/**
+ * MAPEADO DE NAVEGACIÓN
+ */
+const linksMap = new Map();
+navLinks.forEach((a) => {
+  const href = a.getAttribute('href') || '';
+  const id = href.startsWith('#') ? href.slice(1) : '';
+  if (id) linksMap.set(id, a);
+});
+
+/**
+ * GESTIÓN DE ESTADO ACTIVO
+ */
+const scrollChipIntoView = (link) => {
+  if (!link) return;
+  link.scrollIntoView({ 
+    behavior: prefersNoMotion ? 'auto' : 'smooth', 
+    block: 'nearest', 
+    inline: 'center' 
+  });
+};
+
+const setActive = (id) => {
+  let activeLink = null;
+  
+  linksMap.forEach((link, key) => {
+    const isActive = key === id;
+    link.classList.toggle('active', isActive);
     
-    // Establece variables CSS custom para uso en estilos
-    document.documentElement.style.setProperty('--chips-h', `${chipsH}px`);
-    document.documentElement.style.setProperty('--sticky-total', `${headerH + chipsH}px`);
-    
-    // Recalcula posiciones y actualiza estado
-    computeSectionTops();
-    rafUpdate();
-  };
+    if (isActive) {
+      link.setAttribute('aria-current', 'true');
+      activeLink = link;
+    } else {
+      link.removeAttribute('aria-current');
+    }
+  });
+  
+  if (activeLink) {
+    scrollChipIntoView(activeLink);
+  }
+};
 
-  // Actualiza alturas en eventos clave
-  addEventListener('resize', setStickyVars);
-  addEventListener('load', setStickyVars);
-  setStickyVars(); // Ejecución inicial
+/**
+ * NAVEGACIÓN POR CLIC
+ */
+let isScrollingFromClick = false;
+let scrollTimeout = null;
 
-  /**
-   * MAPEADO DE NAVEGACIÓN
-   * ================================================================
-   * Crea un Map bidireccional entre IDs de sección y sus enlaces
-   * para optimizar las búsquedas durante el scrollspy.
-   */
-  const linksMap = new Map();
-  for (const a of navLinks) {
+navLinks.forEach((a) => {
+  a.addEventListener('click', (e) => {
     const href = a.getAttribute('href') || '';
     const id = href.startsWith('#') ? href.slice(1) : '';
-    if (id) linksMap.set(id, a);
-  }
+    const target = id ? document.getElementById(id) : null;
+    if (!target) return;
 
-  /**
-   * NAVEGACIÓN POR CLIC
-   * ================================================================
-   * Maneja clics en los chips de navegación con scroll suave
-   * y actualización inmediata del estado activo.
-   */
-  navLinks.forEach((a) => {
-    a.addEventListener('click', (e) => {
-      const href = a.getAttribute('href') || '';
-      const id = href.startsWith('#') ? href.slice(1) : '';
-      const target = id ? document.getElementById(id) : null;
-      if (!target) return;
+    e.preventDefault();
 
-      e.preventDefault();
+    // Marca que estamos scrolleando por clic
+    isScrollingFromClick = true;
+    
+    // Marca activo inmediatamente
+    setActive(id);
 
-      // Marca activo inmediatamente (UX más responsive)
-      setActive(id);
-
-      // Scroll suave respetando preferencias de accesibilidad
-      target.scrollIntoView({ 
-        behavior: prefersNoMotion ? 'auto' : 'smooth', 
-        block: 'start' 
-      });
-      
-      // Actualiza URL sin recargar página
-      history.replaceState(null, '', `#${id}`);
+    // Calcula el offset para el scroll
+    const headerH = siteHeader?.offsetHeight ?? 0;
+    const chipsH = chipsNav?.offsetHeight ?? 0;
+    const offsetTotal = headerH + chipsH;
+    
+    // Scroll manual con offset correcto
+    const targetPosition = target.getBoundingClientRect().top + window.scrollY - offsetTotal;
+    
+    window.scrollTo({
+      top: targetPosition,
+      behavior: prefersNoMotion ? 'auto' : 'smooth'
     });
+    
+    // Actualiza URL
+    history.replaceState(null, '', `#${id}`);
+
+    // Resetea el flag después del scroll
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      isScrollingFromClick = false;
+    }, 1000);
   });
+});
 
-  /**
-   * GESTIÓN DE ESTADO ACTIVO
-   * ================================================================
-   * Actualiza visualmente qué pestaña está activa y hace scroll
-   * automático de la navegación horizontal si es necesario.
-   */
+/**
+ * SCROLLSPY - DETECCIÓN AUTOMÁTICA DE SECCIÓN
+ */
+const getCurrentSectionId = () => {
+  const headerH = siteHeader?.offsetHeight ?? 0;
+  const chipsH = chipsNav?.offsetHeight ?? 0;
+  const offsetTotal = headerH + chipsH;
   
-  /**
-   * Hace scroll del chip activo al centro de la vista
-   * @param {Element} link - Enlace a centrar
-   */
-  const scrollChipIntoView = (link) => {
-    if (!link) return;
-    link.scrollIntoView({ 
-      behavior: prefersNoMotion ? 'auto' : 'smooth', 
-      block: 'nearest', 
-      inline: 'center' 
-    });
-  };
-
-  /**
-   * Establece qué enlace está activo
-   * @param {string} id - ID de la sección activa
-   */
-  const setActive = (id) => {
-    let activeLink = null;
-    
-    linksMap.forEach((link, key) => {
-      const isActive = key === id;
-      
-      // Toggle clase y atributo aria
-      link.classList.toggle('active', isActive);
-      link.toggleAttribute('aria-current', isActive);
-      
-      if (isActive) activeLink = link;
-    });
-    
-    // Auto-scroll horizontal del chip activo
-    scrollChipIntoView(activeLink);
-  };
-
-  /**
-   * SCROLLSPY - DETECCIÓN AUTOMÁTICA DE SECCIÓN
-   * ================================================================
-   */
+  // Punto de referencia: justo debajo del header sticky
+  const scrollPos = window.scrollY + offsetTotal + 50;
   
-  /** Cache de posiciones de secciones para optimizar cálculos */
-  let sectionTops = [];
+  let currentSection = null;
   
-  /**
-   * Recalcula posiciones de todas las secciones
-   * Se ejecuta en resize y cambios de layout
-   */
-  const computeSectionTops = () => {
-    sectionTops = sections
-      .map((s) => ({ 
-        id: s.id, 
-        top: s.getBoundingClientRect().top + scrollY 
-      }))
-      .sort((a, b) => a.top - b.top);
-  };
-  computeSectionTops(); // Cálculo inicial
-
-  /**
-   * Determina qué sección está actualmente visible
-   * teniendo en cuenta el offset del header sticky
-   * @returns {string|null} ID de la sección activa
-   */
-  const getCurrentSectionId = () => {
-    const stickyTotal = parseFloat(
-      getComputedStyle(document.documentElement)
-        .getPropertyValue('--sticky-total')
-    ) || 0;
+  // Recorre las secciones y encuentra cuál está visible
+  for (let i = sections.length - 1; i >= 0; i--) {
+    const section = sections[i];
+    const sectionTop = section.offsetTop;
     
-    const y = scrollY + stickyTotal + 1; // +1 para holgura
-    let current = sectionTops[0]?.id || null;
-    
-    // Encuentra la última sección que hemos pasado
-    for (let i = 0; i < sectionTops.length; i++) {
-      if (y >= sectionTops[i].top) {
-        current = sectionTops[i].id;
-      } else {
-        break;
-      }
+    if (scrollPos >= sectionTop) {
+      currentSection = section.id;
+      break;
     }
-    
-    return current;
-  };
+  }
+  
+  // Si no hay ninguna sección visible, usa la primera
+  if (!currentSection && sections.length > 0) {
+    currentSection = sections[0].id;
+  }
+  
+  return currentSection;
+};
 
-  /**
-   * OPTIMIZACIÓN CON RAF (RequestAnimationFrame)
-   * ================================================================
-   * Throttling para evitar ejecutar scrollspy en cada frame
-   */
-  let ticking = false;
-  
-  const rafUpdate = () => {
-    if (ticking) return;
-    ticking = true;
-    
-    requestAnimationFrame(() => {
-      const id = getCurrentSectionId();
-      if (id) setActive(id);
-      ticking = false;
-    });
-  };
+/**
+ * ACTUALIZACIÓN CON RAF
+ */
+let ticking = false;
 
-  /**
-   * EVENT LISTENERS PRINCIPALES
-   * ================================================================
-   */
+const updateScrollspy = () => {
+  // No actualices si estamos scrolleando por clic
+  if (isScrollingFromClick) return;
   
-  // Scrollspy en scroll
-  document.addEventListener('scroll', rafUpdate, { passive: true });
+  if (ticking) return;
+  ticking = true;
   
-  // Recálculo en cambios de viewport
-  addEventListener('resize', () => { 
-    computeSectionTops(); 
-    rafUpdate(); 
+  requestAnimationFrame(() => {
+    const id = getCurrentSectionId();
+    if (id) {
+      setActive(id);
+    }
+    ticking = false;
   });
-  
-  // Activación inicial
-  addEventListener('load', () => { 
-    computeSectionTops(); 
-    rafUpdate(); 
-  });
-  
-  rafUpdate(); // Primera ejecución
+};
 
-  /**
-   * INTERSECTION OBSERVER - RESALTADO VISUAL
-   * ================================================================
-   * Añade clase visual a secciones que están en viewport
-   * para efectos de resaltado (opcional, mejora UX)
-   */
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      e.target.classList.toggle('active-section', e.isIntersecting);
-    });
-  }, {
-    root: null,
-    // Offset superior: quita header+chips, inferior: 50% para estabilidad
-    rootMargin: `calc(-1 * var(--sticky-total, 0px)) 0px -50% 0px`,
-    threshold: 0.2,
-  });
+/**
+ * EVENT LISTENERS
+ */
+document.addEventListener('scroll', updateScrollspy, { passive: true });
+window.addEventListener('resize', updateScrollspy);
+window.addEventListener('load', () => {
+  setStickyVars();
+  updateScrollspy();
+});
 
-  // Observa todas las secciones
-  sections.forEach((s) => io.observe(s));
+// Activación inicial
+setTimeout(() => {
+  updateScrollspy();
+}, 100);
+
+/**
+ * INTERSECTION OBSERVER - RESALTADO VISUAL
+ */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e) => {
+    e.target.classList.toggle('active-section', e.isIntersecting);
+  });
+}, {
+  root: null,
+  rootMargin: `-${(siteHeader?.offsetHeight ?? 0) + (chipsNav?.offsetHeight ?? 0)}px 0px -50% 0px`,
+  threshold: 0.1,
+});
+
+sections.forEach((s) => io.observe(s));
 </script>
 
 </BaseLayout>
