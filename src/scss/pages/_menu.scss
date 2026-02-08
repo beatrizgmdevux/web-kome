@@ -260,7 +260,7 @@
     font-family: $font-family-main;
     font-weight: $font-weight-bold;
     font-size: $font-size-base;
-    color: $color-aguacate;
+    color: $color-black;
 
     @include mq-mobile {
       font-size: $font-size-xs;
@@ -295,7 +295,7 @@
     .price {
       font-weight: $font-weight-bold;
       font-size: $font-size-base;
-      color: $color-aguacate;
+      color: $color-black;
       white-space: nowrap;
     }
   }
@@ -328,8 +328,8 @@
 
   // Badge específico para items nuevos
   &--new {
-    background: rgba($color-aguacate, 0.15);
-    color: darken($color-aguacate, 20%);
+    background: rgba($color-primary, 0.15);
+    color: darken($color-primary, 20%);
   }
 }
 
