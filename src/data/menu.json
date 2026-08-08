@@ -3,8 +3,8 @@
       "icon": "pollo",
       "description": "¡Pregunta por nuestra comida casera! 🥘",
       "items": [
-          { "name": "1/2 Pollo asado", "price": "6,00€", "description": "" },
-          { "name": "Pollo asado", "price": "10,50€", "description": "" }
+          { "name": "1/2 Pollo asado", "price": "6,20€", "description": "" },
+          { "name": "Pollo asado", "price": "11,50€", "description": "" }
       ]
     },
 
