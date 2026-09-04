@@ -447,18 +447,34 @@ const pageDescription = 'Los mejores pollos asados, camperos, hamburguesas y má
 
     io = new IntersectionObserver(
       (entries) => {
+        // El callback solo trae las secciones cuyo estado CAMBIÓ en este
+        // instante, no la lista completa de lo que está visible ahora mismo.
+        // Por eso actualizamos la clase visual con esas entries...
         entries.forEach((entry) => {
           entry.target.classList.toggle('active-section', entry.isIntersecting);
         });
 
         if (isScrollingFromClick) return;
 
-        // De las secciones visibles, la más alta en pantalla es la activa
-        const visible = entries.filter((entry) => entry.isIntersecting);
-        if (visible.length > 0) {
-          visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-          setActive(visible[0].target.id);
-        }
+        // ...pero para decidir el chip activo recalculamos en vivo, sobre
+        // TODAS las secciones, cuál de las que están visibles ahora mismo
+        // (ya con la clase actualizada arriba) está más arriba en pantalla.
+        // Así no dependemos de que en este evento concreto haya llegado
+        // una entry "de entrada": siempre miramos el estado real y actual.
+        let topId = null;
+        let topValue = Infinity;
+
+        sections.forEach((s) => {
+          if (s.classList.contains('active-section')) {
+            const top = s.getBoundingClientRect().top;
+            if (top < topValue) {
+              topValue = top;
+              topId = s.id;
+            }
+          }
+        });
+
+        if (topId) setActive(topId);
       },
       {
         root: null,
