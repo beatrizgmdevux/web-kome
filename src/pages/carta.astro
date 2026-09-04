@@ -329,200 +329,156 @@ const pageDescription = 'Los mejores pollos asados, camperos, hamburguesas y má
   - Intersection Observer para resaltado de secciones
 -->
 <script is:inline>
-// Detecta preferencia de movimiento reducido
-const prefersNoMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+(function () {
+  // Detecta preferencia de movimiento reducido
+  const prefersNoMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Selecciona elementos clave del DOM
-const siteHeader = document.querySelector('.site-header');
-const chipsNav = document.querySelector('.menu-nav.sticky-header');
-const navLinks = Array.from(document.querySelectorAll('.menu-nav a[href^="#"]'));
-const sections = Array.from(document.querySelectorAll('.category-section[id]'));
+  // Selecciona elementos clave del DOM
+  const siteHeader = document.querySelector('.site-header');
+  const chipsNav = document.querySelector('.menu-nav.sticky-header');
+  const navLinks = Array.from(document.querySelectorAll('.menu-nav a[href^="#"]'));
+  const sections = Array.from(document.querySelectorAll('.category-section[id]'));
 
-/**
- * GESTIÓN DE ALTURAS DINÁMICAS
- */
-const setStickyVars = () => {
-  const headerH = siteHeader?.offsetHeight ?? 0;
-  const chipsH = chipsNav?.offsetHeight ?? 0;
-  
-  document.documentElement.style.setProperty('--chips-h', `${chipsH}px`);
-  document.documentElement.style.setProperty('--sticky-total', `${headerH + chipsH}px`);
-};
+  if (!navLinks.length || !sections.length) return;
 
-// Actualiza alturas en eventos clave
-window.addEventListener('resize', setStickyVars);
-window.addEventListener('load', setStickyVars);
-setStickyVars();
-
-/**
- * MAPEADO DE NAVEGACIÓN
- */
-const linksMap = new Map();
-navLinks.forEach((a) => {
-  const href = a.getAttribute('href') || '';
-  const id = href.startsWith('#') ? href.slice(1) : '';
-  if (id) linksMap.set(id, a);
-});
-
-/**
- * GESTIÓN DE ESTADO ACTIVO
- */
-const scrollChipIntoView = (link) => {
-  if (!link) return;
-  link.scrollIntoView({ 
-    behavior: prefersNoMotion ? 'auto' : 'smooth', 
-    block: 'nearest', 
-    inline: 'center' 
-  });
-};
-
-const setActive = (id) => {
-  let activeLink = null;
-  
-  linksMap.forEach((link, key) => {
-    const isActive = key === id;
-    link.classList.toggle('active', isActive);
-    
-    if (isActive) {
-      link.setAttribute('aria-current', 'true');
-      activeLink = link;
-    } else {
-      link.removeAttribute('aria-current');
-    }
-  });
-  
-  if (activeLink) {
-    scrollChipIntoView(activeLink);
-  }
-};
-
-/**
- * NAVEGACIÓN POR CLIC
- */
-let isScrollingFromClick = false;
-let scrollTimeout = null;
-
-navLinks.forEach((a) => {
-  a.addEventListener('click', (e) => {
-    const href = a.getAttribute('href') || '';
-    const id = href.startsWith('#') ? href.slice(1) : '';
-    const target = id ? document.getElementById(id) : null;
-    if (!target) return;
-
-    e.preventDefault();
-
-    // Marca que estamos scrolleando por clic
-    isScrollingFromClick = true;
-    
-    // Marca activo inmediatamente
-    setActive(id);
-
-    // Calcula el offset para el scroll
+  /**
+   * GESTIÓN DE ALTURAS DINÁMICAS
+   * Expone --chips-h y --sticky-total (usada por scroll-margin-top en el CSS
+   * de .category-section) y devuelve el offset total en px.
+   */
+  const setStickyVars = () => {
     const headerH = siteHeader?.offsetHeight ?? 0;
     const chipsH = chipsNav?.offsetHeight ?? 0;
-    const offsetTotal = headerH + chipsH;
-    
-    // Scroll manual con offset correcto
-    const targetPosition = target.getBoundingClientRect().top + window.scrollY - offsetTotal;
-    
-    window.scrollTo({
-      top: targetPosition,
-      behavior: prefersNoMotion ? 'auto' : 'smooth'
+    const total = headerH + chipsH;
+
+    document.documentElement.style.setProperty('--chips-h', `${chipsH}px`);
+    document.documentElement.style.setProperty('--sticky-total', `${total}px`);
+
+    return total;
+  };
+
+  /**
+   * MAPEADO DE NAVEGACIÓN
+   */
+  const linksMap = new Map();
+  navLinks.forEach((a) => {
+    const href = a.getAttribute('href') || '';
+    const id = href.startsWith('#') ? href.slice(1) : '';
+    if (id) linksMap.set(id, a);
+  });
+
+  /**
+   * GESTIÓN DE ESTADO ACTIVO (chips de navegación)
+   */
+  const scrollChipIntoView = (link) => {
+    if (!link) return;
+    link.scrollIntoView({
+      behavior: prefersNoMotion ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'center',
     });
-    
-    // Actualiza URL
-    history.replaceState(null, '', `#${id}`);
+  };
 
-    // Resetea el flag después del scroll
-    if (scrollTimeout) clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-      isScrollingFromClick = false;
-    }, 1000);
-  });
-});
+  let currentActiveId = null;
 
-/**
- * SCROLLSPY - DETECCIÓN AUTOMÁTICA DE SECCIÓN
- */
-const getCurrentSectionId = () => {
-  const headerH = siteHeader?.offsetHeight ?? 0;
-  const chipsH = chipsNav?.offsetHeight ?? 0;
-  const offsetTotal = headerH + chipsH;
-  
-  // Punto de referencia: justo debajo del header sticky
-  const scrollPos = window.scrollY + offsetTotal + 50;
-  
-  let currentSection = null;
-  
-  // Recorre las secciones y encuentra cuál está visible
-  for (let i = sections.length - 1; i >= 0; i--) {
-    const section = sections[i];
-    const sectionTop = section.offsetTop;
-    
-    if (scrollPos >= sectionTop) {
-      currentSection = section.id;
-      break;
-    }
-  }
-  
-  // Si no hay ninguna sección visible, usa la primera
-  if (!currentSection && sections.length > 0) {
-    currentSection = sections[0].id;
-  }
-  
-  return currentSection;
-};
+  const setActive = (id) => {
+    if (!id || id === currentActiveId || !linksMap.has(id)) return;
+    currentActiveId = id;
 
-/**
- * ACTUALIZACIÓN CON RAF
- */
-let ticking = false;
+    let activeLink = null;
+    linksMap.forEach((link, key) => {
+      const isActive = key === id;
+      link.classList.toggle('active', isActive);
+      if (isActive) {
+        link.setAttribute('aria-current', 'true');
+        activeLink = link;
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
 
-const updateScrollspy = () => {
-  // No actualices si estamos scrolleando por clic
-  if (isScrollingFromClick) return;
-  
-  if (ticking) return;
-  ticking = true;
-  
-  requestAnimationFrame(() => {
-    const id = getCurrentSectionId();
-    if (id) {
+    if (activeLink) scrollChipIntoView(activeLink);
+  };
+
+  /**
+   * NAVEGACIÓN POR CLIC
+   * Usa scrollIntoView nativo: respeta el scroll-margin-top que ya
+   * tienen las .category-section en el CSS, sin cálculos manuales de píxeles.
+   */
+  let isScrollingFromClick = false;
+  let clickTimeout = null;
+
+  navLinks.forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const href = a.getAttribute('href') || '';
+      const id = href.startsWith('#') ? href.slice(1) : '';
+      const target = id ? document.getElementById(id) : null;
+      if (!target) return;
+
+      e.preventDefault();
+
+      isScrollingFromClick = true;
       setActive(id);
-    }
-    ticking = false;
+      history.replaceState(null, '', `#${id}`);
+
+      target.scrollIntoView({
+        behavior: prefersNoMotion ? 'auto' : 'smooth',
+        block: 'start',
+      });
+
+      // Vuelve a dejar que el IntersectionObserver mande cuando termine el scroll
+      clearTimeout(clickTimeout);
+      clickTimeout = setTimeout(() => {
+        isScrollingFromClick = false;
+      }, 900);
+    });
   });
-};
 
-/**
- * EVENT LISTENERS
- */
-document.addEventListener('scroll', updateScrollspy, { passive: true });
-window.addEventListener('resize', updateScrollspy);
-window.addEventListener('load', () => {
-  setStickyVars();
-  updateScrollspy();
-});
+  /**
+   * SCROLLSPY - IntersectionObserver como única fuente de verdad
+   * Se reconstruye en resize para recalcular el offset del header sticky
+   * (importante en móvil, donde el alto del header puede variar).
+   */
+  let io = null;
 
-// Activación inicial
-setTimeout(() => {
-  updateScrollspy();
-}, 100);
+  const buildObserver = () => {
+    io?.disconnect();
+    const offset = setStickyVars();
 
-/**
- * INTERSECTION OBSERVER - RESALTADO VISUAL
- */
-const io = new IntersectionObserver((entries) => {
-  entries.forEach((e) => {
-    e.target.classList.toggle('active-section', e.isIntersecting);
-  });
-}, {
-  root: null,
-  rootMargin: `-${(siteHeader?.offsetHeight ?? 0) + (chipsNav?.offsetHeight ?? 0)}px 0px -50% 0px`,
-  threshold: 0.1,
-});
+    io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle('active-section', entry.isIntersecting);
+        });
 
-sections.forEach((s) => io.observe(s));
+        if (isScrollingFromClick) return;
+
+        // De las secciones visibles, la más alta en pantalla es la activa
+        const visible = entries.filter((entry) => entry.isIntersecting);
+        if (visible.length > 0) {
+          visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+          setActive(visible[0].target.id);
+        }
+      },
+      {
+        root: null,
+        rootMargin: `-${offset}px 0px -55% 0px`,
+        threshold: [0, 0.1, 0.5],
+      }
+    );
+
+    sections.forEach((s) => io.observe(s));
+  };
+
+  buildObserver();
+
+  window.addEventListener('load', buildObserver);
+  window.addEventListener('resize', buildObserver);
+
+  // Estado inicial: respeta el hash de la URL si viene de un enlace externo
+  const initialId = location.hash ? location.hash.slice(1) : sections[0]?.id;
+  if (initialId) setActive(initialId);
+})();
 </script>
 
 </BaseLayout>
