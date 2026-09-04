@@ -4,8 +4,7 @@
 
 /* Sección */
 .reviews {
-  @include container;
-  padding-block: 2rem;
+  padding: 2rem 4rem;
 }
 
 .reviews-header { margin-bottom: 1rem; }
