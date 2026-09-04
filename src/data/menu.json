@@ -1,7 +1,7 @@
 {
   "Nuestro fuerte": {
       "icon": "pollo",
-      "description": "¡Pregunta por nuestra comida casera! 🥘",
+      "description": "",
       "items": [
           { "name": "1/2 Pollo asado", "price": "6,20€", "description": "" },
           { "name": "Pollo asado", "price": "11,50€", "description": "" }
@@ -80,7 +80,6 @@
           { "icon": "bocata", "name": "Chicle francés", "price": "6,50€", "description": "Tortilla francesa, jamón york, queso, y mayonesa"},
 
           { "icon": "kebab", "name": "Shawarma", "price": "7,50€", "description": "Rollo de carne kebab, lechuga, tomate, cebolla y salsa de yogurt casera"},
-          { "icon": "kebab", "name": "Mexicano", "price": "7,50€", "description": "Pollo asado, pimiento frito, pimiento morrón, cebolla y salsa mexicana"},
           { "icon": "kebab", "name": "Pollo", "price": "7,50€", "description": "Pollo asado, lechuga, tomate, cebolla y mayonesa"}
         ]
     },
@@ -89,9 +88,10 @@
         "icon":"burger",
         "description": "¿Has probado nuestras burger más atrevidas?",
         "items": [  
+          { "badge": "new", "name": "La Crunchy", "price": "7,50€", "description": "Salsa deluxe, col, pepinillos y pollo crunch"},
           { "badge": "new", "name": "Ibérica", "price": "10,90€", "description": "Carne nacional 120gr., crema de queso curado, pimiento frito, jamón serrano, tomate seco y huevo frito"},  
           { "badge": "new", "name": "Como una cabra!!", "price": "11,50€", "description": "Carne nacional 120gr., salsa bacon,  mermelada de bacon, cebolla caramelizada y queso de cabra"},
-          { "badge": "new", "name": "Glotona", "price": "8,90€", "description": "Carne nacional 120gr., bacon, queso, huevo, lechuga, tomate y cebolla"},
+          { "name": "Glotona", "price": "8,90€", "description": "Carne nacional 120gr., bacon, queso, huevo, lechuga, tomate y cebolla"},
           { "name": "Burger La de toda la vida", "price": "7,50€", "description": "Carne nacional 120gr., lechuga, tomate y cebolla y queso"}
         ]
     },
@@ -106,7 +106,7 @@
           { "name": "Mixto", "price": "5,50€", "description": "Jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
           { "name": "Pollo", "price": "6,70€", "description": "Pollo asado, lechuga, tomate, cebolla y mayonesa" },
           { "name": "Pollo Mixto", "price": "7,00€", "description": "Pollo asado, jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
-          { "badge":"new", "name": "Granjero", "price": "6,50€", "description": "Queso, tortilla francesa, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Granjero", "price": "6,50€", "description": "Queso, tortilla francesa, lechuga, tomate, cebolla y mayonesa" },
           
           { "name": "Big Ben", "price": "6,00€", "description": "Bacon, queso, lechuga, tomate, cebolla y mayonesa" },
           { "name": "Pinchitos", "price": "7,00€", "description": "Pinchitos, lechuga, tomate, cebolla y mayonesa" },
