@@ -168,6 +168,16 @@
  * SECCIONES DE CATEGORÍAS
  * ----------------------------------------------------------------- */
 .category-section {
+  // Reset del <ul> principal: el navegador aplica 40px de
+  // padding-inline-start por defecto a cualquier <ul>, y como aquí no usamos
+  // viñetas (list-style ya se quita en .menu-item), ese espacio se queda
+  // "flotando" sin usarse — especialmente costoso en pantallas estrechas.
+  > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
   // Espaciado y posicionamiento
   scroll-margin-top: var(--sticky-total, calc(#{$header-h} + 100px));
   margin-bottom: $space-8;
@@ -179,10 +189,17 @@
 
   // Estado activo (cuando está visible)
   &.active-section {
-    border-left: 2px solid $color-primary;
+    border-left: 4px solid $color-primary;
     background-color: $color-cream;
-    padding-left: $space-2;
+    padding-left: $space-4;
     transition: background-color 0.3s ease, border-left 0.3s ease;
+
+    // En móvil reducimos el grosor del borde y el padding para no
+    // "robarle" ancho útil al contenido en pantallas estrechas
+    @include mq-mobile {
+      border-left-width: 3px;
+      padding-left: $space-2;
+    }
   }
 
   // Título de categoría con icono
