@@ -105,15 +105,15 @@
           
           { "name": "Mixto", "price": "5,50€", "description": "Jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
           { "name": "Pollo", "price": "6,70€", "description": "Pollo asado, lechuga, tomate, cebolla y mayonesa" },
-          { "name": "Pollo Mixto", "price": "7,00€", "description": "Pollo asado, jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Pollo Mixto", "price": "7,20€", "description": "Pollo asado, jamón york, queso, lechuga, tomate, cebolla y mayonesa" },
           { "name": "Granjero", "price": "6,50€", "description": "Queso, tortilla francesa, lechuga, tomate, cebolla y mayonesa" },
           
-          { "name": "Big Ben", "price": "6,00€", "description": "Bacon, queso, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Big Ben", "price": "6,50€", "description": "Bacon, queso, lechuga, tomate, cebolla y mayonesa" },
           { "name": "Pinchitos", "price": "7,00€", "description": "Pinchitos, lechuga, tomate, cebolla y mayonesa" },
           { "name": "Bombay", "price": "7,20€", "description": "Pollo asado al curry, lechuga, tomate y cebolla" },
           
           { "name": "Serrano", "price": "7,50€", "description": "Filetes de cerdo o pollo, jamón serrano, pimiento frito y mayonesa" },
-          { "name": "Kome Kome", "price": "8,20€", "description": "Pollo asado, jamón york, queso, hamburguesa, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Kome Kome", "price": "7,70€", "description": "Pollo asado, jamón york, queso, hamburguesa, lechuga, tomate, cebolla y mayonesa" },
           { "name": "Malaka", "price": "7,20€", "description": "Pollo asado, pimiento frito, huevo frito y ali-oli" },
           { "name": "Turko", "price": "7,50€", "description": "Carne kebab, lechuga, cebolla, tomate y salsa yogur casera" },
           
