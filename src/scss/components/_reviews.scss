@@ -5,6 +5,12 @@
 /* Sección */
 .reviews {
   padding: 2rem 4rem;
+
+  // En móvil, 4rem (64px) por lado se comía un tercio de la pantalla.
+  // Bajamos a un margen lateral acorde al resto de secciones del sitio.
+  @include mq-mobile {
+    padding: 1.5rem 1rem;
+  }
 }
 
 .reviews-header { margin-bottom: 1rem; }
