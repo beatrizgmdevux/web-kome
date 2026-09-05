@@ -27,5 +27,10 @@
     height: 120px;
     width: auto;
     display: block;
+
+    // En móvil el logo se ve desproporcionado frente al resto del header
+    @include mq-mobile {
+      height: 60px;
+    }
   }
 }
