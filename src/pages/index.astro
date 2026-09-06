@@ -2,11 +2,176 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import Reviews from '@/components/Reviews.astro';
-import { Picture } from 'astro:assets';
-import workImg from '@/assets/buscar-trabajo.jpg';
+import rawMenu from '@/data/menu.json';
 
 const pageTitle = "Kome Kome";
 const pageDescription = "Descubre nuestro pollo asado y los mejores camperos de Málaga en Asador Kome Kome, ubicado en Torremolinos.";
+
+/**
+ * CARTA — lógica trasladada desde la antigua página /carta
+ * ================================================================
+ * La carta ahora vive dentro de Inicio (sección #carta), justo
+ * después del botón "Nuestra carta" del hero.
+ */
+
+/**
+ * CONFIGURACIÓN DE ICONOS
+ * ================================================================
+ * Mapeo de claves de iconos a rutas de archivos.
+ * Los iconos deben estar en /public/icons/ y ser PNG o SVG.
+ */
+const ICONS: Record<string, string> = {
+  bocata: '/icons/bocata.png',
+  campero: '/icons/campero.png',
+  ensalada: '/icons/ensalada.png',
+  burger: '/icons/hamburguesa.png',
+  kebab: '/icons/kebab.png',
+  lata: '/icons/lata.png',
+  new: '/icons/new.png',
+  pan: '/icons/pan.png',
+  patatas: '/icons/patatas.png',
+  picante: '/icons/picante.png',
+  pollo: '/icons/pollo-asado.png',
+  refrescos: '/icons/refrescos.png',
+  salsa: '/icons/salsa.png',
+  chef: '/icons/sombrero-de-chef.png',
+};
+
+/**
+ * UTILIDAD: Generador de slugs
+ * ================================================================
+ * Convierte texto con acentos, espacios y caracteres especiales
+ * en un slug válido para URLs y IDs de HTML.
+ */
+function slugify(s: string): string {
+  return String(s)
+    .trim()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Quita acentos
+    .replace(/[^a-zA-Z0-9]+/g, '-')                   // No alfanuméricos → guion
+    .replace(/^-+|-+$/g, '')                          // Limpia bordes
+    .toLowerCase();
+}
+
+/**
+ * ORDEN DE CATEGORÍAS
+ * ================================================================
+ * Define el orden deseado de aparición de las categorías.
+ * Si una categoría existe en menu.json pero no está aquí, se omite.
+ */
+const ORDER = [
+  'Nuestro fuerte',
+  'Para compartir', 
+  'Ensaladas de la huerta',
+  'Entrepanes',
+  'Burgers',
+  'Nuestros camperos',
+] as const;
+
+/**
+ * TIPOS DE DATOS
+ * ================================================================
+ */
+
+/** Estructura de un item individual del menú */
+type Item = {
+  /** Nombre del producto */
+  name: string;
+  /** Precio: string simple u objeto con múltiples opciones */
+  price?: string | Record<string, string>;
+  /** Descripción opcional del item */
+  description?: string;
+  /** Clave del icono (debe existir en ICONS) */
+  icon?: string;
+  /** Badge especial (ej: 'new') */
+  badge?: string;
+};
+
+/** Estructura de una categoría procesada */
+interface ProcessedCategory {
+  /** ID único para navegación (slug) */
+  id: string;
+  /** Nombre visible de la categoría */
+  label: string;
+  /** Ruta del icono o null si no tiene */
+  iconPath: string | null;
+  /** Descripción de la categoría */
+  description: string;
+  /** Array de items de la categoría */
+  items: Item[];
+}
+
+/**
+ * PROCESAMIENTO DE CATEGORÍAS
+ * ================================================================
+ * Convierte el objeto del JSON en un array ordenado de categorías,
+ * procesando iconos y generando IDs únicos.
+ */
+const categories: ProcessedCategory[] = ORDER
+  .filter((label) => Object.prototype.hasOwnProperty.call(rawMenu, label))
+  .map((label) => {
+    const cfg = rawMenu[label] || {};
+    const id = slugify(label);
+    const iconKey = cfg.icon || null;
+    const iconPath = iconKey && ICONS[iconKey] ? ICONS[iconKey] : null;
+    
+    return {
+      id,
+      label,
+      iconPath,
+      description: cfg.description || '',
+      items: Array.isArray(cfg.items) ? cfg.items : [],
+    };
+  });
+
+/**
+ * UTILIDAD: Normalizador de items
+ * ================================================================
+ * Procesa un item del menú para extraer y limpiar:
+ * - Badges (nuevos, especiales)
+ * - Iconos individuales
+ * - Precios simples vs múltiples
+ * - Nombres limpios (sin emojis)
+ */
+interface ProcessedItem {
+  name: string;
+  description: string;
+  priceSingle: string | null;
+  priceMulti: [string, string][] | null;
+  badge: string | null;
+  iconPath: string | null;
+}
+
+function normalizeItem(it: Item): ProcessedItem {
+  // Detecta badge 'new' por bandera o emoji
+  const badge = it.badge === 'new' || 
+    (typeof it.name === 'string' && it.name.includes('🆕')) ? 'Nuevo' : null;
+  
+  // Limpia el nombre quitando emojis
+  const cleanName = typeof it.name === 'string' ? 
+    it.name.replace('🆕', '').trim() : it.name;
+
+  // Procesa icono del item (excluyendo el badge 'new')
+  const itemIconKey = it.icon && it.icon !== 'new' ? it.icon : null;
+  const itemIconPath = itemIconKey && ICONS[itemIconKey] ? ICONS[itemIconKey] : null;
+
+  // Determina tipo de precio: simple (string) o múltiple (objeto)
+  const isMultiPrice = it.price && 
+    typeof it.price === 'object' && 
+    !Array.isArray(it.price);
+  
+  const priceSingle = !isMultiPrice ? (it.price as string ?? null) : null;
+  const priceMulti = isMultiPrice ? 
+    Object.entries(it.price as Record<string, string>) : null;
+
+  return {
+    name: cleanName,
+    description: it.description ?? '',
+    priceSingle,
+    priceMulti,
+    badge,
+    iconPath: itemIconPath
+  };
+}
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
@@ -20,7 +185,7 @@ const pageDescription = "Descubre nuestro pollo asado y los mejores camperos de 
       ¿Te atreves a probarnos?
       Disfruta de nuestros productos hechos con ingredientes frescos y mucho sabor.
     </p>
-    <Button href="/carta" variant="primary" children="Nuestra carta"></Button>
+    <Button href="/#carta" variant="primary" children="Nuestra carta"></Button>
   </section>
 <!-- ! PDT: rediseño
   <section class="info">
@@ -55,25 +220,311 @@ const pageDescription = "Descubre nuestro pollo asado y los mejores camperos de 
   </section>
 -->
 
-  <section class="work">
-    <div class="work-container">
-      <h2>¿Quieres trabajar con nosotros?</h2>
-      <p>Siempre estamos en busca de ofrecer nuevas oportunidades 😉</p>
-      <Button variant="secondary" href="/trabajo" children="Envíanos tu CV"></Button>
-    </div>
+  <!--
+    CARTA (antes era la página /carta, ahora vive dentro de Inicio)
+    ================================================================
+    Genera dinámicamente el menú a partir de un archivo JSON,
+    organizando las categorías en secciones navegables con scroll
+    suave y navegación sticky.
+  -->
+  <section id="carta" class="menu">
 
-    <div class="work-img">
-      <Picture
-        src={workImg}
-        formats={['avif','webp']}
-        widths={[360, 480, 768, 1024]}
-        sizes="(max-width: 768px) 100vw, 480px"
-        alt="Cocinero/a preparando una burger jugosa en Kome Kome"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
+    <!-- 
+      NAVEGACIÓN STICKY DE CATEGORÍAS
+      ================================================================
+      Barra horizontal scrolleable que se mantiene fija en la parte 
+      superior. Cada chip es clickeable y muestra el icono de categoría.
+    -->
+    <nav class="menu-nav sticky-header" aria-label="Categorías de la carta">
+      <ul>
+        {categories.map((c) => (
+          <li>
+            <a href={`#${c.id}`}>
+              {/* Icono de categoría si existe */}
+              {c.iconPath && (
+                <span class="chip__icon" aria-hidden="true">
+                  <img 
+                    src={c.iconPath} 
+                    alt="" 
+                    loading="lazy" 
+                    decoding="async" 
+                  />
+                </span>
+              )}
+              <span class="chip__label">{c.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- 
+      SECCIONES DE CATEGORÍAS
+      ================================================================
+      Cada sección corresponde a una categoría del menú y contiene
+      sus items organizados.
+    -->
+    {categories.map((c) => (
+      <section id={c.id} class="category-section">
+        
+        {/* Título de sección con icono */}
+        <h2>
+          {c.iconPath && (
+            <img 
+              class="cat-icon" 
+              src={c.iconPath} 
+              alt="" 
+              loading="lazy" 
+              decoding="async" 
+            />
+          )}
+          {c.label}
+        </h2>
+
+        {/* Descripción de categoría si existe */}
+        {c.description && (
+          <p class="category-description">{c.description}</p>
+        )}
+
+        {/* Lista de items de la categoría */}
+        <ul>
+          {c.items.map((raw) => {
+            const it = normalizeItem(raw);
+            return (
+              <li class="menu-item">
+                
+                {/* Cabecera del item: nombre + precio simple */}
+                <div class="item-header">
+                  <strong>
+                    {/* Icono del item si existe */}
+                    {it.iconPath && (
+                      <img 
+                        class="item-icon" 
+                        src={it.iconPath} 
+                        alt="" 
+                        loading="lazy" 
+                        decoding="async" 
+                      />
+                    )}
+                    {it.name}
+                    {/* Badge si es nuevo u especial */}
+                    {it.badge && (
+                      <span class="badge badge--new">{it.badge}</span>
+                    )}
+                  </strong>
+
+                  {/* Precio simple (solo si no tiene múltiples opciones) */}
+                  {it.priceSingle && (
+                    <span class="single-price">{it.priceSingle}</span>
+                  )}
+                </div>
+
+                {/* Precios múltiples (ej: Media ración / Ración completa) */}
+                {it.priceMulti && (
+                  <ul class="multi-price">
+                    {it.priceMulti.map(([portion, price]) => (
+                      <li>
+                        <span class="portion">{portion}</span>
+                        <span class="price">{price}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {/* Descripción del item si existe */}
+                {it.description && (
+                  <p class="item-description">{it.description}</p>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    ))}
   </section>
+
+  <!-- 
+    FUNCIONALIDAD JAVASCRIPT DE LA CARTA
+    ================================================================
+    Script que maneja:
+    - Scroll suave entre secciones
+    - Scrollspy (activación automática de pestañas)
+    - Navegación horizontal automática de chips
+    - Cálculo dinámico de alturas sticky
+    - Intersection Observer para resaltado de secciones
+  -->
+  <script is:inline>
+  (function () {
+    // Detecta preferencia de movimiento reducido
+    const prefersNoMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Selecciona elementos clave del DOM
+    const siteHeader = document.querySelector('.site-header');
+    const chipsNav = document.querySelector('.menu-nav.sticky-header');
+    const navLinks = Array.from(document.querySelectorAll('.menu-nav a[href^="#"]'));
+    const sections = Array.from(document.querySelectorAll('.category-section[id]'));
+
+    if (!navLinks.length || !sections.length) return;
+
+    /**
+     * GESTIÓN DE ALTURAS DINÁMICAS
+     * Expone --chips-h y --sticky-total (usada por scroll-margin-top en el CSS
+     * de .category-section) y devuelve el offset total en px.
+     */
+    const setStickyVars = () => {
+      const headerH = siteHeader?.offsetHeight ?? 0;
+      const chipsH = chipsNav?.offsetHeight ?? 0;
+      const total = headerH + chipsH;
+
+      document.documentElement.style.setProperty('--chips-h', `${chipsH}px`);
+      document.documentElement.style.setProperty('--sticky-total', `${total}px`);
+
+      return total;
+    };
+
+    /**
+     * MAPEADO DE NAVEGACIÓN
+     */
+    const linksMap = new Map();
+    navLinks.forEach((a) => {
+      const href = a.getAttribute('href') || '';
+      const id = href.startsWith('#') ? href.slice(1) : '';
+      if (id) linksMap.set(id, a);
+    });
+
+    /**
+     * GESTIÓN DE ESTADO ACTIVO (chips de navegación)
+     */
+    const scrollChipIntoView = (link) => {
+      if (!link) return;
+      link.scrollIntoView({
+        behavior: prefersNoMotion ? 'auto' : 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    };
+
+    let currentActiveId = null;
+
+    const setActive = (id) => {
+      if (!id || id === currentActiveId || !linksMap.has(id)) return;
+      currentActiveId = id;
+
+      let activeLink = null;
+      linksMap.forEach((link, key) => {
+        const isActive = key === id;
+        link.classList.toggle('active', isActive);
+        if (isActive) {
+          link.setAttribute('aria-current', 'true');
+          activeLink = link;
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+
+      if (activeLink) scrollChipIntoView(activeLink);
+    };
+
+    /**
+     * NAVEGACIÓN POR CLIC
+     * Usa scrollIntoView nativo: respeta el scroll-margin-top que ya
+     * tienen las .category-section en el CSS, sin cálculos manuales de píxeles.
+     */
+    let isScrollingFromClick = false;
+    let clickTimeout = null;
+
+    navLinks.forEach((a) => {
+      a.addEventListener('click', (e) => {
+        const href = a.getAttribute('href') || '';
+        const id = href.startsWith('#') ? href.slice(1) : '';
+        const target = id ? document.getElementById(id) : null;
+        if (!target) return;
+
+        e.preventDefault();
+
+        isScrollingFromClick = true;
+        setActive(id);
+        history.replaceState(null, '', `#${id}`);
+
+        target.scrollIntoView({
+          behavior: prefersNoMotion ? 'auto' : 'smooth',
+          block: 'start',
+        });
+
+        // Vuelve a dejar que el IntersectionObserver mande cuando termine el scroll
+        clearTimeout(clickTimeout);
+        clickTimeout = setTimeout(() => {
+          isScrollingFromClick = false;
+        }, 900);
+      });
+    });
+
+    /**
+     * SCROLLSPY - IntersectionObserver como única fuente de verdad
+     * Se reconstruye en resize para recalcular el offset del header sticky
+     * (importante en móvil, donde el alto del header puede variar).
+     */
+    let io = null;
+
+    const buildObserver = () => {
+      io?.disconnect();
+      const offset = setStickyVars();
+
+      io = new IntersectionObserver(
+        (entries) => {
+          // El callback solo trae las secciones cuyo estado CAMBIÓ en este
+          // instante, no la lista completa de lo que está visible ahora mismo.
+          // Por eso actualizamos la clase visual con esas entries...
+          entries.forEach((entry) => {
+            entry.target.classList.toggle('active-section', entry.isIntersecting);
+          });
+
+          if (isScrollingFromClick) return;
+
+          // ...pero para decidir el chip activo recalculamos en vivo, sobre
+          // TODAS las secciones, cuál de las que están visibles ahora mismo
+          // (ya con la clase actualizada arriba) está más arriba en pantalla.
+          // Así no dependemos de que en este evento concreto haya llegado
+          // una entry "de entrada": siempre miramos el estado real y actual.
+          let topId = null;
+          let topValue = Infinity;
+
+          sections.forEach((s) => {
+            if (s.classList.contains('active-section')) {
+              const top = s.getBoundingClientRect().top;
+              if (top < topValue) {
+                topValue = top;
+                topId = s.id;
+              }
+            }
+          });
+
+          if (topId) setActive(topId);
+        },
+        {
+          root: null,
+          rootMargin: `-${offset}px 0px -55% 0px`,
+          threshold: [0, 0.1, 0.5],
+        }
+      );
+
+      sections.forEach((s) => io.observe(s));
+    };
+
+    buildObserver();
+
+    window.addEventListener('load', buildObserver);
+    window.addEventListener('resize', buildObserver);
+
+    // Estado inicial: si se llega con un hash de categoría (ej. /#burgers),
+    // lo respetamos. Si no, dejamos que el IntersectionObserver decida en
+    // cuanto la carta entre en el viewport (ya no es lo primero que se ve).
+    if (location.hash) {
+      const id = location.hash.slice(1);
+      if (linksMap.has(id)) setActive(id);
+    }
+  })();
+  </script>
 
   <Reviews />
 
