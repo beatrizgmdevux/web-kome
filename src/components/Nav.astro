@@ -2,9 +2,8 @@
 // Array con las rutas y nombres de los enlaces de la navegación principal del web.
 const links = [
   { href: "/", label: "Inicio" },
-  { href: "/carta", label: "Carta" },
+  { href: "/#carta", label: "Carta" },
   { href: "/contacto", label: "Nosotros" },
-  { href: "/trabajo", label: "Únete al equipo" },
 ];
 ---
 <nav class="primary-nav" aria-label="Navegación principal">
@@ -25,9 +24,8 @@ const links = [
     <div id="site-nav" class="site-nav" data-open="false">
       <ul class="site-nav__list">
         <li><a href="/" aria-current="page">Inicio</a></li>
-        <li><a href="/carta/">Carta</a></li>
+        <li><a href="/#carta">Carta</a></li>
         <li><a href="/contacto/">Contacto</a></li>
-        <li><a href="/trabajo/">Trabajo</a></li>
       </ul>
     </div>
   </div>
