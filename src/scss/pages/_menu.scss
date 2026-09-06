@@ -14,6 +14,10 @@
   max-width: 850px;
   padding: $space-12 $space-6;
 
+  // Permite que el botón "Nuestra carta" / el enlace "Carta" del nav
+  // salten aquí sin quedar tapados por el header sticky
+  scroll-margin-top: var(--header-h, #{$header-h});
+
   @include mq-mobile {
     padding: $space-8 $space-4;
   }
