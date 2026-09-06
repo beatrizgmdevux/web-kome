@@ -1,13 +1,25 @@
 ---
 const TITLE = 'Nuestros clientes';
+
+// Enlace general de reseñas de Google (mismo que usa "¿Dónde estamos?").
+// Al clicar cualquier tarjeta de reseña, se lleva aquí en vez de a la
+// reseña individual de cada autor.
+const GOOGLE_REVIEWS_URL = "https://www.google.com/maps/place/Asador+de+pollos+Kome+Kome/@36.6147093,-4.5092393,19.07z/data=!4m6!3m5!1s0xd72fb8856eebdc1:0xf399a48f9f5e2c92!8m2!3d36.6146154!4d-4.5090629!16s%2Fg%2F1q5bp42zn?authuser=0&entry=ttu&g_ep=EgoyMDI1MDkwMi4wIKXMDSoASAFQAw%3D%3D";
 ---
 
-<section class="reviews" aria-labelledby="reviews-title" role="region" lang="es">
-  <h2 id="reviews-title">{TITLE}</h2>
+<section class="reviews" aria-labelledby="reviews-title" role="region" lang="es" data-reviews-url={GOOGLE_REVIEWS_URL}>
 
-  <!-- Resumen (rating medio, total) -->
-  <div id="reviews-summary" class="reviews-header">
-    <p id="reviews-skeleton">Cargando reseñas…</p>
+  <!-- Cabecera: etiqueta + título a la izquierda, placa de valoración a la derecha -->
+  <div class="reviews-top">
+    <div class="reviews-heading">
+      <span class="reviews-badge">Google reviews</span>
+      <h2 id="reviews-title">{TITLE}</h2>
+    </div>
+
+    <!-- Placa de valoración (rating medio, total) -->
+    <div id="reviews-summary" class="reviews-plate">
+      <p id="reviews-skeleton">Cargando reseñas…</p>
+    </div>
   </div>
 
   <!-- Carrusel -->
@@ -30,6 +42,8 @@ const TITLE = 'Nuestros clientes';
 <script is:inline>
   const LIMIT = 12;
 
+  const section  = document.querySelector('.reviews');
+  const reviewsUrl = section?.dataset.reviewsUrl || '#';
   const viewport = document.getElementById('reviews-viewport');
   const track    = document.getElementById('reviews-track');
   const prevBtn  = document.querySelector('.reviews-arrow--prev');
@@ -47,14 +61,17 @@ const TITLE = 'Nuestros clientes';
       const data = await res.json();
 
       baseReviews = Array.isArray(data.reviews) ? data.reviews.slice(0, LIMIT) : [];
-      const rating  = data.rating ?? '—';
+      const rating  = data.rating ?? null;
       const total   = data.user_ratings_total ?? 0;
+      const roundedStars = Math.round(Number(rating) || 0);
 
       if (skeleton) skeleton.remove();
       summary.innerHTML = `
-        <p class="reviews-summary">
-          Valoración media: <strong>${rating}</strong> (${total} reseñas)
-        </p>
+        <span class="reviews-plate__rating">${rating ?? '—'}</span>
+        <div class="reviews-plate__meta">
+          <span class="reviews-plate__stars" aria-hidden="true">${'★'.repeat(roundedStars)}${'☆'.repeat(5 - roundedStars)}</span>
+          <span class="reviews-plate__total">${total.toLocaleString('es-ES')} reseñas</span>
+        </div>
       `;
 
       if (!baseReviews.length) {
@@ -111,14 +128,18 @@ const TITLE = 'Nuestros clientes';
     const li = document.createElement('li');
     li.className = 'review-card';
     const text = (r.text ?? '').trim();
+    const author = r.author_name ?? 'Cliente';
 
+    // Toda la tarjeta es un enlace: lleva a las reseñas generales de Google,
+    // no a la reseña individual de cada autor.
     li.innerHTML = `
-      <div class="review-head">
-        <span class="review-author">${r.author_name ?? 'Cliente'}</span>
-        <span class="review-stars">${'★'.repeat(r.rating ?? 0)}${'☆'.repeat(5 - (r.rating ?? 0))}</span>
-      </div>
-      <p class="review-text"></p>
-      <a class="review-link" href="${r.author_url ?? '#'}" target="_blank" rel="noopener">Ver en Google</a>
+      <a class="review-card__link" href="${reviewsUrl}" target="_blank" rel="noopener" aria-label="Ver todas las reseñas en Google">
+        <div class="review-head">
+          <span class="review-author">${author}</span>
+          <span class="review-stars">${'★'.repeat(r.rating ?? 0)}${'☆'.repeat(5 - (r.rating ?? 0))}</span>
+        </div>
+        <p class="review-text"></p>
+      </a>
     `;
     li.querySelector('.review-text').textContent = text;
     return li;
