@@ -1,260 +1,233 @@
-// src/scss/components/_reviews.scss
-@use '@/scss/theme/variables' as *;
-@use '@/scss/theme/mixins' as *;
+---
+const TITLE = 'Nuestros clientes';
 
-/* Sección */
-.reviews {
-  padding: 2rem 4rem;
+// Enlace general de reseñas de Google (mismo que usa "¿Dónde estamos?").
+// Al clicar cualquier tarjeta de reseña, se lleva aquí en vez de a la
+// reseña individual de cada autor.
+const GOOGLE_REVIEWS_URL = "https://www.google.com/maps/place/Asador+de+pollos+Kome+Kome/@36.6147093,-4.5092393,19.07z/data=!4m6!3m5!1s0xd72fb8856eebdc1:0xf399a48f9f5e2c92!8m2!3d36.6146154!4d-4.5090629!16s%2Fg%2F1q5bp42zn?authuser=0&entry=ttu&g_ep=EgoyMDI1MDkwMi4wIKXMDSoASAFQAw%3D%3D";
+---
 
-  // En móvil, 4rem (64px) por lado se comía un tercio de la pantalla.
-  // Bajamos a un margen lateral acorde al resto de secciones del sitio.
-  @include mq-mobile {
-    padding: 1.5rem 1rem;
-  }
-}
+<section class="reviews" aria-labelledby="reviews-title" role="region" lang="es" data-reviews-url={GOOGLE_REVIEWS_URL}>
 
-/* -----------------------------------------------------------------
- * CABECERA: etiqueta + título a la izquierda, placa de valoración a la derecha
- * ----------------------------------------------------------------- */
-.reviews-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: $space-4;
-  margin-bottom: $space-6;
-}
+  <!-- Cabecera: etiqueta + título a la izquierda, placa de valoración a la derecha -->
+  <div class="reviews-top">
+    <div class="reviews-heading">
+      <span class="reviews-badge">Google reviews</span>
+      <h2 id="reviews-title">{TITLE}</h2>
+    </div>
 
-.reviews-heading {
-  #reviews-title {
-    margin: 0;
-  }
-}
+    <!-- Placa de valoración (rating medio, total) -->
+    <div id="reviews-summary" class="reviews-plate">
+      <p id="reviews-skeleton">Cargando reseñas…</p>
+    </div>
+  </div>
 
-.reviews-badge {
-  display: inline-block;
-  background: $color-mostaza;
-  color: #412402;
-  font-family: $font-family-main;
-  font-size: 10px;
-  font-weight: $font-weight-bold;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 2px $space-2;
-  border-radius: 2px;
-  margin-bottom: $space-2;
-}
+  <!-- Carrusel -->
+  <div class="reviews-carousel">
+    <button class="reviews-arrow reviews-arrow--prev" aria-controls="reviews-track" aria-label="Ver reseñas anteriores">
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+    </button>
 
-/* Placa de valoración — estilo chapa industrial */
-.reviews-plate {
-  display: flex;
-  align-items: center;
-  gap: $space-3;
-  background: $color-asfalto;
-  border-top: 3px solid $color-mostaza;
-  padding: $space-2 $space-4;
-  flex-shrink: 0;
-}
+    <div class="reviews-viewport" id="reviews-viewport">
+      <ul id="reviews-track" class="reviews-track" aria-live="polite"></ul>
+    </div>
 
-.reviews-plate__rating {
-  color: $color-white;
-  font-size: 1.375rem;
-  font-weight: $font-weight-bold;
-  line-height: 1;
-}
+    <button class="reviews-arrow reviews-arrow--next" aria-controls="reviews-track" aria-label="Ver reseñas siguientes">
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+    </button>
 
-.reviews-plate__meta {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.3;
-}
+  </div>
 
-.reviews-plate__stars {
-  color: $color-mostaza;
-  font-size: .75rem;
-  letter-spacing: 1px;
-}
+</section>
+<script is:inline>
+  // Menos reseñas en el ciclo del carrusel, para facilitar la lectura
+  const LIMIT = 6;
 
-.reviews-plate__total {
-  color: rgba($color-white, .6);
-  font-size: .7rem;
-}
+  const section  = document.querySelector('.reviews');
+  const reviewsUrl = section?.dataset.reviewsUrl || '#';
+  const viewport = document.getElementById('reviews-viewport');
+  const track    = document.getElementById('reviews-track');
+  const prevBtn  = document.querySelector('.reviews-arrow--prev');
+  const nextBtn  = document.querySelector('.reviews-arrow--next');
+  const summary  = document.getElementById('reviews-summary');
+  const skeleton = document.getElementById('reviews-skeleton');
 
-/* Carrusel */
-.reviews-carousel {
-  position: relative;
-}
+  let baseReviews = []; // reseñas originales (sin clones)
+  let cloneCount  = 1;  // cuántas clonamos en cada extremo (depende de viewport)
 
-/* Viewport con scroll horizontal + scroll-snap */
-.reviews-viewport {
-  overflow-x: auto;
-  overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
+  async function loadReviews() {
+    try {
+      const res = await fetch('/.netlify/functions/reviews');
+      if (!res.ok) throw new Error('Respuesta no OK: ' + res.status);
+      const data = await res.json();
 
-  /* padding para que el primer/último slide no queden pegados */
-  scroll-padding-left: 1rem;
+      baseReviews = Array.isArray(data.reviews) ? data.reviews.slice(0, LIMIT) : [];
+      const rating  = data.rating ?? null;
+      const total   = data.user_ratings_total ?? 0;
+      const roundedStars = Math.round(Number(rating) || 0);
 
-  /* --- Alto visual acorde a las cards (sombra incluida) --- */
-  padding-block: 1rem;   /* da “aire” arriba/abajo para la sombra */
+      if (skeleton) skeleton.remove();
+      summary.innerHTML = `
+        <span class="reviews-plate__rating">${rating ?? '—'}</span>
+        <div class="reviews-plate__meta">
+          <span class="reviews-plate__stars" aria-hidden="true">${'★'.repeat(roundedStars)}${'☆'.repeat(5 - roundedStars)}</span>
+          <span class="reviews-plate__total">${total.toLocaleString('es-ES')} reseñas</span>
+        </div>
+      `;
 
-  /* BFC: evita colapsos de margen y mide altura por su contenido */
-  display: flow-root;
-}
+      if (!baseReviews.length) {
+        const empty = document.createElement('p');
+        empty.textContent = 'Aún no hay reseñas disponibles.';
+        summary.after(empty);
+        document.querySelector('.reviews-carousel')?.remove();
+        return;
+      }
 
-/* Pista de tarjetas */
-.reviews-track {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  gap: 1rem;
-  align-items: stretch;
-}
-
-/* Tarjeta: el <li> solo controla tamaño/snap, el <a> de dentro lleva el diseño */
-.review-card {
-  /* Scroll snap en cada tarjeta */
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-
-  /*
-    Móvil: 1 tarjeta visible, pero no al 100% de ancho.
-    clamp(minimo, preferido, máximo) → evitamos cards gigantes.
-  */
-  min-width: clamp(10rem, 75vw, 14rem);
-  max-width: 22rem;
-
-  @include mq-tablet {
-    min-width: clamp(10rem, 46vw, 14rem);
-    max-width: 24rem;
+      buildCarousel();   // pinta + clona + coloca scroll
+      initControls();    // flechas + teclado
+      window.addEventListener('resize', debounce(rebuildOnResize, 150));
+    } catch (err) {
+      if (skeleton) skeleton.textContent = 'No se pudieron cargar las reseñas ahora mismo.';
+      console.error('Reviews error:', err);
+    }
   }
 
-  @include mq-desktop {
-    min-width: clamp(10rem, 30vw, 14rem);
-    max-width: 24rem;
-  }
-}
+  function buildCarousel() {
+    // Asegura que ambas flechas queden habilitadas en modo infinito
+    prevBtn?.removeAttribute('disabled');
+    nextBtn?.removeAttribute('disabled');
 
-/* Estilo "recibo/ticket" — toda la tarjeta es un enlace clicable */
-.review-card__link {
-  display: flex;
-  flex-direction: column;
-  gap: $space-2;
-  height: 100%;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
+    // limpiar pista
+    track.innerHTML = '';
 
-  background: $color-cream;
-  border-left: 5px solid $color-primary;
-  border-top: 2px dashed rgba($color-black, .3);
-  padding: $space-4 $space-3 $space-3;
+    // pintar las tarjetas base
+    const baseEls = baseReviews.map(createSlide);
+    const fragBase = document.createDocumentFragment();
+    baseEls.forEach(el => fragBase.appendChild(el));
 
-  transition: border-left-color .2s ease, transform .2s ease;
+    // decidir cuántas caben en pantalla (1/2/3) y clonar extremos
+    cloneCount = getVisibleCount();
+    const leftClones  = baseEls.slice(-cloneCount).map(cloneSlide);
+    const rightClones = baseEls.slice(0, cloneCount).map(cloneSlide);
 
-  &:hover {
-    border-left-color: $color-primary-hover;
-    transform: translateY(-2px);
-  }
+    // ensamblar: [left clones] + base + [right clones]
+    const fragAll = document.createDocumentFragment();
+    leftClones.forEach(el => fragAll.appendChild(el));
+    baseEls.forEach(el => fragAll.appendChild(el));
+    rightClones.forEach(el => fragAll.appendChild(el));
+    track.appendChild(fragAll);
 
-  &:active {
-    transform: translateY(0);
-  }
+    // situar scroll en el primer elemento REAL (después de los clones izquierdos)
+    requestAnimationFrame(() => alignToIndex(cloneCount));
 
-  &:focus-visible {
-    @include focus-ring;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .review-card__link {
-    transition: none;
-  }
-}
-
-/* Cabezera de la tarjeta: autor + estrellas */
-.review-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: .75rem;
-}
-
-.review-author {
-  font-weight: 600;
-  font-size: 1.1rem;
-  line-height: 1.5;
-  display: block;     /* se queda en su propia línea */
-
-}
-
-.review-stars  { 
-  letter-spacing: 1px; 
-  white-space: nowrap; 
-  font-size: .95rem; 
-  color: $color-mostaza;
-}
-
-/* Texto (con clamp) */
-.review-text {
-  margin: .25rem 0 0;
-  line-height: 1.8;
-  // texto ajustado y justificado para que no haya espacios innecesarios a la vista
-  text-align: justify;
-  text-justify: inter-word;
-  text-wrap: pretty;            /* Chrome/Safari modernos suavizan espacios */
-  hyphens: auto;                /* cortes silábicos según lang=es */
-  -webkit-hyphens: auto;
-  -ms-hyphens: auto;
-  overflow-wrap: anywhere;      /* permite romper palabras larguísimas */
-  word-break: normal;
-
-  @include clamp-lines(8);
-}
-
-/* Flechas */
-.reviews-arrow {
-  position: absolute;
-  top: 50%;
-  translate: 0 -50%;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 40px; height: 40px;
-  border: 1px solid rgba($color-dark-bg, .12);
-  border-radius: 999px;
-  background: rgba($color-bg, .95);
-  backdrop-filter: blur(6px);
-  cursor: pointer;
-  transition: background-color .15s ease, transform .15s ease, opacity .15s ease;
-
-  &:hover { background: rgba($color-primary, .08); }
-  &:focus-visible { @include focus-ring; }
-  &:active { transform: translateY(-50%) scale(.98); }
-
-  &--prev { left: -.25rem; }
-  &--next { right: -.25rem; }
-
-  &:disabled {
-    opacity: .35;
-    pointer-events: none;
+    // normalizar en scroll (para bucle infinito)
+    viewport.removeEventListener('scroll', _onScrollNormalize);
+    viewport.addEventListener('scroll', _onScrollNormalize);
   }
 
-  .material-symbols-outlined {
-    font-size: 22px;   /* icono dentro del botón de 40x40 */
-    line-height: 1;
-  }
-}
+  function createSlide(r) {
+    const li = document.createElement('li');
+    li.className = 'review-card';
+    const text = (r.text ?? '').trim();
+    const author = r.author_name ?? 'Cliente';
 
-/* Skeleton simple (si lo usas) */
-#reviews-skeleton {
-  width: 100%;
-  height: 2.25rem;
-  border-radius: 8px;
-  background: linear-gradient(90deg, rgba($color-black, .05) 0%, rgba($color-black, .08) 50%, rgba($color-black, .05) 100%);
-  background-size: 200% 100%;
-  animation: reviews-skeleton 1.2s ease-in-out infinite;
-}
-@keyframes reviews-skeleton { 0% {background-position:0 0;} 100% {background-position:200% 0;} }
+    // Toda la tarjeta es un enlace: lleva a las reseñas generales de Google,
+    // no a la reseña individual de cada autor.
+    li.innerHTML = `
+      <a class="review-card__link" href="${reviewsUrl}" target="_blank" rel="noopener" aria-label="Ver todas las reseñas en Google">
+        <div class="review-head">
+          <span class="review-author">${author}</span>
+          <span class="review-stars">${'★'.repeat(r.rating ?? 0)}${'☆'.repeat(5 - (r.rating ?? 0))}</span>
+        </div>
+        <p class="review-text"></p>
+      </a>
+    `;
+    li.querySelector('.review-text').textContent = text;
+    return li;
+  }
+
+  function cloneSlide(el) {
+    const c = el.cloneNode(true);
+    c.dataset.clone = 'true';
+    return c;
+  }
+
+  // cuántos "slides" caben a la vez según viewport — menos tarjetas
+  // simultáneas, pero más anchas y con más aire, para facilitar la lectura
+  function getVisibleCount() {
+    const w = viewport.clientWidth || window.innerWidth;
+    if (w >= 1024) return 2;   // desktop
+    return 1;                  // tablet y móvil
+  }
+
+  // alinear el scroll para que la izquierda del slide i toque el borde del viewport
+  function alignToIndex(i) {
+    const target = track.children[i];
+    if (!target) return;
+    viewport.scrollTo({ left: target.offsetLeft, behavior: 'auto' });
+  }
+
+  // encuentra el índice del slide más cercano a la posición actual
+  function findNearestIndex() {
+    const x = viewport.scrollLeft;
+    const children = Array.from(track.children);
+    let best = 0, bestDelta = Infinity;
+    for (let i = 0; i < children.length; i++) {
+      const d = Math.abs(children[i].offsetLeft - x);
+      if (d < bestDelta) { best = i; bestDelta = d; }
+    }
+    return best;
+  }
+
+  // normaliza cuando entramos en clones (bucle infinito sin “salto” visible)
+  const _onScrollNormalize = debounce(() => {
+    const total = baseReviews.length;
+    if (!total) return;
+
+    const i = findNearestIndex();
+    const firstReal = cloneCount;
+    const lastRealStart = cloneCount + total - 1; // start de la última tarjeta real
+
+    if (i < firstReal) {
+      // estamos en clones de la izquierda → saltar al original equivalente
+      alignToIndex(i + total);
+    } else if (i > lastRealStart) {
+      // estamos en clones de la derecha → saltar al original equivalente
+      alignToIndex(i - total);
+    }
+  }, 80);
+
+  function initControls() {
+    // flechas SIEMPRE activas en modo infinito
+    prevBtn?.addEventListener('click', () => scrollByPage(-1));
+    nextBtn?.addEventListener('click', () => scrollByPage( 1));
+    // teclado (viewport enfocable)
+    viewport.setAttribute('tabindex', '0');
+    viewport.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft')  scrollByPage(-1);
+      if (e.key === 'ArrowRight') scrollByPage( 1);
+    });
+  }
+
+  function getPageWidth() {
+    return viewport.clientWidth || 0;
+  }
+
+  function scrollByPage(direction) {
+    const delta = getPageWidth() * (direction > 0 ? 1 : -1);
+    viewport.scrollBy({ left: delta, behavior: 'smooth' });
+  }
+
+  // reconstruir clones al cambiar de breakpoint (resize)
+  function rebuildOnResize() {
+    const newCount = getVisibleCount();
+    if (newCount !== cloneCount) buildCarousel(); // repinta y recoloca
+  }
+
+  // debounce utilitario
+  function debounce(fn, ms) {
+    let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+  }
+
+  document.addEventListener('DOMContentLoaded', loadReviews);
+</script>
