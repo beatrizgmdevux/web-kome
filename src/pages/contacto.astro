@@ -28,16 +28,66 @@ const pageDescription = "¿Quieres contarnos algo? Ponte en contacto con nosotro
         <p><strong>Avenida del Carmelo, 21 - Torremolinos (Málaga)</strong></p>
     </div>
     <div class="contact-image">
-      <iframe
-          src= "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6404.977916444645!2d-4.5090629!3d36.614615400000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd72fb8856eebdc1%3A0xf399a48f9f5e2c92!2sAsador%20de%20pollos%20Kome%20Kome!5e0!3m2!1ses!2ses!4v1754746073166!5m2!1ses!2ses"
+      <div id="maps-consent-container" class="maps-consent" data-maps-loaded="false">
+        <!-- Se rellena por JS: o el iframe (si hay consentimiento) o un aviso -->
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+  (function () {
+    const container = document.getElementById('maps-consent-container');
+    if (!container) return;
+
+    const MAPS_SRC = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6404.977916444645!2d-4.5090629!3d36.614615400000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd72fb8856eebdc1%3A0xf399a48f9f5e2c92!2sAsador%20de%20pollos%20Kome%20Kome!5e0!3m2!1ses!2ses!4v1754746073166!5m2!1ses!2ses";
+
+    function renderMap() {
+      if (container.dataset.mapsLoaded === 'true') return;
+      container.dataset.mapsLoaded = 'true';
+      container.innerHTML = `
+        <iframe
+          src="${MAPS_SRC}"
           width="100%"
           height="400"
           style="border:0;"
           allowfullscreen=""
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
-      ></iframe>
-    </div>
-  </section>
+        ></iframe>
+      `;
+    }
+
+    function renderPlaceholder() {
+      container.dataset.mapsLoaded = 'false';
+      container.innerHTML = `
+        <div class="maps-placeholder">
+          <p>Para ver el mapa necesitamos cargar un recurso de Google, que usa cookies.</p>
+          <button type="button" class="cookie-btn cookie-btn--solid" id="maps-load-btn">Cargar mapa de Google</button>
+        </div>
+      `;
+      document.getElementById('maps-load-btn')?.addEventListener('click', () => {
+        // Al pulsar aquí, el usuario consiente explícitamente esta categoría
+        const current = (window.kkCookieConsent && window.kkCookieConsent.get()) || {};
+        try {
+          localStorage.setItem('kk-cookie-consent', JSON.stringify({ ...current, maps: true, ts: Date.now() }));
+        } catch {}
+        document.dispatchEvent(new CustomEvent('kk:consent-updated', { detail: { maps: true } }));
+        renderMap();
+      });
+    }
+
+    function applyConsent() {
+      const consent = (window.kkCookieConsent && window.kkCookieConsent.get()) || null;
+      if (consent && consent.maps) {
+        renderMap();
+      } else {
+        renderPlaceholder();
+      }
+    }
+
+    applyConsent();
+    document.addEventListener('kk:consent-updated', applyConsent);
+  })();
+  </script>
 
 </BaseLayout>
