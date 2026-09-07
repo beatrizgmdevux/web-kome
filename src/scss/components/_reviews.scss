@@ -136,7 +136,7 @@
 
 /* Estilo "recibo/ticket" — toda la tarjeta es un enlace clicable */
 .review-card__link {
-  @include-mobile {
+  @include mq-mobile {
     max-width: 280px;
     margin: 0 auto;
     border-right: 0.5px solid rgba($color-black, .3);
