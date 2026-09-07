@@ -40,7 +40,8 @@ const GOOGLE_REVIEWS_URL = "https://www.google.com/maps/place/Asador+de+pollos+K
 
 </section>
 <script is:inline>
-  const LIMIT = 12;
+  // Menos reseñas en el ciclo del carrusel, para facilitar la lectura
+  const LIMIT = 6;
 
   const section  = document.querySelector('.reviews');
   const reviewsUrl = section?.dataset.reviewsUrl || '#';
@@ -151,12 +152,12 @@ const GOOGLE_REVIEWS_URL = "https://www.google.com/maps/place/Asador+de+pollos+K
     return c;
   }
 
-  // cuántos “slides” caben a la vez (1/2/3) según viewport
+  // cuántos "slides" caben a la vez según viewport — menos tarjetas
+  // simultáneas, pero más anchas y con más aire, para facilitar la lectura
   function getVisibleCount() {
     const w = viewport.clientWidth || window.innerWidth;
-    if (w >= 1200) return 3;   // tu desktop
-    if (w >= 768)  return 2;   // tu tablet
-    return 1;                  // móvil
+    if (w >= 1024) return 2;   // desktop
+    return 1;                  // tablet y móvil
   }
 
   // alinear el scroll para que la izquierda del slide i toque el borde del viewport
