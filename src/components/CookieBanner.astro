@@ -1,0 +1,134 @@
+---
+// Banner de consentimiento de cookies.
+// Categorías gestionadas:
+//  - "necesarias": siempre activas, no requieren consentimiento (no se usan
+//    cookies propias actualmente, pero se deja preparado el bloque informativo).
+//  - "maps": carga del mapa de Google embebido en /contacto. Es la única
+//    cookie/recurso de terceros no esencial que tiene el sitio ahora mismo.
+---
+
+<div id="cookie-banner" class="cookie-banner" role="region" aria-label="Aviso de cookies" hidden>
+  <div class="cookie-banner__bar">
+    <p class="cookie-banner__text">
+      Usamos cookies para el mapa de Google en la página de Contacto. Puedes aceptarlas,
+      rechazarlas o elegir qué activar. Más info en nuestra
+      <a href="/politica-cookies/">Política de cookies</a>.
+    </p>
+
+    <div class="cookie-banner__actions">
+      <button type="button" class="cookie-btn cookie-btn--ghost" id="cookie-reject">Rechazar no esenciales</button>
+      <button type="button" class="cookie-btn cookie-btn--ghost" id="cookie-configure">Configurar</button>
+      <button type="button" class="cookie-btn cookie-btn--solid" id="cookie-accept">Aceptar todo</button>
+    </div>
+  </div>
+
+  <!-- Panel de configuración (oculto hasta pulsar "Configurar") -->
+  <div class="cookie-panel" id="cookie-panel" hidden>
+    <div class="cookie-panel__row">
+      <div>
+        <p class="cookie-panel__title">Necesarias</p>
+        <p class="cookie-panel__desc">Imprescindibles para que la web funcione. Siempre activas.</p>
+      </div>
+      <span class="cookie-toggle cookie-toggle--locked" aria-hidden="true"></span>
+    </div>
+
+    <div class="cookie-panel__row">
+      <div>
+        <p class="cookie-panel__title">Mapa de Google</p>
+        <p class="cookie-panel__desc">Carga el mapa interactivo en la página de Contacto.</p>
+      </div>
+      <label class="cookie-toggle">
+        <input type="checkbox" id="cookie-toggle-maps" />
+        <span class="cookie-toggle__track" aria-hidden="true"></span>
+        <span class="sr-only">Activar cookies del mapa de Google</span>
+      </label>
+    </div>
+
+    <div class="cookie-panel__actions">
+      <button type="button" class="cookie-btn cookie-btn--solid" id="cookie-save">Guardar preferencias</button>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+(function () {
+  const STORAGE_KEY = 'kk-cookie-consent';
+
+  const banner   = document.getElementById('cookie-banner');
+  const panel    = document.getElementById('cookie-panel');
+  const toggleMaps = document.getElementById('cookie-toggle-maps');
+
+  const btnAccept    = document.getElementById('cookie-accept');
+  const btnReject    = document.getElementById('cookie-reject');
+  const btnConfigure = document.getElementById('cookie-configure');
+  const btnSave      = document.getElementById('cookie-save');
+
+  function readConsent() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function saveConsent(consent) {
+    const value = { maps: !!consent.maps, ts: Date.now() };
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+    } catch {
+      /* localStorage no disponible: el banner volverá a salir en la siguiente visita */
+    }
+    document.dispatchEvent(new CustomEvent('kk:consent-updated', { detail: value }));
+    return value;
+  }
+
+  function hideBanner() {
+    banner.hidden = true;
+    panel.hidden = true;
+  }
+
+  function showBanner() {
+    banner.hidden = false;
+  }
+
+  // API pública mínima para que otras páginas (ej. contacto.astro) consulten
+  // o abran de nuevo las preferencias sin duplicar esta lógica.
+  window.kkCookieConsent = {
+    get: () => readConsent(),
+    openPreferences: () => {
+      showBanner();
+      panel.hidden = false;
+      const current = readConsent();
+      toggleMaps.checked = !!(current && current.maps);
+    },
+  };
+
+  btnAccept.addEventListener('click', () => {
+    saveConsent({ maps: true });
+    hideBanner();
+  });
+
+  btnReject.addEventListener('click', () => {
+    saveConsent({ maps: false });
+    hideBanner();
+  });
+
+  btnConfigure.addEventListener('click', () => {
+    const current = readConsent();
+    toggleMaps.checked = !!(current && current.maps);
+    panel.hidden = !panel.hidden;
+  });
+
+  btnSave.addEventListener('click', () => {
+    saveConsent({ maps: toggleMaps.checked });
+    hideBanner();
+  });
+
+  // Al cargar: si no hay elección previa, mostrar el banner.
+  const existing = readConsent();
+  if (!existing) {
+    showBanner();
+  }
+})();
+</script>
