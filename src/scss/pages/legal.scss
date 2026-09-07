@@ -1,0 +1,68 @@
+// src/scss/pages/_legal.scss
+@use '@/scss/theme/variables' as *;
+@use '@/scss/theme/mixins' as *;
+
+.legal-page {
+  @include container;
+  max-width: 780px;
+  padding: $space-12 $space-6;
+
+  @include mq-mobile {
+    padding: $space-8 $space-4;
+  }
+
+  h1 {
+    margin-bottom: $space-2;
+  }
+
+  .legal-updated {
+    color: $color-grey;
+    font-size: .85rem;
+    margin-bottom: $space-8;
+  }
+
+  h2 {
+    margin-top: $space-8;
+    margin-bottom: $space-3;
+    font-size: 1.15rem;
+  }
+
+  p, li {
+    line-height: 1.75;
+    color: $color-black;
+  }
+
+  ul {
+    padding-left: $space-6;
+    margin: $space-3 0;
+  }
+
+  li {
+    margin-bottom: $space-2;
+  }
+
+  a {
+    color: $color-primary;
+    font-weight: 600;
+
+    &:hover {
+      color: $color-primary-hover;
+    }
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  .legal-identity {
+    background: $color-cream;
+    border-left: 4px solid $color-primary;
+    padding: $space-4 $space-5;
+    margin: $space-4 0 $space-6;
+
+    p {
+      margin: 0 0 $space-1;
+      font-size: .9rem;
+    }
+  }
+}
