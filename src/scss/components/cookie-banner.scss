@@ -1,0 +1,213 @@
+// src/scss/components/_cookie-banner.scss
+@use '@/scss/theme/variables' as *;
+@use '@/scss/theme/mixins' as *;
+
+.cookie-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  background: $color-black;
+  border-top: 3px solid $color-primary;
+  font-family: $font-family-main;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.cookie-banner__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-4;
+  flex-wrap: wrap;
+  padding: $space-4 $space-6;
+
+  @include mq-mobile {
+    padding: $space-4;
+  }
+}
+
+.cookie-banner__text {
+  margin: 0;
+  font-size: .8125rem;
+  line-height: 1.6;
+  color: $color-white;
+  max-width: 620px;
+
+  a {
+    color: $color-mostaza;
+    font-weight: $font-weight-bold;
+    text-decoration: underline;
+
+    &:hover {
+      color: darken($color-mostaza, 10%);
+    }
+  }
+}
+
+.cookie-banner__actions {
+  display: flex;
+  gap: $space-2;
+  flex-wrap: wrap;
+
+  @include mq-mobile {
+    width: 100%;
+
+    .cookie-btn {
+      flex: 1 1 auto;
+    }
+  }
+}
+
+.cookie-btn {
+  font-family: inherit;
+  font-size: .78rem;
+  font-weight: $font-weight-bold;
+  padding: $space-2 $space-3;
+  cursor: pointer;
+  border-radius: $radius-btn;
+  white-space: nowrap;
+
+  &--ghost {
+    background: transparent;
+    border: 1px solid $color-white;
+    color: $color-white;
+
+    &:hover {
+      background: rgba($color-white, .08);
+    }
+  }
+
+  &--solid {
+    background: $color-primary;
+    border: 1px solid $color-primary;
+    color: $color-white;
+
+    &:hover {
+      background: $color-primary-hover;
+      border-color: $color-primary-hover;
+    }
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+/* Panel de configuración */
+.cookie-panel {
+  border-top: 1px solid rgba($color-white, .12);
+  padding: $space-4 $space-6;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+
+  &[hidden] {
+    display: none;
+  }
+
+  @include mq-mobile {
+    padding: $space-4;
+  }
+}
+
+.cookie-panel__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-4;
+}
+
+.cookie-panel__title {
+  margin: 0;
+  font-size: .85rem;
+  font-weight: $font-weight-bold;
+  color: $color-white;
+}
+
+.cookie-panel__desc {
+  margin: 2px 0 0;
+  font-size: .75rem;
+  color: rgba($color-white, .65);
+}
+
+.cookie-panel__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: $space-2;
+}
+
+/* Interruptor simple */
+.cookie-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 40px;
+  height: 22px;
+  flex-shrink: 0;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  &__track {
+    position: absolute;
+    inset: 0;
+    background: rgba($color-white, .25);
+    border-radius: 999px;
+    transition: background-color .15s ease;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      background: $color-white;
+      border-radius: 50%;
+      transition: transform .15s ease;
+    }
+  }
+
+  input:checked + &__track {
+    background: $color-primary;
+
+    &::after {
+      transform: translateX(18px);
+    }
+  }
+
+  input:focus-visible + &__track {
+    @include focus-ring;
+  }
+
+  &--locked {
+    width: 40px;
+    height: 22px;
+    background: rgba($color-mostaza, .5);
+    border-radius: 999px;
+    display: inline-block;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 16px;
+      height: 16px;
+      background: $color-white;
+      border-radius: 50%;
+    }
+  }
+}
