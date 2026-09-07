@@ -102,4 +102,20 @@
   color: rgba($color-grey-shadow, .9);
 }
 
+.footer-legal {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: $space-2 $space-4;
+  margin-top: $space-2;
 
+  a {
+    color: rgba($color-bg, .75);
+    font-size: .8rem;
+    text-decoration: underline;
+
+    &:hover {
+      color: $color-bg;
+    }
+  }
+}
