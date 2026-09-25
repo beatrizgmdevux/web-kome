@@ -1,0 +1,116 @@
+---
+// Modal reutilizable para avisos de cierre temporal (vacaciones, festivos, etc.)
+// Se muestra automáticamente solo dentro del rango de fechas indicado, y no
+// requiere quitarlo del código a mano cuando termine: simplemente deja de
+// aparecer solo al pasar `endDate`.
+//
+// PARA REUTILIZARLO EN EL FUTURO: solo hay que cambiar las 5 props de abajo
+// (en BaseLayout.astro, donde se usa este componente). No hace falta tocar
+// nada de este archivo.
+//
+// Formato de fechas: ISO con la hora de España explícita (+02:00 en horario
+// de verano / +01:00 en horario de invierno, que en España cambia el último
+// domingo de octubre). Si el cierre futuro cae ya en horario de invierno,
+// cambia "+02:00" por "+01:00" en esas fechas.
+
+interface Props {
+  /** Identificador único de este aviso (para no confundirlo con futuros avisos) */
+  id: string;
+  title: string;
+  message: string;
+  /** Fecha/hora ISO de inicio, ej: '2026-09-26T09:00:00+02:00' */
+  startDate: string;
+  /** Fecha/hora ISO de fin, ej: '2026-10-07T09:00:00+02:00' */
+  endDate: string;
+  icon?: string;
+}
+
+const { id, title, message, startDate, endDate, icon = '🌴' } = Astro.props;
+---
+
+<div
+  id={`announcement-${id}`}
+  class="announcement-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby={`announcement-title-${id}`}
+  data-start={startDate}
+  data-end={endDate}
+  data-storage-key={`kk-announcement-${id}`}
+  hidden
+>
+  <div class="announcement-modal__backdrop" data-announcement-close></div>
+
+  <div class="announcement-modal__card">
+    <button
+      type="button"
+      class="announcement-modal__close"
+      data-announcement-close
+      aria-label="Cerrar aviso"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+
+    <div class="announcement-modal__icon" aria-hidden="true">{icon}</div>
+    <h2 id={`announcement-title-${id}`} class="announcement-modal__title">{title}</h2>
+    <p class="announcement-modal__message">{message}</p>
+  </div>
+</div>
+
+<script is:inline>
+(function () {
+  document.querySelectorAll('.announcement-modal').forEach(initAnnouncement);
+
+  function initAnnouncement(modal) {
+    const start = modal.dataset.start ? new Date(modal.dataset.start) : null;
+    const end = modal.dataset.end ? new Date(modal.dataset.end) : null;
+    const storageKey = modal.dataset.storageKey;
+    const now = new Date();
+
+    const withinRange = start && end && now >= start && now < end;
+    if (!withinRange) return;
+
+    // Ya lo cerró en esta sesión (esta pestaña/navegación) → no repetir
+    let alreadyClosed = false;
+    try {
+      alreadyClosed = sessionStorage.getItem(storageKey) === 'closed';
+    } catch {
+      /* si sessionStorage no está disponible, simplemente se mostrará siempre */
+    }
+    if (alreadyClosed) return;
+
+    openModal(modal, storageKey);
+  }
+
+  function openModal(modal, storageKey) {
+    modal.hidden = false;
+    document.documentElement.classList.add('has-announcement-open');
+
+    const previouslyFocused = document.activeElement;
+    const closeEls = modal.querySelectorAll('[data-announcement-close]');
+    const closeBtn = modal.querySelector('.announcement-modal__close');
+
+    function close() {
+      modal.hidden = true;
+      document.documentElement.classList.remove('has-announcement-open');
+      try {
+        sessionStorage.setItem(storageKey, 'closed');
+      } catch {
+        /* no pasa nada si no se puede guardar: volverá a salir la próxima carga */
+      }
+      document.removeEventListener('keydown', onKeydown);
+      if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus();
+    }
+
+    function onKeydown(e) {
+      if (e.key === 'Escape') close();
+    }
+
+    closeEls.forEach((el) => el.addEventListener('click', close));
+    document.addEventListener('keydown', onKeydown);
+
+    // Foco inicial en la X, para que funcione bien con teclado/lector de pantalla
+    closeBtn?.focus();
+  }
+})();
+</script>
