@@ -1,0 +1,83 @@
+// src/scss/components/_announcement-modal.scss
+@use '@/scss/theme/variables' as *;
+@use '@/scss/theme/mixins' as *;
+
+.announcement-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 3000; // por encima del banner de cookies (2000)
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-4;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.announcement-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba($color-black, .55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.announcement-modal__card {
+  position: relative;
+  z-index: 1;
+  background: $color-cream;
+  border-top: 4px solid $color-primary;
+  max-width: 420px;
+  width: 100%;
+  padding: $space-8 $space-6 $space-6;
+  text-align: center;
+
+  @include mq-mobile {
+    padding: $space-6 $space-4 $space-4;
+  }
+}
+
+.announcement-modal__close {
+  position: absolute;
+  top: $space-3;
+  right: $space-3;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: $color-black;
+  cursor: pointer;
+  padding: $space-1;
+
+  &:hover {
+    color: $color-primary;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.announcement-modal__icon {
+  font-size: 2.5rem;
+  margin-bottom: $space-3;
+}
+
+.announcement-modal__title {
+  margin: 0 0 $space-3;
+}
+
+.announcement-modal__message {
+  margin: 0;
+  line-height: 1.7;
+  color: $color-black;
+  white-space: pre-line; // respeta los saltos de línea del texto (\n)
+}
+
+// Evita que la página haga scroll de fondo mientras el modal está abierto
+html.has-announcement-open,
+html.has-announcement-open body {
+  overflow: hidden;
+}
