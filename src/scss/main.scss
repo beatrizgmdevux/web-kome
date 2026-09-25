@@ -15,6 +15,7 @@
 @use 'components/forms' as *;
 @use 'components/reviews' as *;
 @use 'components/cookie-banner' as *;
+@use 'components/announcement-modal' as *;
 
 // 4. Layout general
 @use 'layout/header' as *;
