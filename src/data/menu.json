@@ -24,7 +24,7 @@
         { "name": "Pollo cajún", "price": "8,00€", "description": "" },
         { "name": "Croquetas", 
           "price": "8,00€", 
-          "description": "Elige entre: cocido, rabo de toro, jamón, setas o bacalao"
+          "description": "Elige entre: cocido, rabo de toro o jamón"
         },
         { "name": "Patatas fritas",
           "price": {
@@ -113,7 +113,7 @@
           { "name": "Bombay", "price": "7,20€", "description": "Pollo asado al curry, lechuga, tomate y cebolla" },
           
           { "name": "Serrano", "price": "7,50€", "description": "Filetes de cerdo o pollo, jamón serrano, pimiento frito y mayonesa" },
-          { "name": "Kome Kome", "price": "7,70€", "description": "Pollo asado, jamón york, queso, hamburguesa, lechuga, tomate, cebolla y mayonesa" },
+          { "name": "Kome Kome", "price": "8,20€", "description": "Pollo asado, jamón york, queso, hamburguesa, lechuga, tomate, cebolla y mayonesa" },
           { "name": "Malaka", "price": "7,20€", "description": "Pollo asado, pimiento frito, huevo frito y ali-oli" },
           { "name": "Turko", "price": "7,50€", "description": "Carne kebab, lechuga, cebolla, tomate y salsa yogur casera" },
           
