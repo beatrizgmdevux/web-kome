@@ -7,6 +7,25 @@
   padding: $space-8;
 }
 
+/* Botones del hero: uno al lado del otro y apilados si no caben */
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: $space-4;
+
+  .btn {
+    margin-top: $space-4;
+  }
+
+  // El hover del botón secundario está pensado para fondos oscuros (texto
+  // crema). Sobre el fondo claro del hero se perdería, así que lo ajustamos.
+  .btn.secondary:hover {
+    border: 2px solid $color-black;
+    color: $color-black;
+  }
+}
+
 /* Tablet */
 @include mq-tablet {
   .hero-img { max-width: 500px; }
