@@ -11,7 +11,7 @@
  * ----------------------------------------------------------------- */
 .menu {
   @include container;
-  max-width: 850px;
+  max-width: 960px;
   padding: $space-12 $space-6;
 
   // Permite que el botón "Nuestra carta" / el enlace "Carta" del nav
@@ -38,7 +38,7 @@
   scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
   --kk-scroll-track: rgba(0, 0, 0, .08); /* pista */
-  --kk-scroll-thumb: $color-mostaza;       /* pulgar (rojo Kome Kome) */
+  --kk-scroll-thumb: #{$color-primary};       /* pulgar (rojo Kome Kome) */
   --kk-scroll-size: 8px;                   /* grosor/alto */
   --kk-scroll-radius: 999px;               /* forma “pill” */
   
@@ -128,8 +128,9 @@
         // Estado activo
         &:active,
         &[aria-current="true"] {
-          color: $color-primary-text;
-          text-decoration: underline;
+          color: $color-black;
+          background: rgba($color-primary, .25);
+          text-decoration: none;
           text-underline-offset: 3px;
         }
       }
@@ -191,21 +192,6 @@
     margin-bottom: $space-6;
   }
 
-  // Estado activo (cuando está visible)
-  &.active-section {
-    border-left: 4px solid $color-primary;
-    background-color: $color-cream;
-    padding-left: $space-4;
-    transition: background-color 0.3s ease, border-left 0.3s ease;
-
-    // En móvil reducimos el grosor del borde y el padding para no
-    // "robarle" ancho útil al contenido en pantallas estrechas
-    @include mq-mobile {
-      border-left-width: 3px;
-      padding-left: $space-2;
-    }
-  }
-
   // Título de categoría con icono
   h2 {
     font-family: $font-family-heading;
@@ -238,12 +224,12 @@
  * ----------------------------------------------------------------- */
 .menu-item {
   list-style: none;
-  margin: $space-4;
-  padding: $space-2;
-  border-bottom: 1px solid $color-cream;
+  margin: 0;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid rgba($color-black, .12);
 
   @include mq-mobile {
-    margin: $space-2;
+    margin: 0;
   }
 
   // Cabecera del item (nombre + precio simple)
@@ -255,9 +241,9 @@
     margin-bottom: $space-1;
 
     @include mq-mobile {
-      flex-direction: column;
+      flex-direction: row;
       align-items: flex-start;
-      gap: $space-2;
+      gap: $space-3;
     }
 
     strong {
@@ -284,7 +270,7 @@
     color: $color-black;
 
     @include mq-mobile {
-      font-size: $font-size-xs;
+      font-size: $font-size-base;
     }
   }
 
@@ -323,7 +309,7 @@
 
   // Descripción del item
   .item-description {
-    margin: $space-2;
+    margin: .5rem 0 0;
     font-family: $font-family-main;
     font-size: $font-size-sm;
     color: $color-grey-description;
@@ -377,3 +363,10 @@
     font-size: 2rem; // 32px en tablet
   }
 }
+
+.menu .section-intro { margin-bottom: 1.5rem; }
+.menu-nav ul li a { min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center; gap: .35rem; }
+.menu-nav.sticky-header { padding: .5rem 0; background: $color-white; border-bottom: 1px solid rgba($color-black,.15); }
+.category-section { padding-top: 1.5rem; }
+.menu-item .single-price { white-space: nowrap; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+@media (min-width: 1024px) { .menu-nav ul { justify-content: space-between; gap: 0; } .menu-nav ul li a { padding-inline: .65rem; font-size: .875rem; } }
