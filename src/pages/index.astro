@@ -3,9 +3,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import Reviews from '@/components/Reviews.astro';
 import rawMenu from '@/data/menu.json';
+import { ORDER_URL } from '@/data/site';
 
 const pageTitle = "Kome Kome";
 const pageDescription = "Descubre nuestro pollo asado y los mejores camperos de Málaga en Asador Kome Kome, ubicado en Torremolinos.";
+
+const categoryLabels: Record<string, string> = {
+  'Nuestros camperos': 'Camperos', 'Ensaladas de la huerta': 'Ensaladas',
+  'Entrepanes': 'Bocatas y rollos', 'Nuestro fuerte': 'Pollos asados',
+};
+// Precios e ingredientes proceden de la carta: no se mantienen por duplicado.
+const featured = [
+  { category: 'Nuestros camperos', name: 'Yankee', image: 'yankee', label: 'Campero Yankee' },
+  { category: 'Nuestros camperos', name: 'Como una cabra!!', image: 'como-una-cabra', label: 'Campero Como una cabra' },
+  { category: 'Burgers', name: 'La Crunchy', image: 'la-crunchy', label: 'Burger La Crunchy' },
+  { category: 'Para compartir', name: 'Patatas gochas', image: 'patatas-gochas', label: 'Patatas Gochas' },
+].map((product) => {
+  const item = rawMenu[product.category as keyof typeof rawMenu].items.find(i => i.name === product.name)!;
+  const price = typeof item.price === 'string' ? item.price : `Desde ${Object.values(item.price)[0]}`;
+  return { ...product, description: item.description, price };
+});
 
 /**
  * CARTA — lógica trasladada desde la antigua página /carta
@@ -175,59 +192,36 @@ function normalizeItem(it: Item): ProcessedItem {
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
-  <section class="hero">
-    <h1>¡Bienvenid@s al Kome Kome!</h1>
+  <section class="hero hero--product" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="eyebrow">Kome Kome · Torremolinos</p>
+      <h1 id="hero-title">Tu próximo<br />antojo está aquí.</h1>
+      <p class="hero-description">Camperos bien cargados, burgers y pollo asado. Pide online y ven a recogerlo junto al Parque de la Batería.</p>
+      <div class="hero-actions">
+        <Button href={ORDER_URL} variant="primary" target="_blank" rel="noopener" children="Pedir online ↗" />
+        <Button href="/#carta" variant="secondary" children="Ver la carta" />
+      </div>
+      <p class="pickup-note">Solo recogida en el local · Sin reparto a domicilio</p>
+    </div>
+    <figure class="hero-product">
+      <img src="/products/yankee-960.webp" srcset="/products/yankee-480.webp 480w, /products/yankee-960.webp 960w" sizes="(max-width: 767px) calc(100vw - 32px), 50vw" width="960" height="720" alt="Campero Yankee con pulled pork, col y salsa cheddar" fetchpriority="high" />
+      <figcaption><span>Hoy te lo ponemos fácil</span><strong>Campero Yankee</strong></figcaption>
+    </figure>
+  </section>
 
-    <h3>Pollos asados, camperos y hamburguesas en Torremolinos</h3>
-    <h4>Los hay que dicen que tenemos el mejor pollo asado y los mejores camperos de toda Málaga 😏</h4>
-
-    <p>
-      ¿Te atreves a probarnos?
-      Disfruta de nuestros productos hechos con ingredientes frescos y mucho sabor.
-    </p>
-    <div class="hero-actions">
-      <Button
-        href="https://r.qamarero.com//asador-de-pollos-kome-kome?mode=PICKUP"
-        variant="primary"
-        target="_blank"
-        rel="noopener"
-        children="¡Pide ya!"
-      ></Button>
-      <Button href="/#carta" variant="secondary" children="Nuestra carta"></Button>
+  <section class="featured" aria-labelledby="featured-title">
+    <div class="section-intro"><div><p class="eyebrow">Para abrir boca</p><h2 id="featured-title">Cuatro buenas tentaciones</h2></div><a href="#carta">Ver toda la carta ↓</a></div>
+    <div class="featured-grid">
+      {featured.map(product => (
+        <article class="product-card">
+          <a href={`#${slugify(product.category)}`} aria-label={`Ver ${product.label} en la carta`}>
+            <img src={`/products/${product.image}-480.webp`} srcset={`/products/${product.image}-480.webp 480w, /products/${product.image}-960.webp 960w`} sizes="(max-width: 767px) 50vw, 25vw" width="480" height="360" loading="lazy" decoding="async" alt={product.label} />
+          </a>
+          <div class="product-card__body"><h3>{product.label}</h3><p>{product.description}</p><div class="product-card__bottom"><strong>{product.price}</strong><a href={`#${slugify(product.category)}`}>Ver en carta <span aria-hidden="true">↓</span></a></div></div>
+        </article>
+      ))}
     </div>
   </section>
-<!-- ! PDT: rediseño
-  <section class="info">
-    <div class="card-container">
-      <span class="material-symbols-outlined">
-        schedule
-      </span>
-      <h3>Horario</h3>
-      <h4>Abiertos de Miércoles a Domingo</h4>
-      <p>12:00 a 16:00</p>
-      <p>20:00 a 23:00</p>
-    </div>
-
-    <div class="card-container">
-      <span class="material-symbols-outlined">
-        phone_in_talk
-      </span>
-      <h3>Teléfono</h3>
-      <p>¿Quieres pedir ya?</p>
-      <Button variant="secondary" children="¡Pide ya!" href="tel:+34952376259"></Button>
-    </div>
-
-    <div class="card-container">
-      <span class="material-symbols-outlined">
-        location_on
-      </span>
-      <h3>Ubicación</h3>
-      <p>Avenida del Carmelo, 21</p>
-      <Button variant="secondary" children="¿Dónde estamos?" href="https://www.google.com/maps/place/Asador+de+pollos+Kome+Kome/@36.6147093,-4.5092393,19.07z/data=!4m6!3m5!1s0xd72fb8856eebdc1:0xf399a48f9f5e2c92!8m2!3d36.6146154!4d-4.5090629!16s%2Fg%2F1q5bp42zn?authuser=0&entry=ttu&g_ep=EgoyMDI1MDkwMi4wIKXMDSoASAFQAw%3D%3D"></Button>
-    </div>
-
-  </section>
--->
 
   <!--
     CARTA (antes era la página /carta, ahora vive dentro de Inicio)
@@ -236,7 +230,8 @@ function normalizeItem(it: Item): ProcessedItem {
     organizando las categorías en secciones navegables con scroll
     suave y navegación sticky.
   -->
-  <section id="carta" class="menu">
+  <section id="carta" class="menu" aria-labelledby="menu-title">
+    <div class="section-intro"><div><p class="eyebrow">Elige tu antojo</p><h2 id="menu-title">Nuestra carta</h2></div><p>Consulta aquí. Pide online para recoger.</p></div>
 
     <!-- 
       NAVEGACIÓN STICKY DE CATEGORÍAS
@@ -260,7 +255,7 @@ function normalizeItem(it: Item): ProcessedItem {
                   />
                 </span>
               )}
-              <span class="chip__label">{c.label}</span>
+              <span class="chip__label">{categoryLabels[c.label] ?? c.label}</span>
             </a>
           </li>
         ))}
@@ -406,11 +401,9 @@ function normalizeItem(it: Item): ProcessedItem {
      */
     const scrollChipIntoView = (link) => {
       if (!link) return;
-      link.scrollIntoView({
-        behavior: prefersNoMotion ? 'auto' : 'smooth',
-        block: 'nearest',
-        inline: 'center',
-      });
+      if (!chipsNav) return;
+      const left = link.getBoundingClientRect().left - chipsNav.getBoundingClientRect().left + chipsNav.scrollLeft;
+      chipsNav.scrollTo({ left: left - (chipsNav.clientWidth - link.offsetWidth) / 2, behavior: prefersNoMotion ? 'auto' : 'smooth' });
     };
 
     let currentActiveId = null;

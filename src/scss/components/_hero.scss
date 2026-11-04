@@ -1,37 +1,46 @@
-// src/scss/components/_hero.scss
-@use '@/scss/theme/variables' as *; // colores, tipografías...
-@use '@/scss/theme/mixins' as *;    // container, respond, etc.
+@use '@/scss/theme/variables' as *;
+@use '@/scss/theme/mixins' as *;
 
-.hero {
-  text-align: center;
-  padding: $space-8;
+.eyebrow { margin: 0 0 .75rem; font-size: .75rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: $color-primary-text; }
+.hero--product {
+  @include container;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding-block: clamp(2rem, 5vw, 4rem);
+  h1 { margin: 0 0 1.25rem; font-size: clamp(2.5rem, 4.5vw, 4.5rem); line-height: 1.08; letter-spacing: .02em; }
+  .hero-description { max-width: 460px; line-height: 1.7; }
 }
-
-/* Botones del hero: uno al lado del otro y apilados si no caben */
-.hero-actions {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: $space-4;
-
-  .btn {
-    margin-top: $space-4;
-  }
-
-  // El hover del botón secundario está pensado para fondos oscuros (texto
-  // crema). Sobre el fondo claro del hero se perdería, así que lo ajustamos.
-  .btn.secondary:hover {
-    border: 2px solid $color-black;
-    color: $color-black;
-  }
+.hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; .btn { margin-top: .5rem; font-weight: 700; } }
+.pickup-note { margin: 1rem 0 0; font-size: .8rem; color: $color-grey; }
+.hero-product {
+  position: relative; margin: 0; border-radius: 1.25rem; overflow: hidden;
+  img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+  figcaption { position: absolute; left: 1rem; bottom: 1rem; right: 1rem; background: $color-cream; padding: .75rem 1rem; border-radius: .5rem; display: flex; flex-direction: column; }
+  figcaption span { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; }
+  figcaption strong { font-size: 1.1rem; }
 }
-
-/* Tablet */
-@include mq-tablet {
-  .hero-img { max-width: 500px; }
+.featured { @include container; padding-block: 1rem 3rem; }
+.section-intro { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; h2 { margin: 0; font-size: clamp(1.6rem, 3vw, 2rem); letter-spacing: .02em; } > p { margin: 0; font-size: .875rem; color: $color-grey; } a { color: $color-primary-text; font-size: .875rem; font-weight: 700; text-underline-offset: 4px; } }
+.featured-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.product-card {
+  min-width: 0; background: $color-cream; border-radius: .75rem; overflow: hidden; display: flex; flex-direction: column;
+  > a { display: block; }
+  img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+  &__body { padding: 1rem; flex: 1; display: flex; flex-direction: column; }
+  h3 { font-family: $font-family-main; font-size: 1rem; line-height: 1.35; text-transform: none; letter-spacing: 0; margin: 0 0 .5rem; }
+  p { font-size: .8rem; line-height: 1.5; margin: 0 0 1rem; color: $color-grey; }
+  &__bottom { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; strong { font-size: .9rem; } a { color: $color-primary-text; font-size: .75rem; font-weight: 700; text-underline-offset: 3px; min-height: 44px; display: inline-flex; align-items: center; } }
 }
-
-/* Desktop (≥ $bp-desktop) */
-@include mq-desktop {
-  .hero-img { max-width: 640px; }
+@include mq-mobile {
+  .hero--product { grid-template-columns: 1fr; gap: 1.5rem; padding-top: 1.5rem; h1 { font-size: clamp(2.4rem, 10vw, 3.4rem); } }
+  .hero-product figcaption { left: .75rem; right: .75rem; bottom: .75rem; }
+  .hero-actions .btn { flex: 1; text-align: center; padding: .85rem .5rem; }
+  .featured-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+  .product-card__body { padding: .75rem; }
+  .product-card p { display: none; }
+  .section-intro { align-items: start; flex-direction: column; }
+  .pickup-note { font-size: .75rem; }
 }
+@media (prefers-reduced-motion: reduce) { .hero-actions .btn { transition: none; } }

@@ -1,16 +1,15 @@
 ---
-// Array con las rutas y nombres de los enlaces de la navegación principal del web.
-const links = [
-  { href: "/", label: "Inicio" },
-  { href: "/#carta", label: "Carta" },
-  { href: "/contacto", label: "Nosotros" },
-];
+import { ORDER_URL } from '../data/site';
+const isContact = Astro.url.pathname.startsWith('/contacto');
+const isHome = Astro.url.pathname === '/';
 ---
 <nav class="primary-nav" aria-label="Navegación principal">
   <div class="site-header__inner">
     <a class="site-logo" href="/">
       <img src="/NuevoLogoWhite250px.png" alt="Kome Kome" />
     </a>
+
+    <a class="header-order" href={ORDER_URL} target="_blank" rel="noopener">Pedir online <span aria-hidden="true">↗</span></a>
 
     <!-- Botón hamburguesa (visible en móvil) -->
     <button class="nav-toggle" aria-controls="site-nav" aria-expanded="false">
@@ -23,9 +22,9 @@ const links = [
     <!-- Navegación -->
     <div id="site-nav" class="site-nav" data-open="false">
       <ul class="site-nav__list">
-        <li><a href="/" aria-current="page">Inicio</a></li>
+        <li><a href="/" aria-current={isHome ? "page" : undefined}>Inicio</a></li>
         <li><a href="/#carta">Carta</a></li>
-        <li><a href="/contacto/">Contacto</a></li>
+        <li><a href="/contacto/" aria-current={isContact ? "page" : undefined}>Contacto</a></li>
       </ul>
     </div>
   </div>
@@ -51,13 +50,20 @@ const links = [
   function toggleNav(force) {
     const open = (typeof force === 'boolean') ? force : (nav.dataset.open !== 'true');
     nav.dataset.open = String(open);
+    nav.inert = !open && !matchMedia('(min-width: 1024px)').matches;
     overlay?.setAttribute('data-open', String(open));
     setButtonLabels(open);
     // bloquear scroll de fondo cuando abrimos
     document.documentElement.classList.toggle('no-scroll', open);
   }
 
-  setButtonLabels(false);
+  const desktop = matchMedia('(min-width: 1024px)');
+  const syncNav = () => {
+    toggleNav(false);
+    nav.inert = !desktop.matches;
+  };
+  desktop.addEventListener('change', syncNav);
+  syncNav();
 
   btn?.addEventListener('click', () => toggleNav());
 

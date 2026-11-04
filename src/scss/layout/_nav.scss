@@ -11,7 +11,7 @@
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: $space-6;
+  gap: $space-3;
   padding: $space-3;
   position: relative;
 }
@@ -69,6 +69,7 @@
   max-inline-size: none;
 
   /* Cerrado (animación sutil desde arriba) */
+  visibility: hidden;
   opacity: 0;
   transform: translateY(-8px);
   pointer-events: none;
@@ -81,6 +82,7 @@
   padding: $space-4;
 
   &[data-open="true"] {
+    visibility: visible;
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
@@ -94,7 +96,7 @@
     gap: $space-3;
 
     a {
-      font-family: $font-family-heading;
+      font-family: $font-family-main;
       font-size: 20px;
       padding: .5rem .75rem;
       border-radius: .5rem;
@@ -108,8 +110,8 @@
       }
 
       &.active,
-      &[aria-current="true"] {
-        color: $color-primary;
+      &[aria-current="page"] {
+        color: $color-primary-text;
         box-shadow: inset 0 -2px 0 $color-primary;
       }
     }
@@ -135,30 +137,33 @@
 
 /* === Desktop === */
 @include mq-desktop {
-  .site-header__inner { grid-template-columns: auto 1fr; }
+  .site-header__inner { grid-template-columns: auto 1fr auto; }
   .nav-toggle { display: none; }
 
   .site-nav {
     position: static;
+    visibility: visible;
+    grid-column: 2;
+    grid-row: 1;
     opacity: 1;
     transform: none;
     pointer-events: auto;
     background: none;
     border: 0;
     box-shadow: none;
-    padding: $space-8;
+    padding: 0;
 
     &__list {
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-content: center;
-      gap: $space-6;
+      gap: $space-3;
       background: none;
 
       a {
-        font-family: $font-family-heading;
-        font-size: 24px;
+        font-family: $font-family-main;
+        font-size: 17px;
         color: $color-cream;
 
         &:hover,
@@ -168,7 +173,7 @@
         }
 
         &.active,
-        &[aria-current="true"] {
+        &[aria-current="page"] {
           color: $color-primary;
           box-shadow: inset 0 -2px 0 $color-primary;
         }
@@ -178,3 +183,22 @@
 
   .nav-overlay { display: none; }
 }
+.header-order {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 44px;
+  padding: 0 .9rem;
+  border-radius: .5rem;
+  background: $color-primary;
+  color: $color-black;
+  font-size: .875rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  &:hover { background: $color-primary-hover; }
+  &:focus-visible { @include focus-ring; }
+  @include mq-desktop { grid-column: 3; grid-row: 1; }
+}
+.nav-toggle { grid-column: 3; grid-row: 1; min-width: 44px; min-height: 44px; }
