@@ -59,12 +59,12 @@ function slugify(s: string): string {
  * Si una categoría existe en menu.json pero no está aquí, se omite.
  */
 const ORDER = [
-  'Nuestro fuerte',
-  'Para compartir', 
-  'Ensaladas de la huerta',
-  'Entrepanes',
+  'Nuestros camperos',      // Mayor margen → primera categoría que se ve
+  'Para compartir',
   'Burgers',
-  'Nuestros camperos',
+  'Entrepanes',
+  'Ensaladas de la huerta',
+  'Nuestro fuerte',
 ] as const;
 
 /**
@@ -185,7 +185,16 @@ function normalizeItem(it: Item): ProcessedItem {
       ¿Te atreves a probarnos?
       Disfruta de nuestros productos hechos con ingredientes frescos y mucho sabor.
     </p>
-    <Button href="/#carta" variant="primary" children="Nuestra carta"></Button>
+    <div class="hero-actions">
+      <Button
+        href="https://r.qamarero.com//asador-de-pollos-kome-kome?mode=PICKUP"
+        variant="primary"
+        target="_blank"
+        rel="noopener"
+        children="¡Pide ya!"
+      ></Button>
+      <Button href="/#carta" variant="secondary" children="Nuestra carta"></Button>
+    </div>
   </section>
 <!-- ! PDT: rediseño
   <section class="info">
