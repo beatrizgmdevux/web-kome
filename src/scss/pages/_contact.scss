@@ -42,6 +42,13 @@
   text-align: center; // móvil centrado
 }
 
+/* Aviso pequeño bajo el botón de pedir (tarjeta de fidelidad) */
+.contact-note {
+  margin-top: $space-4;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+}
+
 .contact-image {
   justify-content: center;
 }
