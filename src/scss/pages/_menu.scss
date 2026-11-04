@@ -128,7 +128,7 @@
         // Estado activo
         &:active,
         &[aria-current="true"] {
-          color: $color-primary;
+          color: $color-primary-text;
           text-decoration: underline;
           text-underline-offset: 3px;
         }
@@ -349,8 +349,8 @@
 
   // Badge específico para items nuevos
   &--new {
-    background: rgba($color-primary, 0.15);
-    color: darken($color-primary, 20%);
+    background: rgba($color-primary, 0.2);
+    color: $color-primary-text;
   }
 }
 
