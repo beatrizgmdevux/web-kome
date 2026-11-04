@@ -42,11 +42,12 @@
   }
 
   a {
-    color: $color-primary;
+    color: $color-primary-text;
     font-weight: 600;
+    text-decoration: underline;
 
     &:hover {
-      color: $color-primary-hover;
+      color: $color-black;
     }
   }
 
