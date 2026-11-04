@@ -5,8 +5,10 @@ $color-white: #f7f2ed;
 $color-black: #241F1F;
 $color-grey: #3d3d3d;
 $color-grey-description: #6e6e6e;
-$color-primary: #C83F37;
-$color-primary-hover: #a42019;
+$color-primary: #5FBEB4;            // acento de marca (teal)
+$color-primary-hover: #4AA89E;      // versión algo más oscura, para hover/active de rellenos
+$color-primary-text: #287269;       // teal oscuro para TEXTO sobre fondos claros (el teal base no tiene contraste suficiente)
+$color-on-primary: #241F1F;         // texto sobre rellenos teal (el blanco no tiene contraste suficiente)
 $color-cream: #FBE5CF;
 $color-bg: #F6E8DA;
 $color-bg-2: #111213;
