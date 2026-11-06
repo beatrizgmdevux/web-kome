@@ -14,10 +14,10 @@ const categoryLabels: Record<string, string> = {
 };
 // Precios e ingredientes proceden de la carta: no se mantienen por duplicado.
 const featured = [
-  { category: 'Nuestros camperos', name: 'Yankee', image: 'yankee', label: 'Campero Yankee' },
+  { category: 'Para compartir', name: 'Patatas gochas', image: 'patatas-gochas', label: 'Patatas Gochas' },
+  { category: 'Ensaladas de la huerta', name: 'Especial', image: 'ensalada-especial', label: 'Ensalada Especial' },
   { category: 'Nuestros camperos', name: 'Como una cabra!!', image: 'como-una-cabra', label: 'Campero Como una cabra' },
   { category: 'Burgers', name: 'La Crunchy', image: 'la-crunchy', label: 'Burger La Crunchy' },
-  { category: 'Para compartir', name: 'Patatas gochas', image: 'patatas-gochas', label: 'Patatas Gochas' },
 ].map((product) => {
   const item = rawMenu[product.category as keyof typeof rawMenu].items.find(i => i.name === product.name)!;
   const price = typeof item.price === 'string' ? item.price : `Desde ${Object.values(item.price)[0]}`;
