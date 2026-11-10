@@ -194,9 +194,33 @@
 
   // Título de categoría con icono
   h2 {
+    // La pincelada se inclina; el texto conserva su alineación y legibilidad.
+    position: relative;
+    isolation: isolate;
+    display: table;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: .45em .65em;
+    color: $color-black;
+    line-height: 1.25;
     font-family: $font-family-heading;
     font-size: $font-size-xxl;
     margin-bottom: $space-4;
+
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      inset: .12em 0;
+      background: $color-primary;
+      transform: rotate(-1deg);
+      clip-path: polygon(1% 12%, 9% 6%, 24% 9%, 42% 2%, 61% 7%, 79% 3%, 98% 9%, 97% 28%, 100% 44%, 98% 64%, 99% 87%, 88% 93%, 70% 89%, 52% 98%, 33% 92%, 15% 97%, 0 89%, 2% 67%, 0 43%, 2% 29%);
+    }
+
+    @include mq-mobile {
+      font-size: clamp(1.25rem, 5.5vw, 1.75rem);
+      letter-spacing: .035em;
+    }
 
     @include mq-desktop {
       font-size: 2.25rem; // 36px en desktop
@@ -208,6 +232,10 @@
       vertical-align: -0.2em;
       margin-right: $space-2;
     }
+  }
+
+  &:nth-of-type(even) h2::before {
+    transform: rotate(.7deg);
   }
 }
 
