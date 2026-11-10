@@ -274,6 +274,7 @@ function normalizeItem(it: Item): ProcessedItem {
         {/* Título de sección con icono */}
         <h2>
           {c.iconPath && (
+            <span class="category-title-icon" aria-hidden="true">
             <img 
               class="cat-icon" 
               src={c.iconPath} 
@@ -281,6 +282,7 @@ function normalizeItem(it: Item): ProcessedItem {
               loading="lazy" 
               decoding="async" 
             />
+            </span>
           )}
           <span class="category-title-text">{c.label}</span>
         </h2>
